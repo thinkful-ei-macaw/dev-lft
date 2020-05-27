@@ -53,13 +53,14 @@
 }
 
 .Section {
-  margin-left: 20px;
-  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: lightgray;
+  padding: 40px;
+  font-size: 1.1em;
 }
-.Section--list {
-  margin-left: 10px;
-  margin-right: 10px;
-}
+
 
 .NiceDate {
   color: rgb(100, 207, 96);

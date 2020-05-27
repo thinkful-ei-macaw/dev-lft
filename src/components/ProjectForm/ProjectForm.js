@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './ProjectForm.css';
-import { Input, Textarea, Button } from '../Utils/Utils';
+import { Input, Textarea, Button, Section } from '../Utils/Utils';
 
 
 export default class ProjectForm extends Component {
@@ -20,7 +20,7 @@ export default class ProjectForm extends Component {
 
   render() {
     return (
-      <div className="projects-form">
+      <Section className="projects-form">
         <form onSubmit={this.handleSubmit}>
           <h1>New Project</h1>
           <label htmlFor="project-name">Project name:</label>
@@ -34,7 +34,7 @@ export default class ProjectForm extends Component {
           <Button className='submit'>Submit</Button>
           <Button className="cancel" onClick={e => {e.preventDefault(); this.props.history.push('/projects')}}>Cancel</Button>
         </form>
-      </div>
+      </Section>
     )
   }
 }
