@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import projectdashservice from './projectdashservice'
+// import ProjectDashService from './projectdashservice'
 import './ProjectDash.css';
 import { project, vacancies, requests } from './dummydata';
 
@@ -18,11 +18,13 @@ class ProjectDash extends Component {
 
   handleLeaveTeam = e => {
     e.preventDefault();
+    //patch to vacancies
     console.log('leave');
   };
 
   handleRequest = e => {
     e.preventDefault();
+    //post to requests
     console.log('request');
   };
 
@@ -34,11 +36,14 @@ class ProjectDash extends Component {
 
   handleApprove = e => {
     e.preventDefault();
+    //patch to vacancies
+    //delete/patch to request
     console.log('approve');
   };
 
   handleDecline = e => {
     e.preventDefault();
+    //delete/patch to request
     console.log('decline');
   };
 
