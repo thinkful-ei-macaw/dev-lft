@@ -1,0 +1,18 @@
+.projects-page {
+  text-align: center;
+  background-color: lightgray;
+  padding: 20px;
+}
+
+.start-project {
+  width: 80%;
+}
+ul {
+  list-style-type: none;
+}
+
+@media only screen  and (min-width: 775px) {
+  .start-project {
+    width: 30%;
+  }
+}
