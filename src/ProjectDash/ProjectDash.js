@@ -167,23 +167,3 @@ class ProjectDash extends Component {
 }
 
 export default ProjectDash;
-
-/*
-
-DONE--If a user is project creator, show pending requests to join
-DONE--If a user is a project creator, show button/form to add vacancies
-DONE--Pending requests have checkmark, X and a message icon. These can be used to approve, deny or message the requesting user.
-DONE--If user is a project creator, shows a button (tiny) to delete a project. Require some kind of confirmation (are you sure that you're sure?)
-
-
-DONE--Shows project info (title, desc, tags and all vacancies)
-
-DONE--If a user is not part of a project, show a button to request to join
-
-DONE--If a user is a part of a project, show project board
-project board contains an input to create a post
-DONE--If a user is a part of a project, show project links
-DONE--If user is a project team member, shows a button (tiny) to leave a project. Confirm that you confirmed.
-
-
-*/
