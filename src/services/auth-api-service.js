@@ -31,21 +31,10 @@ const AuthApiService = {
       )
   },
 
-  getName() {
-    return fetch(`${config.API_ENDPOINT}/users/name`, {
-      headers: {
-        'authorization': `bearer ${TokenService.getAuthToken()}`,
-      },
-    })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
-          : res.json()
-      )
-  },
 
-  getUserId() {
-    return fetch(`${config.API_ENDPOINT}/users/user_id`, {
+
+  getUser() {
+    return fetch(`${config.API_ENDPOINT}/user`, {
       headers: {
         'Authorization': `bearer ${TokenService.getAuthToken()}`,
       },
