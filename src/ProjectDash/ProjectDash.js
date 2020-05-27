@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import ProjectDashService from './projectdashservice'
+import ProjectDashService from './project-dash-service';
 import './ProjectDash.css';
 import { project, vacancies, requests } from './dummydata';
 
@@ -13,12 +13,20 @@ class ProjectDash extends Component {
   };
 
   componentDidMount() {
-    //wanna get all the project and request data here, store it in state, also get user role and store that as well
+    let project_id = 1;
+    //get user role and store that as well
+    ProjectDashService.getProjects(project_id).then(data => {
+      this.setState({ project: data.project });
+    });
+    // ProjectDashService.getRequests(project_id)
+    // ProjectDashService.getVacancies(project_id)
+    // ProjectDashService.getPosts(project_id)
   }
 
   handleLeaveTeam = e => {
     e.preventDefault();
     //patch to vacancies
+    //user_id changes to null
     console.log('leave');
   };
 

@@ -1,81 +1,93 @@
-// import config from "../config";
-// import TokenService from "../services/token-service";
-let url = 'http://localhost:8000/api';
+import config from '../config';
+import TokenService from '../services/token-service';
 
 const ProjectDashService = {
-  getProject() {
-    return fetch(`${url}/projects/:project_id`, {
+  getProjects(project_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/projects/${project_id}`, {
       method: 'GET',
       headers: {
-        // authorization: `Bearer ${TokenService.getAuthToken()}`,
+        authorization: `Bearer ${TokenService.getAuthToken()}`
       }
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
   },
 
-  getVacancies() {
-    return fetch(`${url}/vacancies/:project_id`, {
+  getVacancies(project_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/vacancies/${project_id}`, {
       method: 'GET',
       headers: {
-        // authorization: `Bearer ${TokenService.getAuthToken()}`,
+        authorization: `Bearer ${TokenService.getAuthToken()}`
       }
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
   },
 
-  postVacancies(title, description, skills) {
-    return fetch(`${url}/vacancies/:project_id`, {
+  getRequests(project_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/requests/${project_id}`, {
+      method: 'GET',
+      headers: {
+        authorization: `Bearer ${TokenService.getAuthToken()}`
+      }
+    }).then(res =>
+      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
+    );
+  },
+
+  getPosts(project_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/posts/${project_id}`, {
+      method: 'GET',
+      headers: {
+        authorization: `Bearer ${TokenService.getAuthToken()}`
+      }
+    }).then(res =>
+      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
+    );
+  },
+
+  postVacancies(title, description, skills, project_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/vacancies/${project_id}`, {
       method: 'POST',
       headers: {
-        // authorization: `Bearer ${TokenService.getAuthToken()}`,
+        authorization: `Bearer ${TokenService.getAuthToken()}`
       },
-      body: {
-        title, description, skills
-      }
-    }).then(res =>
-      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
-    );
-  },
-  
-  patchVacancies() {},
-
-  getRequest() {
-    return fetch(`${url}/requests`, {
-      method: 'GET',
-      headers: {
-        // authorization: `Bearer ${TokenService.getAuthToken()}`,
-      }
+      body: JSON.stringify({ title, description, skills })
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
   },
 
-  deleteRequest() {
-    return fetch(`${url}/requests/:request_id`, {
-      method: 'DELETE',
+  patchVacancies(vacancy_id) {},
+
+  postRequest(project_id, vacancy_id, user_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/requests/${project_id}`, {
+      method: 'POST',
       headers: {
-        // authorization: `Bearer ${TokenService.getAuthToken()}`,
-      }
+        authorization: `Bearer ${TokenService.getAuthToken()}`
+      },
+      body: JSON.stringify({ vacancy_id, user_id })
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
   },
 
-  getPosts() {
-    return fetch(`${url}/posts/:project_id`, {
-      method: 'GET',
+  patchRequest(status, request_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/requests/${request_id}`, {
+      method: 'PATCH',
       headers: {
-        // authorization: `Bearer ${TokenService.getAuthToken()}`,
-      }
+        authorization: `Bearer ${TokenService.getAuthToken()}`
+      },
+      body: JSON.stringify({ status })
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
   },
+
+
   postPost() {},
   postChat() {},
-  postMessage() {},
+  postMessage() {}
 };
 
 export default ProjectDashService;
