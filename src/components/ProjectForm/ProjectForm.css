@@ -1,4 +1,16 @@
+.projectSubmitForm {
+  width: 100%;
+}
+
 
 .submit {
   margin-right: 10px;
+}
+
+
+
+@media only screen  and (min-width: 775px) {
+  .projectSubmitForm {
+    width: 60%;
+  }
 }

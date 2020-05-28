@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import ProjectApiService from '../../services/project-api-service';
 import './ProjectForm.css';
 import { Input, Textarea, Button, Section } from '../Utils/Utils';
 
@@ -7,21 +8,22 @@ export default class ProjectForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    // const { projectName, description, tags, links } = e.target;
-    
-    // // ProjectApiService.postProject(projectName.value, description.value, tags.value, links.value)
-    // //   .then(this.context.addProject)
-    // //   .then((project) => {
-    // //     this.props.history.push(`/projects`)
-    // //   })
-    // //   .catch(this.context.setError)
+    const { name, description, live_url, trello_url, github_url } = e.target;
+    const tags = e.target.tags.value.split(', ');
+    ProjectApiService.postProject(name.value, description.value, tags, live_url.value, trello_url.value, github_url.value)
+      .then(() => {
+        this.props.history.push(`/projects`)
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
 
 
   render() {
     return (
       <Section className="projects-form">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} className="projectSubmitForm">
           <h1>New Project</h1>
           <label htmlFor="name">Project name:</label>
           <Input type="text" name="name" id="name" required/>

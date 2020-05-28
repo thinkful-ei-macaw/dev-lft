@@ -14,8 +14,9 @@ const ProjectApiService = {
           : res.json()
       )
   },
-  getAllVacancies() {
-    return fetch(`${config.API_ENDPOINT}/vacancies`, {
+
+  getAllUserProjects() {
+    return fetch(`${config.API_ENDPOINT}/projects/user`, {
       headers: {
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
@@ -26,6 +27,20 @@ const ProjectApiService = {
           : res.json()
       )
   },
+
+  getAllVacanciesForAProject(project_id) {
+    return fetch(`${config.API_ENDPOINT}/vacancies/${project_id}`, {
+      headers: {
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+
   getProject(project_id) {
     return fetch(`${config.API_ENDPOINT}/projects/${project_id}`, {
       headers: {

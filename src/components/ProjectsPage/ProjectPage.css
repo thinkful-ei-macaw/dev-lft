@@ -5,7 +5,16 @@
 ul {
   list-style-type: none;
 }
-
+.bold {
+  font-weight: bold;
+  background-color: teal;
+  margin-right: 10px;
+}
+.oneProject {
+  background-color: rgb(146, 146, 172);
+  padding: 10px;
+  margin: 15px 0;
+}
 @media only screen  and (min-width: 775px) {
   .start-project {
     width: 30%;
