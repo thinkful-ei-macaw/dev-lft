@@ -38,7 +38,7 @@ export default class ProjectForm extends Component {
           <label htmlFor="live_url">GitHub url:</label>
           <Input type="text" name="github_url" required/>
           <Button className='submit'>Submit</Button>
-          <Button className="cancel" onClick={e => {e.preventDefault(); this.props.history.push('/projects')}}>Cancel</Button>
+          <Button className="cancel" onClick={e => {e.preventDefault(); this.props.history.push('/my-projects')}}>Cancel</Button>
         </form>
       </Section>
     )

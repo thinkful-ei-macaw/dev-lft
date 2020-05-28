@@ -11,11 +11,11 @@ export default class App extends Component {
       <div className="App">
 
         <Switch>
-        <Route  exact path={'/projects'}
+        <Route  path={'/my-projects'}
               component={ProjectsPage}/>
           <Route  path={'/project-form'}
               component={ProjectForm}/>
-          <Route  path={'/feeds/:project_id'}
+          <Route  path={'/feeds'}
               component={FeedPage}/>
         </Switch>
         

@@ -2,32 +2,30 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Section } from '../Utils/Utils';
 import ProjectApiService from '../../services/project-api-service';
-import FeedItem from '../FeedItem/FeedItem';
+import ProjectItem from '../ProjectItem/ProjectItem';
 
 export default class FeedPage extends Component {
   state = {
-    vacancies: []
+    vacantProjects: []
   }
 
   componentDidMount() {
-    let project_id = this.props.match.params.project_id;
-    ProjectApiService.getAllVacanciesForAProject(project_id)
-      .then(vac => this.setState({vacancies: vac.vacancy}))
+    ProjectApiService.getAllProjects()
+      .then(vacantProjects => this.setState({vacantProjects}))
   }
   
 
   render() {    
     return (
       <Section className="projects-page">      
-      <h2>Vacancies for this project:</h2> 
-      <Link to="/projects">Go Back</Link>
+      <h2>Projects with vacancies</h2> 
       {
-         (this.state.vacancies.length !== 0)? 
-         <div>{this.state.vacancies.map((vacancy, i) => {
-            return (<FeedItem key={i} vacancy={vacancy}/>)
+         (this.state.vacantProjects.length !== 0)? 
+         <div>{this.state.vacantProjects.map((project, i) => {
+            return (<ProjectItem key={i} project={project}/>)
          })}
          </div>
-          : 'No vacancies available!'
+          : 'No projects available!'
          }         
       
     </Section>

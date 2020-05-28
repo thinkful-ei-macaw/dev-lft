@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from '../Utils/Utils';
+import './ProjectItem.css';
 
 export default class FeedItem extends Component {
   
@@ -15,7 +17,7 @@ export default class FeedItem extends Component {
           <p><span className='bold'>GitHub url:</span>{project.github_url}</p>
           <p><span className='bold'>Live url:</span><a href={project.live_url} target="_blank" rel="noopener noreferrer">{project.live_url}</a></p>
           <p><span className='bold'>Trello url</span>{project.trello_url}</p>
-          <Link to={`/feeds/${project.id}`}>See vacancies</Link>
+          <Link to={`/project-dash/${project.id}`}>Go to dashboard</Link>          
         </div>
     )
   }
