@@ -107,9 +107,17 @@ const ProjectDashService = {
 
   postPost(project_id, user_id, content) {},
 
-  postMessage(project_id, recipient_id, message) {
-    // /chats
-    //send project_id and recipient_id in request body along with body
+  postChat(project_id, recipient_id, body) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/chats`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${TokenService.getAuthToken()}`
+      },
+      body: JSON.stringify({ recipient_id, project_id, body })
+    }).then(res =>
+      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
+    );
   },
 
   deleteProject(project_id) {

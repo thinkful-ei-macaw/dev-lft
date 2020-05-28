@@ -103,8 +103,8 @@ class ProjectDash extends Component {
     e.preventDefault();
     //patch to vacancies
     //user_id changes to null
-    //let user_id = null;
-    //ProjectDashService.patchVacancy(vacancy_id, user_id)
+    let user_id = null;
+    //    ProjectDashService.patchVacancy(vacancy_id, user_id)
     console.log('leave');
   };
 
@@ -123,21 +123,20 @@ class ProjectDash extends Component {
     console.log(message);
   };
 
- //need to rerender the vacancies
+  //need to rerender the vacancies
   handleApprove = e => {
     e.preventDefault();
     let request_id = e.target.value;
     let status = 'approved';
-    let {requests} = this.state
+    let { requests } = this.state;
     let newR = requests.map(item => {
       if (item.id == request_id) {
-        item.status = status
-        return item
+        item.status = status;
+        return item;
+      } else {
+        return item;
       }
-      else {
-        return item
-      }
-    })
+    });
     ProjectDashService.patchRequest(status, request_id).then(
       this.setState({
         requests: newR
@@ -149,16 +148,15 @@ class ProjectDash extends Component {
     e.preventDefault();
     let request_id = e.target.value;
     let status = 'denied';
-    let {requests} = this.state
+    let { requests } = this.state;
     let newR = requests.map(item => {
       if (item.id == request_id) {
-        item.status = status
-        return item
+        item.status = status;
+        return item;
+      } else {
+        return item;
       }
-      else {
-        return item
-      }
-    })
+    });
     ProjectDashService.patchRequest(status, request_id).then(
       this.setState({
         requests: newR
@@ -167,22 +165,26 @@ class ProjectDash extends Component {
   };
 
   handleNewMessage = e => {
+    let { recipient_id } = this.state;
+    let project_id = 1;
     e.preventDefault();
-    //open modal, send post request, close modal
-    this.handleCloseChatModal();
-    console.log('message');
+    let body = e.target['ProjectDash__chat-message'].value;
+    ProjectDashService.postChat(project_id, recipient_id, body).then(
+      this.handleCloseChatModal()
+    );
   };
 
   handleOpenChatModal = e => {
     this.setState({
-      showChatModal: true
+      showChatModal: true,
+      recipient_id: e.target.value
     });
-    this.renderChatModal();
   };
 
   handleCloseChatModal = e => {
     this.setState({
-      showChatModal: false
+      showChatModal: false,
+      recipient_id: null
     });
   };
 
@@ -288,7 +290,11 @@ class ProjectDash extends Component {
           <button value={request.id} onClick={this.handleApprove} type="button">
             Approve
           </button>
-          <button onClick={this.handleNewMessage} type="button">
+          <button
+            value={request.id}
+            onClick={this.handleOpenChatModal}
+            type="button"
+          >
             Message
           </button>
         </li>
@@ -370,6 +376,9 @@ class ProjectDash extends Component {
         ) : (
           ''
         )}
+        {user_role === 'owner' && this.state.showChatModal
+          ? this.renderChatModal()
+          : ''}
         {this.state.showVacancyModal ? this.renderVacancyModal() : ''}
       </section>
     );
