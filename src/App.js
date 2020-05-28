@@ -8,13 +8,11 @@ import FeedPage from './components/FeedPage/FeedPage';
 export default class App extends Component {
   render() {
     return (
-      <div className="App">
-        <Switch>
-          <Route path={'/my-projects'} component={ProjectsPage} />
-          <Route path={'/project-form'} component={ProjectForm} />
-          <Route path={'/feeds'} component={FeedPage} />
-        </Switch>
-      </div>
+      <Switch>
+        <Route exact path='/projects' component={ProjectsPage} />
+        <Route path='/projects/new' component={ProjectForm} />
+        <Route path='/feed' component={FeedPage} />
+      </Switch>
     );
   }
 }
