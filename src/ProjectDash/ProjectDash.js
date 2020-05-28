@@ -9,11 +9,13 @@ class ProjectDash extends Component {
     user_role: 'team_member',
     project,
     vacancies,
-    requests
+    requests,
+    showChatModal: false
+    // project_id
   };
 
   componentDidMount() {
-    let project_id = 1;
+    let project_id = 2;
     //get user role and store that as well
     ProjectDashService.getProjects(project_id).then(data => {
       this.setState({ project: data.project });
@@ -27,6 +29,8 @@ class ProjectDash extends Component {
     e.preventDefault();
     //patch to vacancies
     //user_id changes to null
+    let user_id = null;
+    //ProjectDashService.patchVacancies(vacancy_id, project_id, user_id)
     console.log('leave');
   };
 
@@ -38,8 +42,9 @@ class ProjectDash extends Component {
 
   handlePost = e => {
     e.preventDefault();
-    let postBody = e.target['ProjectDash__create-post'].value;
-    console.log(postBody);
+    let message = e.target['ProjectDash__create-post'].value;
+    //ProjectDashService.postPost(message, project_id)
+    console.log(message);
   };
 
   handleApprove = e => {
@@ -57,7 +62,44 @@ class ProjectDash extends Component {
 
   handleNewMessage = e => {
     e.preventDefault();
+    //open modal, send post request, close modal
+    this.handleCloseChatModal();
     console.log('message');
+  };
+
+  handleOpenChatModal = e => {
+    this.setState({
+      showChatModal: true
+    });
+    this.renderChatModal();
+  };
+
+  handleCloseChatModal = e => {
+    this.setState({
+      showChatModal: false
+    });
+  };
+
+  renderChatModal = () => {
+    return (
+      <div className="ProjectDash__chat-modal">
+        <form
+          onSubmit={this.handleNewMessage}
+          className="ProjectDash__start-chat-form"
+        >
+          <label htmlFor="ProjectDash__chat-message">What's the message?</label>
+          <input
+            type="text"
+            name="ProjectDash__chat-message"
+            id="ProjectDash__chat-message"
+          />
+          <button type="submit">Send</button>
+          <button onClick={this.handleCloseChatModal} type="button">
+            Cancel
+          </button>
+        </form>
+      </div>
+    );
   };
 
   render() {
@@ -76,6 +118,13 @@ class ProjectDash extends Component {
           <p>Role: {item.title}</p>
           <p>Duties: {item.description}</p>
           <p>Skills: {item.skills.join(', ')}</p>
+          {user_role === 'user' && item.user_id === null ? (
+            <button type="button" onClick={this.handleRequest}>
+              Request to join
+            </button>
+          ) : (
+            ''
+          )}
         </li>
       );
     });
@@ -106,13 +155,6 @@ class ProjectDash extends Component {
           <ul className="ProjectDash__tags">{tagsList}</ul>
           <ul className="ProjectDash__vacancies">{vacancyList}</ul>
         </article>
-        {user_role === 'user' ? (
-          <button type="button" onClick={this.handleRequest}>
-            Request to join
-          </button>
-        ) : (
-          ''
-        )}
 
         {user_role === 'team_member' ? (
           <article className="ProjectDash__team-options">
@@ -163,6 +205,7 @@ class ProjectDash extends Component {
         ) : (
           ''
         )}
+
         {user_role === 'owner' ? (
           <article className="ProjectDash__creator-options">
             <div className="ProjectDash__pending-requests">

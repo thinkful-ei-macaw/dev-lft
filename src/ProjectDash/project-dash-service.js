@@ -58,15 +58,25 @@ const ProjectDashService = {
     );
   },
 
-  patchVacancies(vacancy_id) {},
+  patchVacancies(vacancy_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/vacancies/${vacancy_id}`, {
+      method: 'PATCH',
+      headers: {
+        authorization: `Bearer ${TokenService.getAuthToken()}`
+      },
+      body: JSON.stringify({ vacancy_id})
+    }).then(res =>
+      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
+    );
+  },
 
-  postRequest(project_id, vacancy_id, user_id) {
-    return fetch(`${config.REACT_APP_API_ENDPOINT}/requests/${project_id}`, {
+  postRequest(project_id, vacancy_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/requests/${vacancy_id}`, {
       method: 'POST',
       headers: {
         authorization: `Bearer ${TokenService.getAuthToken()}`
       },
-      body: JSON.stringify({ vacancy_id, user_id })
+      body: JSON.stringify({ project_id})
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
@@ -84,10 +94,12 @@ const ProjectDashService = {
     );
   },
 
-
-  postPost() {},
-  postChat() {},
-  postMessage() {}
+  postPost(project_id, user_id, content) {},
+  
+  postMessage(project_id, recipient_id, message) {
+    // /chats
+    //send project_id and recipient_id in request body along with body:
+  }
 };
 
 export default ProjectDashService;
