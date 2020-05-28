@@ -1,5 +1,5 @@
-import config from '../config';
-import TokenService from '../services/token-service';
+import config from '../../config';
+import TokenService from '../../services/token-service';
 
 const ProjectDashService = {
   getProjects(project_id) {
@@ -50,6 +50,7 @@ const ProjectDashService = {
     return fetch(`${config.REACT_APP_API_ENDPOINT}/vacancies/${project_id}`, {
       method: 'POST',
       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${TokenService.getAuthToken()}`
       },
       body: JSON.stringify({ title, description, skills })
@@ -58,25 +59,36 @@ const ProjectDashService = {
     );
   },
 
-  patchVacancies(vacancy_id) {
+  patchVacancy(vacancy_id, user_id) {
     return fetch(`${config.REACT_APP_API_ENDPOINT}/vacancies/${vacancy_id}`, {
       method: 'PATCH',
       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${TokenService.getAuthToken()}`
       },
-      body: JSON.stringify({ vacancy_id})
+      body: JSON.stringify({ user_id })
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
+  },
+
+  deleteVacancy(vacancy_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/vacancies/${vacancy_id}`, {
+      method: 'DELETE',
+      headers: {
+        authorization: `Bearer ${TokenService.getAuthToken()}`
+      }
+    }).then(res => (!res.ok ? res.json().then(e => Promise.reject(e)) : res));
   },
 
   postRequest(project_id, vacancy_id) {
     return fetch(`${config.REACT_APP_API_ENDPOINT}/requests/${vacancy_id}`, {
       method: 'POST',
       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${TokenService.getAuthToken()}`
       },
-      body: JSON.stringify({ project_id})
+      body: JSON.stringify({ project_id })
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
@@ -86,19 +98,27 @@ const ProjectDashService = {
     return fetch(`${config.REACT_APP_API_ENDPOINT}/requests/${request_id}`, {
       method: 'PATCH',
       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${TokenService.getAuthToken()}`
       },
       body: JSON.stringify({ status })
-    }).then(res =>
-      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
-    );
+    }).then(res => (!res.ok ? res.json().then(e => Promise.reject(e)) : res));
   },
 
   postPost(project_id, user_id, content) {},
-  
+
   postMessage(project_id, recipient_id, message) {
     // /chats
-    //send project_id and recipient_id in request body along with body:
+    //send project_id and recipient_id in request body along with body
+  },
+
+  deleteProject(project_id) {
+    return fetch(`${config.REACT_APP_API_ENDPOINT}/projects/${project_id}`, {
+      method: 'DELETE',
+      headers: {
+        authorization: `Bearer ${TokenService.getAuthToken()}`
+      }
+    }).then(res => (!res.ok ? res.json().then(e => Promise.reject(e)) : res));
   }
 };
 
