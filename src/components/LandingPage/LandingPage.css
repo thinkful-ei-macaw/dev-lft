@@ -1,0 +1,56 @@
+.landing-page .hero {
+  padding: 8rem 4rem;
+  font-size: 2rem;
+  background: #ddd;
+  margin-bottom: 4rem;
+}
+
+.landing-page h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+}
+
+.landing-page h1 i {
+  display: block;
+}
+
+.landing-page .cta {
+  border: 2px solid #222;
+  padding: 0.5em 1em;
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.landing-page .cta:hover {
+  background: #222;
+  color: #fff;
+}
+
+.landing-page .features,
+.landing-page .projects,
+.landing-page .push {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.landing-page .features article {
+  margin-bottom: 4rem;
+}
+
+.landing-page .carousel {
+  width: 70%;
+}
+
+.landing-page .push {
+  margin-top: 4rem;
+  padding: 4rem;
+  background: #eee;
+}
+
+.landing-page .push h2 {
+  margin: 0;
+}
