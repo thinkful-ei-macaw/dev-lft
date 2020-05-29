@@ -1,5 +1,5 @@
 import config from '../config';
-import TokenService from '../services/token-service';
+import TokenService from './token-service';
 
 const AuthApiService = {
   postLogin({ username, password }) {
@@ -13,6 +13,7 @@ const AuthApiService = {
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
   },
+
   postUser(user) {
     return fetch(`${config.API_ENDPOINT}/users`, {
       method: 'POST',
@@ -23,6 +24,13 @@ const AuthApiService = {
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
+  },
+
+  getUserCount() {
+    return fetch(`${config.API_ENDPOINT}/users`)
+      .then(res =>
+        !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
+      );
   },
 
   getUserInfo(user_id) {

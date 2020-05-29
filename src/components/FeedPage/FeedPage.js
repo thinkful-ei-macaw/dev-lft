@@ -10,7 +10,6 @@ export default class FeedPage extends Component {
 
   componentDidMount() {
     ProjectApiService.getAllProjects().then(projects => {
-      console.log(projects);
       this.setState({ vacantProjects: projects });
     });
   }
@@ -26,8 +25,8 @@ export default class FeedPage extends Component {
             })}
           </div>
         ) : (
-          'No projects available!'
-        )}
+            'No projects available!'
+          )}
       </Section>
     );
   }
