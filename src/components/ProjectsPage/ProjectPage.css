@@ -1,4 +1,3 @@
-
 .start-project {
   width: 80%;
 }
@@ -15,7 +14,7 @@ ul {
   padding: 10px;
   margin: 15px 0;
 }
-@media only screen  and (min-width: 775px) {
+@media only screen and (min-width: 775px) {
   .start-project {
     width: 30%;
   }

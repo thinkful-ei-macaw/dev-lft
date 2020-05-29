@@ -16,7 +16,6 @@ export default class ProjectsPage extends Component {
   }
 
   render() {
-    console.log('all projects with vacancies', this.state.projects);
     return (
       <Section className="projects-page">
         <Button

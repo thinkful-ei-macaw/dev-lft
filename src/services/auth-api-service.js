@@ -25,11 +25,22 @@ const AuthApiService = {
     );
   },
 
+<<<<<<< HEAD
   getUserCount() {
     return fetch(`${config.API_ENDPOINT}/users`)
       .then(res =>
         !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
       );
+=======
+  getUserInfo(user_id) {
+    return fetch(`${config.API_ENDPOINT}/users/${user_id}`, {
+      headers: {
+        Authorization: `bearer ${TokenService.getAuthToken()}`
+      }
+    }).then(res =>
+      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
+    );
+>>>>>>> 63162833e503a7fdcf7e4f7377d57474a38acc1d
   }
 };
 

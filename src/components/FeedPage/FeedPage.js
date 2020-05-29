@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Section } from '../Utils/Utils';
 import ProjectApiService from '../../services/project-api-service';
 import ProjectItem from '../ProjectItem/ProjectItem';
