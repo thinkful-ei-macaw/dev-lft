@@ -49,9 +49,8 @@ class Chat extends Component {
         <div role="alert">{error && <p>{error}</p>}</div>
         <ul className="Chat__list">
           {chats.map(chat => (
-            <li className="Chat__item">
+            <li key={chat.chat_id} className="Chat__item">
               <Link
-                key={chat.chat_id}
                 className="Chat__link"
                 to={{
                   pathname: '/chats/messages',
