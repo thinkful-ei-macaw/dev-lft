@@ -50,6 +50,7 @@ class ChatMessages extends Component {
   };
 
   getNameInitials(firstName, lastName) {
+    // TODO: Refactor into shared util with Chat
     // Helps avoid NaN warning from React
     // by ensuring any response is a string.
     return (firstName[0] + lastName[0]).toString();
