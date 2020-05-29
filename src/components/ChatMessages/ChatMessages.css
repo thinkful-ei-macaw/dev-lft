@@ -1,0 +1,60 @@
+.Messages__header {
+  display: flex;
+  flex-flow: row nowrap;
+  text-decoration: none;
+  color: inherit;
+}
+
+.Messages__header > p > span {
+  display: block;
+  margin-left: 1rem;
+}
+
+.Messages__logo {
+  height: 55px;
+  width: 55px;
+  display: block;
+  text-align: center;
+  align-self: center;
+  border: 1px solid black;
+  border-radius: 50%;
+}
+
+.Messages__logo_initials {
+  line-height: 55px;
+}
+
+.Messages__name {
+  font-weight: 700;
+}
+
+.Messages__list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.Messages__item {
+  padding: 1rem;
+  margin-top: 4rem;
+  border: 1px solid black;
+  position: relative;
+  width: 80%;
+}
+
+.author {
+  background-color: lightgray;
+  margin-left: auto;
+}
+
+.Messages__time {
+  position: absolute;
+  bottom: -25px;
+  right: 0px;
+}
+
+.author.Messages__time {
+  position: absolute;
+  bottom: -25px;
+  left: 0px;
+}

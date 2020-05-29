@@ -4,6 +4,8 @@ import './App.css';
 import ProjectForm from './components/ProjectForm/ProjectForm';
 import ProjectsPage from './components/ProjectsPage/ProjectsPage';
 import FeedPage from './components/FeedPage/FeedPage';
+import Chat from './components/Chat/Chat';
+import ChatMessages from './components/ChatMessages/ChatMessages';
 
 export default class App extends Component {
   render() {
@@ -13,6 +15,8 @@ export default class App extends Component {
           <Route path={'/my-projects'} component={ProjectsPage} />
           <Route path={'/project-form'} component={ProjectForm} />
           <Route path={'/feeds'} component={FeedPage} />
+          <Route exact path={'/chats'} component={Chat} />
+          <Route exact path={'/chats/messages'} component={ChatMessages} />
         </Switch>
       </div>
     );
