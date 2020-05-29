@@ -36,9 +36,11 @@ export default class LandingPage extends Component {
     return (
       <main className="landing-page">
         <section className="hero">
-          <h1>Side Projects <i>Conquered.</i></h1>
-          <p>Lorem ipsum something something something something something</p>
-          <Link to="/signup" className="cta">Start Yours</Link>
+          <div className="wrapper">
+            <h1>Side Projects <i>Conquered.</i></h1>
+            <p>Lorem ipsum something something something something something</p>
+            <Link to="/signup" className="cta">Start Yours</Link>
+          </div>
         </section>
 
         <section className="wrapper features">
@@ -61,7 +63,7 @@ export default class LandingPage extends Component {
           </article>
         </section>
 
-        <section className="wrapper projects">
+        {projects.length && <section className="wrapper projects">
           <h2>Projects that could use someone like you</h2>
           <Carousel>
             {projects.map(project => (
@@ -72,7 +74,7 @@ export default class LandingPage extends Component {
             ))}
           </Carousel>
           <Link to="/signup" className="cta">Sign up to join this team</Link>
-        </section>
+        </section>}
 
         <section className="push">
           <h2>What are you waiting for?</h2>
