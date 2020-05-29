@@ -1,41 +1,104 @@
 import React, { Component } from 'react';
 import ProjectDashService from './project-dash-service';
 import './ProjectDash.css';
-import { project, vacancies, requests } from './dummydata';
+import TokenService from '../../services/token-service';
+import { Link } from 'react-router-dom';
 
 class ProjectDash extends Component {
-  //user can be project_owner, team_member, or user
   state = {
-    user_role: 'owner',
-    project,
-    vacancies,
-    requests,
+    user_role: '',
+    project: {},
+    vacancies: [],
+    requests: [],
+    posts: [],
     showChatModal: false
-    // project_id
   };
 
   componentDidMount() {
-    let project_id = 1;
-    //get user role and store that as well
-    ProjectDashService.getProjects(project_id).then(data => {
-      this.setState({ project: data.project });
+    let project_id = this.props.match.params.project_id;
+    let userInfo = TokenService.parseAuthToken();
+
+    this.setState({
+      project_id,
+      user_id: userInfo.user_id
     });
-    ProjectDashService.getRequests(project_id).then(res => {
-      this.setState({ requests: res });
-    });
-    ProjectDashService.getVacancies(project_id).then(response => {
-      this.setState({ vacancies: response });
-    });
-    // ProjectDashService.getPosts(project_id)
+
+    ProjectDashService.getProjects(project_id)
+      .then(project => {
+        this.setState({ project });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
+
+    ProjectDashService.getRequests(project_id)
+      .then(res => {
+        this.setState({ requests: res });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
+
+    ProjectDashService.getVacancies(project_id)
+      .then(response => {
+        this.setState({ vacancies: response });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
+
+    ProjectDashService.getPosts(project_id)
+      .then(posts => {
+        this.setState({ posts });
+      })
+      .then(() => {
+        this.determineUserRole();
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
   }
+
+  determineUserRole = () => {
+    let { user_id, project, vacancies } = this.state;
+    let isMember = vacancies.find(item => item.user_id == user_id);
+
+    if (project.creator == user_id) {
+      this.setState({
+        user_role: 'owner'
+      });
+    } else if (isMember !== undefined) {
+      this.setState({
+        user_role: 'team_member'
+      });
+    } else {
+      this.setState({
+        user_role: 'user'
+      });
+    }
+  };
 
   handleDeleteProject = e => {
     e.preventDefault();
-    let project_id = 1;
+    if (
+      prompt(
+        'Are you really sure you want to delete this project??? Type "delete my project" to confirm '
+      ) !== 'delete my project'
+    ) {
+      return;
+    }
+    let { project_id } = this.state;
+
     ProjectDashService.deleteProject(project_id)
-      .then
-      //history.push('/feed')
-      ();
+      .then(() => {
+        this.setState({
+          project: []
+        });
+        this.props.history.push('/my-projects');
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
   };
 
   handleShowVacancyModal = e => {
@@ -45,13 +108,18 @@ class ProjectDash extends Component {
   };
 
   handleCloseVacancyModal = () => {
-    let project_id = 1;
-    ProjectDashService.getVacancies(project_id).then(response => {
-      this.setState({
-        vacancies: response,
-        showVacancyModal: false
+    let { project_id } = this.state;
+
+    ProjectDashService.getVacancies(project_id)
+      .then(response => {
+        this.setState({
+          vacancies: response,
+          showVacancyModal: false
+        });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
       });
-    });
   };
 
   renderVacancyModal = e => {
@@ -74,61 +142,104 @@ class ProjectDash extends Component {
 
   handleSubmitVacancy = e => {
     e.preventDefault();
-    let project_id = 1;
+    let { project_id } = this.state;
+
     let title = e.target['vacancy-title'].value;
     let description = e.target['vacancy-description'].value;
     let skills = e.target['vacancy-skills'].value.split(',');
-    ProjectDashService.postVacancies(
-      title,
-      description,
-      skills,
-      project_id
-    ).then(res => (res ? this.handleCloseVacancyModal() : ''));
-    //need to add error handling
+    ProjectDashService.postVacancies(title, description, skills, project_id)
+      .then(res => (res ? this.handleCloseVacancyModal() : ''))
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
   };
 
   handleDeleteVacancy = e => {
     e.preventDefault();
+    if (
+      prompt(
+        'Are you sure you want to delete this vacancy? Type "delete" to confirm '
+      ) !== 'delete'
+    ) {
+      return;
+    }
     let vacancy_id = e.target.value;
     const { vacancies: prevGuides } = this.state;
     const filtered = prevGuides.filter(item => item.id != vacancy_id);
-    ProjectDashService.deleteVacancy(vacancy_id).then(
-      this.setState({
-        vacancies: filtered
-      })
-    );
+    ProjectDashService.deleteVacancy(vacancy_id)
+      .then(
+        this.setState({
+          vacancies: filtered
+        })
+      )
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
   };
 
   handleLeaveTeam = e => {
     e.preventDefault();
-    //patch to vacancies
+    if (
+      prompt(
+        'Are you sure you want to leave this team? Type "leave" to confirm '
+      ) !== 'leave'
+    ) {
+      return;
+    }
+    let { vacancies, user_id, project_id } = this.state;
+    let vacancy = vacancies.find(item => item.user_id === user_id);
+    let vacancy_id = vacancy.id;
     //user_id changes to null
-    let user_id = null;
-    //    ProjectDashService.patchVacancy(vacancy_id, user_id)
-    console.log('leave');
+    user_id = null;
+    ProjectDashService.patchVacancy(vacancy_id, user_id)
+      .then(() => {
+        ProjectDashService.getVacancies(project_id).then(vacancies => {
+          this.setState({
+            vacancies,
+            user_role: 'user'
+          });
+        });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
   };
 
   //need to add some sort of user feedback
   handleRequest = e => {
     e.preventDefault();
-    let project_id = 1;
+    let { project_id } = this.state;
     let vacancy_id = e.target.value;
-    ProjectDashService.postRequest(project_id, vacancy_id);
+
+    ProjectDashService.postRequest(project_id, vacancy_id).catch(res => {
+      alert(res.error);
+    });
   };
 
   handleSubmitPost = e => {
     e.preventDefault();
-    let message = e.target['ProjectDash__create-post'].value;
-    //ProjectDashService.postPost(message, project_id)
-    console.log(message);
+    let { project_id } = this.state;
+    let message = e.target['create-post'].value;
+    document.getElementById('post-to-project-form').reset();
+
+    ProjectDashService.postPost(project_id, message)
+      .then(() => {
+        ProjectDashService.getPosts(project_id).then(posts => {
+          this.setState({
+            posts
+          });
+        });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
   };
 
-  //need to rerender the vacancies
   handleApprove = e => {
     e.preventDefault();
     let request_id = e.target.value;
     let status = 'approved';
-    let { requests } = this.state;
+    let { requests, project_id } = this.state;
     let newR = requests.map(item => {
       if (item.id == request_id) {
         item.status = status;
@@ -137,41 +248,54 @@ class ProjectDash extends Component {
         return item;
       }
     });
-    ProjectDashService.patchRequest(status, request_id).then(
-      this.setState({
-        requests: newR
+    ProjectDashService.patchRequest(status, request_id)
+      .then(() => {
+        ProjectDashService.getVacancies(project_id).then(vacancies => {
+          this.setState({
+            vacancies
+          });
+        });
       })
-    );
+      .then(() => {
+        ProjectDashService.getRequests(project_id).then(requests => {
+          this.setState({
+            requests
+          });
+        });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
   };
 
   handleDecline = e => {
     e.preventDefault();
     let request_id = e.target.value;
     let status = 'denied';
-    let { requests } = this.state;
-    let newR = requests.map(item => {
-      if (item.id == request_id) {
-        item.status = status;
-        return item;
-      } else {
-        return item;
-      }
-    });
-    ProjectDashService.patchRequest(status, request_id).then(
-      this.setState({
-        requests: newR
+    let { project_id } = this.state;
+
+    ProjectDashService.patchRequest(status, request_id)
+      .then(() => {
+        ProjectDashService.getRequests(project_id).then(requests => {
+          this.setState({
+            requests
+          });
+        });
       })
-    );
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
   };
 
   handleNewMessage = e => {
-    let { recipient_id } = this.state;
-    let project_id = 1;
     e.preventDefault();
-    let body = e.target['ProjectDash__chat-message'].value;
-    ProjectDashService.postChat(project_id, recipient_id, body).then(
-      this.handleCloseChatModal()
-    );
+    let { recipient_id, project_id } = this.state;
+    let body = e.target['chat-message'].value;
+    ProjectDashService.postChat(project_id, recipient_id, body)
+      .then(() => this.handleCloseChatModal())
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
   };
 
   handleOpenChatModal = e => {
@@ -188,40 +312,71 @@ class ProjectDash extends Component {
     });
   };
 
-  //in progess
+  handleEditPost = e => {
+    e.preventDefault();
+    let post_id = e.target.value;
+    this.setState({
+      postToEdit: post_id
+    });
+  };
+
+  handlePatchPost = e => {
+    e.preventDefault();
+    let { project_id } = this.state;
+    let post_id = this.state.postToEdit;
+    let message = e.target['edit-post'].value;
+
+    ProjectDashService.patchPost(post_id, message)
+      .then(() => {
+        ProjectDashService.getPosts(project_id).then(posts => {
+          this.setState({
+            posts,
+            postToEdit: null
+          });
+        });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
+  };
+
+  handleCancelEdit = () => {
+    this.setState({
+      postToEdit: null
+    });
+  };
+
   handleRemoveMember = e => {
     e.preventDefault();
+    if (
+      prompt(
+        'Are you sure you want to remove this member? Type "remove" to confirm '
+      ) !== 'remove'
+    ) {
+      return;
+    }
     let vacancy_id = e.target.value;
     let user_id = null;
-    let { vacancies } = this.state;
-    let newV = vacancies.map(item => {
-      if (item.id == vacancy_id) {
-        item.user_id = null;
-        return item;
-      } else {
-        return item;
-      }
-    });
-    ProjectDashService.patchVacancy(vacancy_id, user_id).then(
-      this.setState({
-        vacancies: newV
+    let { project_id } = this.state;
+    ProjectDashService.patchVacancy(vacancy_id, user_id)
+      .then(() => {
+        ProjectDashService.getVacancies(project_id).then(vacancies => {
+          this.setState({
+            vacancies
+          });
+        });
       })
-    );
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
   };
 
   renderChatModal = () => {
     return (
-      <div className="ProjectDash__chat-modal">
-        <form
-          onSubmit={this.handleNewMessage}
-          className="ProjectDash__start-chat-form"
-        >
-          <label htmlFor="ProjectDash__chat-message">What's the message?</label>
-          <input
-            type="text"
-            name="ProjectDash__chat-message"
-            id="ProjectDash__chat-message"
-          />
+      <div className="chat-modal">
+        <form onSubmit={this.handleNewMessage} className="start-chat-form">
+          <label htmlFor="chat-message">What's the message?</label>
+          <input type="text" name="chat-message" id="chat-message" />
           <button type="submit">Send</button>
           <button onClick={this.handleCloseChatModal} type="button">
             Cancel
@@ -231,16 +386,41 @@ class ProjectDash extends Component {
     );
   };
 
-  render() {
-    let { project, vacancies, requests, user_role } = this.state;
-    let tagsList = project.tags.map(tag => {
-      return <li key={tag}>{tag}</li>;
-    });
+  renderTags = () => {
+    let { project } = this.state;
+    if (!project) {
+      return;
+    } else if (project.tags) {
+      let tagsList = project.tags.map(tag => {
+        return <li key={tag}>{tag}</li>;
+      });
+      return tagsList;
+    }
+  };
+
+  renderVacancies = () => {
+    let { vacancies, user_role } = this.state;
+    if (!vacancies) {
+      return <p>No vacancies at this time</p>;
+    }
 
     let vacancyList = vacancies.map(item => {
       return (
         <li key={item.id}>
           <p>{item.user_id === null ? 'This role is available' : ''}</p>
+          <h3>
+            {item.user_id !== null ? (
+              <Link to={`/users/${item.user_id}`}>
+                <span>
+                  {item.first_name} {item.last_name}
+                </span>
+              </Link>
+            ) : (
+              <span>
+                {item.first_name} {item.last_name}
+              </span>
+            )}
+          </h3>
           <p>Role: {item.title}</p>
           <p>Duties: {item.description}</p>
           <p>Skills: {item.skills.join(', ')}</p>
@@ -276,14 +456,63 @@ class ProjectDash extends Component {
         </li>
       );
     });
+    return vacancyList;
+  };
 
-    let pendingRequests = requests.filter(request => {
-      return request.status === 'pending';
+  renderPosts = () => {
+    let { posts, user_id, postToEdit } = this.state;
+    if (!posts) {
+      return <p>No posts at this time</p>;
+    }
+
+    let allPosts = posts.map(post => {
+      return (
+        <li key={post.id}>
+          <p>
+            {post.first_name} {post.last_name}: {post.message}
+          </p>
+          {post.user_id === user_id ? (
+            <button value={post.id} onClick={this.handleEditPost} type="button">
+              edit
+            </button>
+          ) : (
+            ''
+          )}
+          {post.user_id === user_id && postToEdit == post.id ? (
+            <form
+              name="edit-post-form"
+              className="edit-post-form"
+              onSubmit={this.handlePatchPost}
+            >
+              <label htmlFor="edit-post">Change to:</label>
+              <input type="text" name="edit-post" id="edit-post" />
+              <button type="submit">Submit</button>
+              <button onClick={this.handleCancelEdit} type="button">
+                Cancel
+              </button>
+            </form>
+          ) : (
+            ''
+          )}
+        </li>
+      );
     });
-    let requestList = pendingRequests.map(request => {
+    return allPosts;
+  };
+
+  renderRequests = () => {
+    let { requests } = this.state;
+    if (!requests) {
+      return <p>No requests at this time</p>;
+    }
+
+    let requestList = requests.map(request => {
       return (
         <li key={request.id}>
-          {request.name} wants to join your team
+          <Link to={`/users/${request.user_id}`}>
+            {request.first_name} {request.last_name}
+          </Link>
+          wants to fill your {request.vacancy_title} role
           <button value={request.id} onClick={this.handleDecline} type="button">
             Decline
           </button>
@@ -301,20 +530,33 @@ class ProjectDash extends Component {
       );
     });
 
+    return requestList;
+  };
+
+  render() {
+    let { project, user_role, error } = this.state;
+    if (!project) {
+      return <p>Could not find this project</p>;
+    }
     return (
       <section className="ProjectDash">
+        <div role="alert">{error && <p>{error}</p>}</div>
         <h1>Project Dashboard</h1>
-        <article className="ProjectDash__project">
+        <article className="project">
           <h2>{project.name}</h2>
           <p>{project.description}</p>
-          <ul className="ProjectDash__tags">{tagsList}</ul>
-          <ul className="ProjectDash__vacancies">{vacancyList}</ul>
+          <ul className="tags">{this.renderTags()}</ul>
+          <ul className="vacancies">{this.renderVacancies()}</ul>
         </article>
 
-        {user_role === 'team_member' ? (
-          <article className="ProjectDash__team-options">
+        {user_role === 'team_member' || user_role === 'owner' ? (
+          <article className="team-options">
+            <div className="team-posts">
+              <ul>{this.renderPosts()}</ul>
+            </div>
+
             <a
-              className="ProjectDash__links"
+              className="links"
               rel="noopener noreferrer"
               target="_blank"
               href="https://www.github.com"
@@ -322,7 +564,7 @@ class ProjectDash extends Component {
               Github
             </a>
             <a
-              className="ProjectDash__links"
+              className="links"
               rel="noopener noreferrer"
               target="_blank"
               href="https://www.github.com"
@@ -330,7 +572,7 @@ class ProjectDash extends Component {
               Live Page
             </a>
             <a
-              className="ProjectDash__links"
+              className="links"
               rel="noopener noreferrer"
               target="_blank"
               href="https://www.trello.com"
@@ -338,33 +580,28 @@ class ProjectDash extends Component {
               Trello
             </a>
 
-            <form
-              onSubmit={this.handleSubmitPost}
-              className="ProjectDash__post-to-project"
-            >
-              <label htmlFor="ProjectDash__create-post">
-                What do you want to post?
-              </label>
-              <input
-                name="ProjectDash__create-post"
-                id="ProjectDash__create-post"
-                type="text"
-                required
-              />
+            <form onSubmit={this.handleSubmitPost} id="post-to-project-form">
+              <label htmlFor="create-post">What do you want to post?</label>
+              <input name="create-post" id="create-post" type="text" required />
               <button type="submit">Submit Post</button>
             </form>
-            <button onClick={this.handleLeaveTeam} type="button">
-              Leave Team
-            </button>
           </article>
         ) : (
           ''
         )}
 
+        {user_role === 'team_member' ? (
+          <button onClick={this.handleLeaveTeam} type="button">
+            Leave Team
+          </button>
+        ) : (
+          ''
+        )}
+
         {user_role === 'owner' ? (
-          <article className="ProjectDash__creator-options">
-            <div className="ProjectDash__pending-requests">
-              <ul className="ProjectDash__request">{requestList}</ul>
+          <article className="creator-options">
+            <div className="pending-requests">
+              <ul className="request">{this.renderRequests()}</ul>
             </div>
             <button onClick={this.handleShowVacancyModal} type="button">
               Add new vacancy
