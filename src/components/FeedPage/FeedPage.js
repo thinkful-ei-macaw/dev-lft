@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Section } from '../Utils/Utils';
 import ProjectApiService from '../../services/project-api-service';
 import ProjectItem from '../ProjectItem/ProjectItem';
@@ -11,7 +10,6 @@ export default class FeedPage extends Component {
 
   componentDidMount() {
     ProjectApiService.getAllProjects().then(projects => {
-      console.log(projects);
       this.setState({ vacantProjects: projects });
     });
   }
@@ -27,8 +25,8 @@ export default class FeedPage extends Component {
             })}
           </div>
         ) : (
-          'No projects available!'
-        )}
+            'No projects available!'
+          )}
       </Section>
     );
   }

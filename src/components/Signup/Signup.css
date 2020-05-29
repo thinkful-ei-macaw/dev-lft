@@ -1,4 +1,4 @@
-.loginpage fieldset {
+.signuppage fieldset {
   text-align: center;
   padding: 50px;
   margin-left: 25%;
@@ -6,7 +6,7 @@
   border-radius: 10%;
 }
 
-.devlogin {
+.devsignup {
   text-align: center;
   padding: 15px;
   margin: 50px;
@@ -17,25 +17,25 @@
   margin-right: auto;
 }
 
-.loginpage .error {
+.signuppage .error {
   color: red;
 }
 
-.loginpage h3 {
+.signuppage h3 {
   margin: 20px;
 }
 
-.loginpage label {
+.signuppage label {
   padding: 5px;
 }
 
-.loginpage input {
+.signuppage input {
   padding: 5px;
   margin: 20px;
   width: 125px;
 }
 
-.loginbtn {
+.signupbtn {
   padding: 10px;
   margin: 25px;
   margin-bottom: 50px;
@@ -44,7 +44,7 @@
   cursor: pointer;
 }
 
-.loginpage a {
+.signuppage a {
   text-decoration: none;
   color: black;
   font-size: 11px;

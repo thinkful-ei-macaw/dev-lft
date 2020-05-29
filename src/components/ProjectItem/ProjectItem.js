@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '../Utils/Utils';
 import './ProjectItem.css';
 
 export default class FeedItem extends Component {

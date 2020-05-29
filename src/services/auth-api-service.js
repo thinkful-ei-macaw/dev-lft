@@ -1,5 +1,5 @@
 import config from '../config';
-import TokenService from '../services/token-service';
+import TokenService from './token-service';
 
 const AuthApiService = {
   postLogin({ username, password }) {
@@ -13,6 +13,7 @@ const AuthApiService = {
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
   },
+
   postUser(user) {
     return fetch(`${config.API_ENDPOINT}/users`, {
       method: 'POST',
@@ -25,14 +26,44 @@ const AuthApiService = {
     );
   },
 
-  getUser() {
-    return fetch(`${config.API_ENDPOINT}/user`, {
+  getUserCount() {
+    return fetch(`${config.API_ENDPOINT}/users`).then(res =>
+      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
+    );
+  },
+
+  getUserInfo(user_id) {
+    return fetch(`${config.API_ENDPOINT}/users/${user_id}`, {
       headers: {
         Authorization: `bearer ${TokenService.getAuthToken()}`
       }
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
+  },
+
+  updateUserInfo(
+    user_id,
+    first_name,
+    last_name,
+    github_url,
+    linkedin_url,
+    twitter_url
+  ) {
+    return fetch(`${config.API_ENDPOINT}/users/${user_id}`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `bearer ${TokenService.getAuthToken()}`
+      },
+      body: JSON.stringify({
+        first_name,
+        last_name,
+        github_url,
+        linkedin_url,
+        twitter_url
+      })
+    }).then(res => (!res.ok ? res.json().then(e => Promise.reject(e)) : res));
   }
 };
 
