@@ -8,10 +8,11 @@ import Footer from './components/Footer/Footer';
 import ProjectForm from './components/ProjectForm/ProjectForm';
 import ProjectsPage from './components/ProjectsPage/ProjectsPage';
 import FeedPage from './components/FeedPage/FeedPage';
+import Login from './components/Login/Login';
+import Signup from './components/Signup/Signup';
 import UserProfile from './components/UserProfile/UserProfile';
 import Chat from './components/Chat/Chat';
 import ChatMessages from './components/ChatMessages/ChatMessages';
-import Login from './components/Login/Login';
 
 export default class App extends Component {
   render() {
@@ -20,6 +21,7 @@ export default class App extends Component {
         <Nav />
         <Switch>
           <Route exact path='/' component={LandingPage} />
+          <Route path='/signup' component={Signup} />
           <Route path='/login' component={Login} />
           <Route path='/feed' component={FeedPage} />
           <Route path='/my-projects' component={ProjectsPage} />
