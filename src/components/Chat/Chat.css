@@ -1,0 +1,56 @@
+.Chat__list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.Chat__link {
+  text-decoration: none;
+  color: inherit;
+  display: contents;
+}
+
+.Chat__item {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr, 2fr, 2fr, 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas:
+    'logo name project date'
+    'logo preview preview ...'
+    'logo preview preview ...';
+}
+
+.Chat__logo {
+  grid-area: logo;
+  border: 1px solid black;
+  height: 55px;
+  width: 55px;
+  border-radius: 50%;
+  align-self: center;
+  text-align: center;
+}
+
+.Chat__logo_initials {
+  line-height: 55px;
+}
+
+.Chat__name {
+  grid-area: name;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-weight: 700;
+}
+
+.Chat__project {
+  grid-area: project;
+}
+
+.Chat__preview {
+  grid-area: preview;
+  align-self: center;
+}
+
+.Chat__date {
+  grid-area: date;
+}
