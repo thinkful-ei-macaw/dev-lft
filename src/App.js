@@ -13,6 +13,7 @@ import Signup from './components/Signup/Signup';
 import UserProfile from './components/UserProfile/UserProfile';
 import Chat from './components/Chat/Chat';
 import ChatMessages from './components/ChatMessages/ChatMessages';
+import Settings from './components/Settings/Settings';
 
 export default class App extends Component {
   render() {
@@ -20,15 +21,16 @@ export default class App extends Component {
       <React.Fragment>
         <Nav />
         <Switch>
-          <Route exact path='/' component={LandingPage} />
-          <Route path='/signup' component={Signup} />
-          <Route path='/login' component={Login} />
-          <Route path='/feed' component={FeedPage} />
-          <Route path='/my-projects' component={ProjectsPage} />
-          <Route path='/project-form' component={ProjectForm} />
-          <Route path='/users/:user_id' component={UserProfile} />
-          <Route exact path='/chats' component={Chat} />
-          <Route path='/chats/messages' component={ChatMessages} />
+          <Route exact path="/" component={LandingPage} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/login" component={Login} />
+          <Route path="/settings" component={Settings} />
+          <Route path="/feed" component={FeedPage} />
+          <Route path="/my-projects" component={ProjectsPage} />
+          <Route path="/project-form" component={ProjectForm} />
+          <Route path="/users/:user_id" component={UserProfile} />
+          <Route exact path="/chats" component={Chat} />
+          <Route path="/chats/messages" component={ChatMessages} />
         </Switch>
         <Footer />
       </React.Fragment>

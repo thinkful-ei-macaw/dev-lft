@@ -27,10 +27,9 @@ const AuthApiService = {
   },
 
   getUserCount() {
-    return fetch(`${config.API_ENDPOINT}/users`)
-      .then(res =>
-        !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
-      );
+    return fetch(`${config.API_ENDPOINT}/users`).then(res =>
+      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
+    );
   },
 
   getUserInfo(user_id) {
@@ -41,6 +40,30 @@ const AuthApiService = {
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
+  },
+
+  updateUserInfo(
+    user_id,
+    first_name,
+    last_name,
+    github_url,
+    linkedin_url,
+    twitter_url
+  ) {
+    return fetch(`${config.API_ENDPOINT}/users/${user_id}`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `bearer ${TokenService.getAuthToken()}`
+      },
+      body: JSON.stringify({
+        first_name,
+        last_name,
+        github_url,
+        linkedin_url,
+        twitter_url
+      })
+    }).then(res => (!res.ok ? res.json().then(e => Promise.reject(e)) : res));
   }
 };
 
