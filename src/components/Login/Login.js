@@ -41,9 +41,7 @@ class Login extends React.Component {
         <form onSubmit={this.handleJWTSubmission}>
           <fieldset>
             <h3>Sign In</h3>
-            <div role='alert'>
-          {error && <p>{error}</p>}
-        </div>
+            <div role="alert">{error && <p>{error}</p>}</div>
             <label htmlFor="username">username:</label>
             <input type="text" id="username" name="user_name" required />
             <br />
