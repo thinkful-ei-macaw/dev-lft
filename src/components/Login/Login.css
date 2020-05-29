@@ -1,17 +1,9 @@
-* {
-  box-sizing: border-box;
-}
-
-fieldset {
+.loginpage fieldset {
   text-align: center;
   padding: 50px;
   margin-left: 25%;
   margin-right: 25%;
   border-radius: 10%;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .devlogin {
@@ -25,25 +17,25 @@ body {
   margin-right: auto;
 }
 
-.error {
+.loginpage .error {
   color: red;
 }
 
-h3 {
+.loginpage h3 {
   margin: 20px;
 }
 
-label {
+.loginpage label {
   padding: 5px;
 }
 
-input {
+.loginpage input {
   padding: 5px;
   margin: 20px;
   width: 125px;
 }
 
-.login {
+.loginbtn {
   padding: 10px;
   margin: 25px;
   margin-bottom: 50px;
@@ -52,7 +44,7 @@ input {
   cursor: pointer;
 }
 
-a {
+.loginpage a {
   text-decoration: none;
   color: black;
   font-size: 11px;

@@ -34,21 +34,23 @@ class Login extends React.Component {
   render() {
     const error = this.state.error;
     return (
-      <div>
+      <div className="loginpage">
         <header>
           <h2 className="devlogin">DEV LFT</h2>
         </header>
         <form onSubmit={this.handleJWTSubmission}>
           <fieldset>
             <h3>Sign In</h3>
-            <div role="alert">{error && <p>{error}</p>}</div>
+            <div role="alert">
+              <p className="error">{error}</p>
+            </div>
             <label htmlFor="username">username:</label>
             <input type="text" id="username" name="user_name" required />
             <br />
             <label htmlFor="pwd">password:</label>
             <input type="password" id="pwd" name="password" required />
             <br />
-            <button type="submit" className="login">
+            <button type="submit" className="loginbtn">
               LOG IN
             </button>
             <br />
