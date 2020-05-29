@@ -1,0 +1,14 @@
+footer {
+  background: #dddddd;
+  padding: 3rem 0;
+}
+
+footer h2,
+footer p {
+  margin: 0;
+  line-height: 1.2;
+}
+
+footer h2 a {
+  text-decoration: none;
+}
