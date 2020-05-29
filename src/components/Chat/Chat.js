@@ -7,11 +7,21 @@ import './Chat.css';
 class Chat extends Component {
   state = {
     chats: [],
-    error: null
+    error: null,
+    interval_id: null
   };
 
   componentDidMount() {
     this.getChats();
+
+    const checkChats = setInterval(() => {
+      this.getChats();
+    }, 30000);
+    this.setState({ interval_id: checkChats });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.interval_id);
   }
 
   getChats = () => {

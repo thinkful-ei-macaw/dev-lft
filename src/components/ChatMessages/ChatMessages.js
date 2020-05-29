@@ -14,7 +14,8 @@ class ChatMessages extends Component {
       first_name: '',
       last_name: '',
       project_name: '',
-      error: null
+      error: null,
+      interval_id: null
     };
   }
 
@@ -24,10 +25,16 @@ class ChatMessages extends Component {
     if (!this.props.history.location.state.chat_id) {
       this.setState({ redirect: true });
     }
-
     this.setState({ ...this.props.history.location.state });
-
     this.getAllMessages();
+    const checkMessages = setInterval(() => {
+      this.getAllMessages();
+    }, 30000);
+    this.setState({ interval_id: checkMessages });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.interval_id);
   }
 
   getAllMessages = () => {
