@@ -14,6 +14,7 @@ import UserProfile from './components/UserProfile/UserProfile';
 import Chat from './components/Chat/Chat';
 import ChatMessages from './components/ChatMessages/ChatMessages';
 import Settings from './components/Settings/Settings';
+import ProjectDash from './components/ProjectDash/ProjectDash';
 
 export default class App extends Component {
   render() {
@@ -28,6 +29,7 @@ export default class App extends Component {
           <Route path="/feed" component={FeedPage} />
           <Route path="/my-projects" component={ProjectsPage} />
           <Route path="/project-form" component={ProjectForm} />
+          <Route path="/project-dash/:project_id" component={ProjectDash} />
           <Route path="/users/:user_id" component={UserProfile} />
           <Route exact path="/chats" component={Chat} />
           <Route path="/chats/messages" component={ChatMessages} />

@@ -1,0 +1,23 @@
+.ProjectDash {
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.ProjectDash li {
+  list-style: none;
+}
+
+.ProjectDash .vacancies li {
+  border: 1px black solid;
+  margin: 1em;
+  padding: 5%;
+}
+
+.ProjectDash .vacancies p {
+  padding: 0;
+  margin: auto;
+}
+
+.ProjectDash a {
+  margin: 1em;
+}
