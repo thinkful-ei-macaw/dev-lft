@@ -239,15 +239,7 @@ class ProjectDash extends Component {
     e.preventDefault();
     let request_id = e.target.value;
     let status = 'approved';
-    let { requests, project_id } = this.state;
-    let newR = requests.map(item => {
-      if (item.id == request_id) {
-        item.status = status;
-        return item;
-      } else {
-        return item;
-      }
-    });
+    let { project_id } = this.state;
     ProjectDashService.patchRequest(status, request_id)
       .then(() => {
         ProjectDashService.getVacancies(project_id).then(vacancies => {
