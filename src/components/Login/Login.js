@@ -4,10 +4,10 @@ import TokenService from '../../services/token-service';
 import ApiAuthService from '../../services/auth-api-service.js';
 import { Link } from 'react-router-dom';
 
+import UserContext from '../../contexts/UserContext';
+
 class Login extends React.Component {
-  static defaultProps = {
-    loginSuccess: () => {}
-  };
+  static contextType = UserContext;
 
   state = { error: null };
 
@@ -23,7 +23,7 @@ class Login extends React.Component {
         user_name.value = '';
         password.value = '';
         TokenService.saveAuthToken(user.authToken);
-        this.props.loginSuccess();
+        this.context.onAuth();
         this.props.history.push('/feed');
       })
       .catch(res => {
