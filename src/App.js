@@ -28,23 +28,28 @@ export default class App extends Component {
     this.handleAuth();
   }
 
-  handleAuth() {
+  handleAuth = () => {
     const user = TokenService.hasAuthToken()
       ? TokenService.parseAuthToken()
       : null;
     this.setState({ user });
   }
 
-  handleLogOut() {
+  handleLogOut = () => {
     TokenService.clearAuthToken();
     this.handleAuth();
   }
 
   render() {
     const { user } = this.state;
+    const contextValues = {
+      user,
+      onAuth: this.handleAuth,
+      onLogOut: this.handleLogOut
+    }
 
     return (
-      <UserContext.Provider value={{ user, onAuth: this.handleAuth, onLogOut: this.handleLogOut }}>
+      <UserContext.Provider value={contextValues}>
         <Nav />
         <Switch>
           <Route exact path="/" component={LandingPage} />

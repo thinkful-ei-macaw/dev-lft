@@ -2,19 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './Nav.css';
 
-import TokenService from '../../services/token-service';
+import UserContext from '../../contexts/UserContext';
 
 export default class Nav extends Component {
-  state = {
-    isLoggedIn: TokenService.hasAuthToken()
-  }
-
-  handleLogOut = () => {
-    TokenService.clearAuthToken();
-    this.setState({
-      isLoggedIn: TokenService.hasAuthToken()
-    })
-  }
+  static contextType = UserContext;
 
   renderPublicLinks() {
     return (
@@ -31,21 +22,21 @@ export default class Nav extends Component {
         <li><Link to="/my-projects">Projects</Link></li>
         <li><Link to="/chats">Chats</Link></li>
         <li><Link to="/settings">Settings</Link></li>
-        <li><Link to="/" onClick={this.handleLogOut}>Log Out</Link></li>
+        <li><Link to="/" onClick={this.context.onLogOut}>Log Out</Link></li>
       </ul>
     )
   }
 
   render() {
-    const { isLoggedIn } = this.state;
-    const homeURL = isLoggedIn ? "/feed" : "/";
+    const { user } = this.context;
+    const homeURL = user ? "/feed" : "/";
 
     return (
       <nav>
         <div className="wrapper">
           <Link to={homeURL}>Dev LFT</Link>
           {
-            isLoggedIn
+            user
               ? this.renderPrivateLinks()
               : this.renderPublicLinks()
           }
