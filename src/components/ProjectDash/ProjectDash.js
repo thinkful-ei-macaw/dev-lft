@@ -520,7 +520,7 @@ class ProjectDash extends Component {
             Approve
           </button>
           <button
-            value={request.id}
+            value={request.user_id}
             onClick={this.handleOpenChatModal}
             type="button"
           >
