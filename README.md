@@ -3,16 +3,19 @@
 #### Why
 
 There are so many web developers, software engineers and web designers that have some ideas to build side projects and this app is the solution to bring them together.
+
 [Client](https://github.com/thinkful-ei-macaw/dev-lft)
+
 [Server](https://github.com/thinkful-ei-macaw/dev-lft-api)
+
 [Live](https://www.devlft.com)
 
 #### Features
 
-[x] Projects with vacancies
-[x] Project Dashboard
-[x] Create New Project
-[x] Chats
+[x] Projects with vacancies  
+[x] Project Dashboard  
+[x] Create New Project  
+[x] Chats  
 [x] Settings
 
 #### Team
