@@ -2,12 +2,19 @@ import React from 'react';
 import './Signup.css';
 import ApiAuthService from '../../services/auth-api-service';
 import { Link } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
 import TokenService from '../../services/token-service';
 import UserContext from '../../contexts/UserContext';
 
 class Signup extends React.Component {
+  static defaultProps = {
+    history: {
+      push: () => {}
+    }
+  };
+
   static contextType = UserContext;
+
   state = { error: null };
 
   getUserCredentials = e => {
@@ -69,5 +76,11 @@ class Signup extends React.Component {
     );
   }
 }
+
+Signup.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func
+  })
+};
 
 export default Signup;
