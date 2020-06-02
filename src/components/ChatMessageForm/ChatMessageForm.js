@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import ChatService from '../../services/chat-service';
 import './ChatMessageForm.css';
+import PropTypes from 'prop-types';
 
 class ChatMessageForm extends Component {
   static defaultProps = {
     recipient_id: null,
-    project_id: null
+    project_id: null,
+    setNewMessage: () => {}
   };
 
   state = {
@@ -58,4 +60,11 @@ class ChatMessageForm extends Component {
     );
   }
 }
+
+ChatMessageForm.propType = {
+  recipient_id: PropTypes.number.isRequired,
+  project_id: PropTypes.number.isRequired,
+  setNewMessage: PropTypes.func.isRequired
+};
+
 export default ChatMessageForm;
