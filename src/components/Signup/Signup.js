@@ -3,7 +3,11 @@ import './Signup.css';
 import ApiAuthService from '../../services/auth-api-service';
 import { Link } from 'react-router-dom';
 
+import TokenService from '../../services/token-service';
+import UserContext from '../../contexts/UserContext';
+
 class Signup extends React.Component {
+  static contextType = UserContext;
   state = { error: null };
 
   getUserCredentials = e => {
@@ -19,7 +23,9 @@ class Signup extends React.Component {
       first_name: firstname,
       last_name: lastname
     })
-      .then(() => {
+      .then(user => {
+        TokenService.saveAuthToken(user.authToken);
+        this.context.onAuth();
         this.props.history.push('/feed');
       })
       .catch(res => {

@@ -58,3 +58,8 @@
   bottom: -25px;
   left: 0px;
 }
+
+.Messages__closed {
+  margin-top: 3rem;
+  text-align: center;
+}

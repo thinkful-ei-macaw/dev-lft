@@ -1,37 +1,50 @@
 # Dev LFT
 
-//Description
+#### Why
 
-[Client repo](https://github.com/thinkful-ei-macaw/dev-lft)
+There are so many web developers, software engineers and web designers that have some ideas to build side projects and this app is the solution to bring them together.
 
-[Server repo](https://github.com/thinkful-ei-macaw/dev-lft-api)
+[Client](https://github.com/thinkful-ei-macaw/dev-lft)
+
+[Server](https://github.com/thinkful-ei-macaw/dev-lft-api)
 
 [Live](https://www.devlft.com)
 
-Designed by [Malcolm](https://github.com/malcolmkiano), [Sara](https://github.com/Saraquail), [Jack](https://github.com/jacklansing), [Andrew](https://github.com/atwb21786) and [Muhiddin](https://github.com/muhiddinsgithub)
+#### Features
 
-# Screenshots
+[x] Projects with vacancies  
+[x] Project Dashboard  
+[x] Create New Project  
+[x] Chats  
+[x] Settings
 
+#### Team
 
+- Project Manager - [Malcolm Kiano](https://github.com/malcolmkiano)
+- Product Manager - [Sara Mills](https://github.com/Saraquail)
+- QA Lead - [Jack Lansing](https://github.com/jacklansing)
+- Design Lead - [Andrew Burchett](https://github.com/atwb21786)
+- Documentation Manager - [Muhiddin Kurbonov](https://github.com/muhiddinsgithub)
 
+### Tech Stack
 
+##### Front-end technologies
 
+React, HTML, CSS, JavaScript
 
-### Stack
+##### Server technologies
 
-#### Front-end technologies
-React, React Context API, React Router, HTML, CSS, JavaScript
+Node, Express, Knex
 
-#### Server technologies
-Node, Express
+##### Data persistence
 
-#### Data persistence
 PostgreSQL
 
-#### Testing environments
+##### Testing environments
+
 Mocha
 
-#### Hosting
+##### Hosting
+
 Client: now(zeit/vercel)
 Server/Database: heroku
-

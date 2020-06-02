@@ -16,10 +16,40 @@ import ChatMessages from './components/ChatMessages/ChatMessages';
 import Settings from './components/Settings/Settings';
 import ProjectDash from './components/ProjectDash/ProjectDash';
 
+import UserContext from './contexts/UserContext';
+import TokenService from './services/token-service';
+
 export default class App extends Component {
+  state = {
+    user: null
+  }
+
+  componentDidMount() {
+    this.handleAuth();
+  }
+
+  handleAuth = () => {
+    const user = TokenService.hasAuthToken()
+      ? TokenService.parseAuthToken()
+      : null;
+    this.setState({ user });
+  }
+
+  handleLogOut = () => {
+    TokenService.clearAuthToken();
+    this.handleAuth();
+  }
+
   render() {
+    const { user } = this.state;
+    const contextValues = {
+      user,
+      onAuth: this.handleAuth,
+      onLogOut: this.handleLogOut
+    }
+
     return (
-      <React.Fragment>
+      <UserContext.Provider value={contextValues}>
         <Nav />
         <Switch>
           <Route exact path="/" component={LandingPage} />
@@ -35,7 +65,7 @@ export default class App extends Component {
           <Route path="/chats/messages" component={ChatMessages} />
         </Switch>
         <Footer />
-      </React.Fragment>
+      </UserContext.Provider>
     );
   }
 }

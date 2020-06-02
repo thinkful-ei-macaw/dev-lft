@@ -79,14 +79,12 @@ const ProjectDashService = {
     }).then(res => (!res.ok ? res.json().then(e => Promise.reject(e)) : res));
   },
 
-  postRequest(project_id, vacancy_id) {
+  postRequest(vacancy_id) {
     return fetch(`${config.API_ENDPOINT}/requests/${vacancy_id}`, {
       method: 'POST',
       headers: {
-        'content-type': 'application/json',
         authorization: `Bearer ${TokenService.getAuthToken()}`
       },
-      body: JSON.stringify({ project_id })
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );

@@ -3,11 +3,17 @@ import './Login.css';
 import TokenService from '../../services/token-service';
 import ApiAuthService from '../../services/auth-api-service.js';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import UserContext from '../../contexts/UserContext';
 
 class Login extends React.Component {
   static defaultProps = {
-    loginSuccess: () => {}
+    history: {
+      push: () => {}
+    }
   };
+
+  static contextType = UserContext;
 
   state = { error: null };
 
@@ -23,7 +29,7 @@ class Login extends React.Component {
         user_name.value = '';
         password.value = '';
         TokenService.saveAuthToken(user.authToken);
-        this.props.loginSuccess();
+        this.context.onAuth();
         this.props.history.push('/feed');
       })
       .catch(res => {
@@ -62,4 +68,10 @@ class Login extends React.Component {
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func
+  })
+};
 export default Login;
