@@ -16,11 +16,9 @@ class ProjectDash extends Component {
 
   componentDidMount() {
     let project_id = this.props.match.params.project_id;
-    let userInfo = TokenService.parseAuthToken();
 
     this.setState({
       project_id,
-      user_id: userInfo.user_id
     });
 
     ProjectDashService.getProjects(project_id)
@@ -61,8 +59,9 @@ class ProjectDash extends Component {
 
   determineUserRole = () => {
     let { user_id, project, vacancies } = this.state;
+    console.log(vacancies)
     let isMember = vacancies.find(item => item.user_id == user_id);
-    if (project.creator == user_id) {
+    if (project.isOwner) {
       this.setState({
         user_role: 'owner'
       });
@@ -468,7 +467,8 @@ class ProjectDash extends Component {
   };
 
   renderPosts = () => {
-    let { posts, user_id, postToEdit } = this.state;
+    let { posts, postToEdit } = this.state;
+    console.log({posts})
     if (!posts) {
       return <p>No posts at this time</p>;
     }
@@ -479,14 +479,14 @@ class ProjectDash extends Component {
           <p>
             {post.first_name} {post.last_name}: {post.message}
           </p>
-          {post.user_id === user_id ? (
+          {post.canEdit ? (
             <button value={post.id} onClick={this.handleEditPost} type="button">
               edit
             </button>
           ) : (
             ''
           )}
-          {post.user_id === user_id && postToEdit == post.id ? (
+          {post.canEdit && postToEdit == post.id ? (
             <form
               name="edit-post-form"
               className="edit-post-form"
@@ -510,6 +510,7 @@ class ProjectDash extends Component {
 
   renderRequests = () => {
     let { requests } = this.state;
+    console.log({requests})
     let pendingRequests = requests.filter(item => item.status === "pending")
     if (!requests) {
       return <p>No requests at this time</p>;
@@ -518,7 +519,7 @@ class ProjectDash extends Component {
     let requestList = pendingRequests.map(request => {
       return (
         <li key={request.id}>
-          <Link to={`/users/${request.user_id}`}>
+          <Link to={`/users/${request.username}`}>
             {request.first_name} {request.last_name}
           </Link>
           wants to fill your {request.vacancy_title} role
@@ -529,7 +530,7 @@ class ProjectDash extends Component {
             Approve
           </button>
           <button
-            value={request.user_id}
+            value={request.username}
             onClick={this.handleOpenChatModal}
             type="button"
           >
