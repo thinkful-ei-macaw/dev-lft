@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
-import { format } from 'date-fns';
-import config from '../../config';
+import ChatService from '../../services/chat-service';
 import ChatMessageForm from '../ChatMessageForm/ChatMessageForm';
 import './ChatMessages.css';
 
@@ -22,46 +21,29 @@ class ChatMessages extends Component {
   componentDidMount() {
     /* If user arrives at this route with a chat_id, send them back
      to the chats list */
-    if (!this.props.history.location.state.chat_id) {
+    if (this.props.history.location.state === undefined) {
       this.setState({ redirect: true });
+    } else {
+      this.setState({ ...this.props.history.location.state });
+      this.setAllMessages();
+
+      const checkMessages = setInterval(() => {
+        this.setAllMessages();
+      }, 30000);
+      this.setState({ interval_id: checkMessages });
     }
-    this.setState({ ...this.props.history.location.state });
-    this.getAllMessages();
-    const checkMessages = setInterval(() => {
-      this.getAllMessages();
-    }, 30000);
-    this.setState({ interval_id: checkMessages });
   }
 
   componentWillUnmount() {
     clearInterval(this.state.interval_id);
   }
 
-  getAllMessages = () => {
+  setAllMessages = () => {
     const { chat_id } = this.props.history.location.state;
-    fetch(`${config.API_ENDPOINT}/chats/${chat_id}`, {
-      method: 'GET',
-      headers: {
-        authorization: `Bearer ${window.localStorage.getItem(config.TOKEN_KEY)}`
-      }
-    })
-      .then(res => res.json())
+    ChatService.getAllChatMessages(chat_id)
       .then(allMessages => this.setState({ ...allMessages }))
       .catch(error => this.setState({ error }));
   };
-
-  getFormattedDate = date => {
-    // TODO: If > 24 hours from now, show date instead
-    // TODO: Refactor into shared util with Chat
-    return format(new Date(date), 'hh:mmaa');
-  };
-
-  getNameInitials(firstName, lastName) {
-    // TODO: Refactor into shared util with Chat
-    // Helps avoid NaN warning from React
-    // by ensuring any response is a string.
-    return (firstName[0] + lastName[0]).toString();
-  }
 
   setNewMessage = message => {
     return this.setState({
@@ -71,6 +53,7 @@ class ChatMessages extends Component {
 
   render() {
     const {
+      closed,
       redirect,
       allMessages,
       first_name,
@@ -83,12 +66,13 @@ class ChatMessages extends Component {
 
     return (
       <section className="Messages">
-        <div role="alert">{error && <p>{error}</p>}</div>
+        {redirect ? <Redirect to="/chats" /> : null}
+        <div role="alert">{error && <p>{error.error}</p>}</div>
         <Link to="/chats" className="Messages__header">
           &larr;
           <span className="Messages__logo">
             <span className="Messages__logo_initials">
-              {this.getNameInitials(first_name, last_name)}
+              {ChatService.getNameInitials(first_name, last_name)}
             </span>
           </span>
           <p>
@@ -96,30 +80,30 @@ class ChatMessages extends Component {
             <span className="Messages__project">({project_name})</span>
           </p>
         </Link>
-        {redirect ? (
-          <Redirect to="/chat" />
+        <ul className="Messages__list">
+          {allMessages.map(message => (
+            <li
+              key={message.id}
+              className={`Messages__item ${message.isAuthor ? 'author' : ''}`}
+            >
+              <span className="Messages__body">{message.body}</span>
+              <span className="Messages__time">
+                {ChatService.getFormattedDate(message.date_created)}
+              </span>
+            </li>
+          ))}
+        </ul>
+        {closed ? (
+          <p className="Messages__closed">
+            This chat has been closed by the project owner.
+          </p>
         ) : (
-          <ul className="Messages__list">
-            {allMessages.map(message => (
-              <li
-                key={message.id}
-                className={`Messages__item ${
-                  message.author_id !== recipient_id ? 'author' : ''
-                }`}
-              >
-                <span className="Messages__body">{message.body}</span>
-                <span className="Messages__time">
-                  {this.getFormattedDate(message.date_created)}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <ChatMessageForm
+            project_id={project_id}
+            recipient_id={recipient_id}
+            setNewMessage={this.setNewMessage}
+          />
         )}
-        <ChatMessageForm
-          project_id={project_id}
-          recipient_id={recipient_id}
-          setNewMessage={this.setNewMessage}
-        />
       </section>
     );
   }
