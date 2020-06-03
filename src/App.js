@@ -18,21 +18,33 @@ import ProjectDash from './components/ProjectDash/ProjectDash';
 
 import UserContext from './contexts/UserContext';
 import TokenService from './services/token-service';
+import AuthApiService from './services/auth-api-service';
 
 export default class App extends Component {
   state = {
-    user: null
+    user: {
+      username: '',
+      first_name: '',
+      last_name: '',
+      github_url: '',
+      linkedin_url: '',
+      twitter_url: '',
+      date_created: '',
+      isAuth: TokenService.hasAuthToken()
+    },
+    error: null
   };
 
   componentDidMount() {
-    this.handleAuth();
+    if (TokenService.hasAuthToken()) {
+      this.handleAuth();
+    }
   }
 
   handleAuth = () => {
-    const user = TokenService.hasAuthToken()
-      ? TokenService.parseAuthToken()
-      : null;
-    this.setState({ user });
+    AuthApiService.getUserProfile()
+      .then(user => this.setState({ user: { ...user, isAuth: true } }))
+      .catch(error => this.setState({ ...error, user: { isAuth: false } }));
   };
 
   handleLogOut = () => {
@@ -40,12 +52,17 @@ export default class App extends Component {
     this.handleAuth();
   };
 
+  handleUserUpdate = updatedFields => {
+    this.setState({ user: { ...this.state.user, ...updatedFields } });
+  };
+
   render() {
     const { user } = this.state;
     const contextValues = {
       user,
       onAuth: this.handleAuth,
-      onLogOut: this.handleLogOut
+      onLogOut: this.handleLogOut,
+      onProfileUpdate: this.handleUserUpdate
     };
 
     return (
