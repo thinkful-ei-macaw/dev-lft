@@ -22,7 +22,7 @@ import TokenService from './services/token-service';
 export default class App extends Component {
   state = {
     user: null
-  }
+  };
 
   componentDidMount() {
     this.handleAuth();
@@ -33,12 +33,12 @@ export default class App extends Component {
       ? TokenService.parseAuthToken()
       : null;
     this.setState({ user });
-  }
+  };
 
   handleLogOut = () => {
     TokenService.clearAuthToken();
     this.handleAuth();
-  }
+  };
 
   render() {
     const { user } = this.state;
@@ -46,7 +46,7 @@ export default class App extends Component {
       user,
       onAuth: this.handleAuth,
       onLogOut: this.handleLogOut
-    }
+    };
 
     return (
       <UserContext.Provider value={contextValues}>
@@ -60,7 +60,7 @@ export default class App extends Component {
           <Route path="/my-projects" component={ProjectsPage} />
           <Route path="/project-form" component={ProjectForm} />
           <Route path="/project-dash/:project_id" component={ProjectDash} />
-          <Route path="/users/:user_id" component={UserProfile} />
+          <Route path="/users/:username" component={UserProfile} />
           <Route exact path="/chats" component={Chat} />
           <Route path="/chats/messages" component={ChatMessages} />
         </Switch>

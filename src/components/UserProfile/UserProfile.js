@@ -1,43 +1,53 @@
 import React, { Component } from 'react';
 import AuthApiService from '../../services/auth-api-service';
-import TokenService from '../../services/token-service';
 import { Section } from '../Utils/Utils';
-import { Redirect } from 'react-router-dom';
-import moment from 'moment';
+import { format } from 'date-fns';
 
 export default class UserProfile extends Component {
   state = {
-    userInfo: []
+    loading: false,
+    error: null
   };
+
   componentDidMount() {
-    let user_id = this.props.match.params.user_id;
-    AuthApiService.getUserInfo(user_id).then(res => {
-      this.setState({ userInfo: res });
-    });
+    this.setState({ loading: true });
+    let username = this.props.match.params.username;
+    AuthApiService.getUserInfo(username)
+      .then(userInfo => {
+        this.setState({ ...userInfo, loading: false });
+      })
+      .catch(error => this.setState({ ...error, loading: false }));
   }
 
-  getDate(date) {
-    return moment(date).format('MMM YYYY');
-  }
+  getDate = date => {
+    const activeDate = new Date(date);
+    return format(activeDate, 'MMM yyy');
+  };
+
   render() {
-    let userInfo = this.state.userInfo;
-    console.log(userInfo.date_created);
+    const {
+      error,
+      loading,
+      first_name,
+      last_name,
+      date_created,
+      github_url,
+      linkedin_url,
+      twitter_url
+    } = this.state;
     return (
       <Section>
-        {userInfo.user_id === TokenService.parseAuthToken().user_id ? (
-          <Redirect to="/settings" />
-        ) : (
+        <div role="alert">{error && <p>{error}</p>}</div>
+        {!loading && !error && (
           <div>
-            <h2>{userInfo.first_name}'s profile</h2>
+            <h2>{first_name}'s profile</h2>
             <p>
-              {userInfo.first_name} {userInfo.last_name} | Active since{' '}
-              {this.getDate(userInfo.date_created)}
+              {first_name} {last_name} | Active since{' '}
+              {date_created ? this.getDate(date_created) : null}
             </p>
-            <p>GitHub: {userInfo.github_url ? userInfo.github_url : 'N/A'}</p>
-            <p>
-              Linkedin: {userInfo.linkedin_url ? userInfo.linkedin_url : 'N/A'}
-            </p>
-            <p>Twitter: {userInfo.twitter_url ? userInfo.twitter_url : 'NA'}</p>
+            <p>GitHub: {github_url ? github_url : 'N/A'}</p>
+            <p>Linkedin: {linkedin_url ? linkedin_url : 'N/A'}</p>
+            <p>Twitter: {twitter_url ? twitter_url : 'NA'}</p>
           </div>
         )}
       </Section>
