@@ -3,8 +3,15 @@ import './ProjectPage.css';
 import { Button, Section } from '../Utils/Utils';
 import ProjectApiService from '../../services/project-api-service';
 import ProjectItem from '../ProjectItem/ProjectItem';
+import PropTypes from 'prop-types';
 
 export default class ProjectsPage extends Component {
+  static defaultProps = {
+    history: {
+      push: () => {}
+    }
+  };
+
   state = {
     projects: []
   };
@@ -41,3 +48,9 @@ export default class ProjectsPage extends Component {
     );
   }
 }
+
+ProjectsPage.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func
+  })
+};
