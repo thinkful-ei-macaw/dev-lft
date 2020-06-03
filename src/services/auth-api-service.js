@@ -32,8 +32,9 @@ const AuthApiService = {
     );
   },
 
-  getUserInfo(user_id) {
-    return fetch(`${config.API_ENDPOINT}/users/${user_id}`, {
+  getUserInfo(username) {
+    return fetch(`${config.API_ENDPOINT}/users/${username}`, {
+      method: 'GET',
       headers: {
         Authorization: `bearer ${TokenService.getAuthToken()}`
       }

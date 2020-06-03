@@ -11,7 +11,7 @@ const ChatService = {
       case difference < 24:
         return format(messageDate, 'hh:mmaa');
       case difference < 48:
-        return format(messageDate, 'Yesterday, hh:mmaa');
+        return `Yesterday, ${format(messageDate, 'hh:mmaa')}`;
       case difference < 168:
         return format(messageDate, 'EEEE - hh:mmaa');
       default:
