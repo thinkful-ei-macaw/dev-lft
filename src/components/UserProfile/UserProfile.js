@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AuthApiService from '../../services/auth-api-service';
 import { Section } from '../Utils/Utils';
 import { format } from 'date-fns';
+import PropTypes from 'prop-types';
 
 export default class UserProfile extends Component {
   state = {
@@ -54,3 +55,11 @@ export default class UserProfile extends Component {
     );
   }
 }
+
+UserProfile.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      username: PropTypes.string.isRequired
+    })
+  })
+};
