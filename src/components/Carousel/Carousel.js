@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './Carousel.css';
 
 export default class Carousel extends Component {
@@ -6,7 +7,7 @@ export default class Carousel extends Component {
     super(props);
     this.state = {
       currentSlide: props.startSlide || 0
-    }
+    };
   }
 
   goToSlide(number) {
@@ -22,7 +23,7 @@ export default class Carousel extends Component {
     const style = {
       width: `${slides.length * 100}%`,
       transform: `translateX(-${(100 / slides.length) * currentSlide}%)`
-    }
+    };
     return (
       <div className="carousel">
         <div className="carousel-slider" style={style}>
@@ -30,10 +31,19 @@ export default class Carousel extends Component {
         </div>
         <div className="dots">
           {slides.map((slide, index) => (
-            <button onClick={() => this.goToSlide(index)} key={index} className={`dot ${index === currentSlide ? 'active' : ''}`}></button>
+            <button
+              onClick={() => this.goToSlide(index)}
+              key={index}
+              className={`dot ${index === currentSlide ? 'active' : ''}`}
+            ></button>
           ))}
         </div>
       </div>
-    )
+    );
   }
 }
+
+Carousel.propTypes = {
+  children: PropTypes.node.isRequired,
+  startSlide: PropTypes.number
+};
