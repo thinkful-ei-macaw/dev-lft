@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ProjectDashService from './project-dash-service';
+import ProjectDashPosts from '../ProjectDashPosts/ProjectDashPosts';
 import './ProjectDash.css';
 import TokenService from '../../services/token-service';
 import { Link } from 'react-router-dom';
@@ -17,7 +18,6 @@ class ProjectDash extends Component {
     project: {},
     vacancies: [],
     requests: [],
-    posts: [],
     showChatModal: false
   };
 
@@ -47,14 +47,6 @@ class ProjectDash extends Component {
     ProjectDashService.getVacancies(project_id)
       .then(response => {
         this.setState({ vacancies: response });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
-
-    ProjectDashService.getPosts(project_id)
-      .then(posts => {
-        this.setState({ posts });
       })
       .then(() => {
         this.determineUserRole();
@@ -231,25 +223,6 @@ class ProjectDash extends Component {
       });
   };
 
-  handleSubmitPost = e => {
-    e.preventDefault();
-    let { project_id } = this.state;
-    let message = e.target['create-post'].value;
-    document.getElementById('post-to-project-form').reset();
-
-    ProjectDashService.postPost(project_id, message)
-      .then(() => {
-        ProjectDashService.getPosts(project_id).then(posts => {
-          this.setState({
-            posts
-          });
-        });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
-  };
-
   handleApprove = e => {
     e.preventDefault();
     let request_id = e.target.value;
@@ -317,34 +290,6 @@ class ProjectDash extends Component {
       showChatModal: false,
       recipient_id: null
     });
-  };
-
-  handleEditPost = e => {
-    e.preventDefault();
-    let post_id = e.target.value;
-    this.setState({
-      postToEdit: post_id
-    });
-  };
-
-  handlePatchPost = e => {
-    e.preventDefault();
-    let { project_id } = this.state;
-    let post_id = this.state.postToEdit;
-    let message = e.target['edit-post'].value;
-
-    ProjectDashService.patchPost(post_id, message)
-      .then(() => {
-        ProjectDashService.getPosts(project_id).then(posts => {
-          this.setState({
-            posts,
-            postToEdit: null
-          });
-        });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
   };
 
   handleCancelEdit = () => {
@@ -472,47 +417,6 @@ class ProjectDash extends Component {
     return vacancyList;
   };
 
-  renderPosts = () => {
-    let { posts, postToEdit } = this.state;
-    if (!posts) {
-      return <p>No posts at this time</p>;
-    }
-
-    let allPosts = posts.map(post => {
-      return (
-        <li key={post.id}>
-          <p>
-            {post.first_name} {post.last_name}: {post.message}
-          </p>
-          {post.canEdit ? (
-            <button value={post.id} onClick={this.handleEditPost} type="button">
-              edit
-            </button>
-          ) : (
-            ''
-          )}
-          {post.canEdit && postToEdit == post.id ? (
-            <form
-              name="edit-post-form"
-              className="edit-post-form"
-              onSubmit={this.handlePatchPost}
-            >
-              <label htmlFor="edit-post">Change to:</label>
-              <input type="text" name="edit-post" id="edit-post" />
-              <button type="submit">Submit</button>
-              <button onClick={this.handleCancelEdit} type="button">
-                Cancel
-              </button>
-            </form>
-          ) : (
-            ''
-          )}
-        </li>
-      );
-    });
-    return allPosts;
-  };
-
   renderRequests = () => {
     let { requests } = this.state;
     let pendingRequests = requests.filter(item => item.status === 'pending');
@@ -564,42 +468,7 @@ class ProjectDash extends Component {
         </article>
 
         {user_role === 'team_member' || user_role === 'owner' ? (
-          <article className="team-options">
-            <div className="team-posts">
-              <ul>{this.renderPosts()}</ul>
-            </div>
-
-            <a
-              className="links"
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://www.github.com"
-            >
-              Github
-            </a>
-            <a
-              className="links"
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://www.github.com"
-            >
-              Live Page
-            </a>
-            <a
-              className="links"
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://www.trello.com"
-            >
-              Trello
-            </a>
-
-            <form onSubmit={this.handleSubmitPost} id="post-to-project-form">
-              <label htmlFor="create-post">What do you want to post?</label>
-              <input name="create-post" id="create-post" type="text" required />
-              <button type="submit">Submit Post</button>
-            </form>
-          </article>
+          <ProjectDashPosts project_id={this.state.project_id} />
         ) : (
           ''
         )}
