@@ -45,5 +45,5 @@ export default class Carousel extends Component {
 
 Carousel.propTypes = {
   children: PropTypes.node.isRequired,
-  startSlide: PropTypes.number.isRequired
+  startSlide: PropTypes.number
 };
