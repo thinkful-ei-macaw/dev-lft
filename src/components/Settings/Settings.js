@@ -13,12 +13,6 @@ export default class Settings extends Component {
     error: null
   };
 
-  componentDidMount() {
-    AuthApiService.getUserProfile()
-      .then(user => this.setState({ user }))
-      .catch(error => this.setState({ ...error }));
-  }
-
   handleUpdate = event => {
     event.preventDefault();
 
@@ -41,6 +35,7 @@ export default class Settings extends Component {
     AuthApiService.updateUserInfo(updatedInfo)
       .then(() => {
         this.setState({ updateSuccess: true });
+        this.context.onProfileUpdate(updatedInfo);
       })
       .catch(error => error.error);
   };
@@ -52,7 +47,7 @@ export default class Settings extends Component {
       github_url,
       linkedin_url,
       twitter_url
-    } = this.state.user;
+    } = this.context.user;
 
     return (
       <Section className="settingSection">
