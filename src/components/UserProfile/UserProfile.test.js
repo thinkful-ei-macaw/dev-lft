@@ -8,7 +8,7 @@ it('renders without crashing', () => {
   const props = {
     match: {
       params: {
-        user_id: 1
+        username: 'test-user-1'
       }
     }
   };
