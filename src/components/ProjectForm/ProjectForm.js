@@ -2,8 +2,15 @@ import React, { Component } from 'react';
 import ProjectApiService from '../../services/project-api-service';
 import './ProjectForm.css';
 import { Input, Textarea, Button, Section } from '../Utils/Utils';
+import PropTypes from 'prop-types';
 
 export default class ProjectForm extends Component {
+  static defaultProps = {
+    history: {
+      push: () => {}
+    }
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     const { name, description, live_url, trello_url, github_url } = e.target;
@@ -56,3 +63,9 @@ export default class ProjectForm extends Component {
     );
   }
 }
+
+ProjectForm.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func
+  })
+};
