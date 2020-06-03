@@ -3,6 +3,7 @@ import { Redirect, Link } from 'react-router-dom';
 import ChatService from '../../services/chat-service';
 import ChatMessageForm from '../ChatMessageForm/ChatMessageForm';
 import './ChatMessages.css';
+import PropTypes from 'prop-types';
 
 class ChatMessages extends Component {
   constructor(props) {
@@ -108,4 +109,20 @@ class ChatMessages extends Component {
     );
   }
 }
+
+ChatMessages.propTypes = {
+  history: PropTypes.shape({
+    location: PropTypes.shape({
+      state: PropTypes.object
+    })
+  }),
+  allMessages: PropTypes.array,
+  redirect: PropTypes.bool,
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  project_name: PropTypes.string,
+  error: PropTypes.object,
+  interval_id: PropTypes.number
+};
+
 export default ChatMessages;
