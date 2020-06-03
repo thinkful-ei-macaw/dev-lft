@@ -3,8 +3,15 @@ import ProjectDashService from './project-dash-service';
 import './ProjectDash.css';
 import TokenService from '../../services/token-service';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 class ProjectDash extends Component {
+  static defaultProps = {
+    history: {
+      push: () => {}
+    }
+  };
+
   state = {
     user_role: '',
     project: {},
@@ -628,5 +635,16 @@ class ProjectDash extends Component {
     );
   }
 }
+
+ProjectDash.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      folder_id: PropTypes.number
+    })
+  }),
+  history: PropTypes.shape({
+    push: PropTypes.func
+  })
+};
 
 export default ProjectDash;
