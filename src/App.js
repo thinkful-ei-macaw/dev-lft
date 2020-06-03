@@ -18,6 +18,7 @@ import ProjectDash from './components/ProjectDash/ProjectDash';
 
 import UserContext from './contexts/UserContext';
 import TokenService from './services/token-service';
+import AuthApiService from './services/auth-api-service';
 
 export default class App extends Component {
   state = {
@@ -29,10 +30,9 @@ export default class App extends Component {
   }
 
   handleAuth = () => {
-    const user = TokenService.hasAuthToken()
-      ? TokenService.parseAuthToken()
-      : null;
-    this.setState({ user });
+    AuthApiService.getUserProfile()
+      .then(user => this.setState({ user }))
+      .catch(error => this.setState({ error, user: null }));
   };
 
   handleLogOut = () => {
