@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import ProjectDashService from './project-dash-service';
 import ProjectDashPosts from '../ProjectDashPosts/ProjectDashPosts';
+import ProjectDashVacancies from '../ProjectDashVacancies/ProjectDashVacancies';
+import ProjectDashVacancyModal from '../ProjectDashVacancyModal/ProjectDashVacancyModal';
+import ProjectDashChatModal from '../ProjectDashChatModal/ProjectDashChatModal';
 import './ProjectDash.css';
 import TokenService from '../../services/token-service';
 import { Link } from 'react-router-dom';
@@ -118,24 +121,6 @@ class ProjectDash extends Component {
       });
   };
 
-  renderVacancyModal = e => {
-    return (
-      <form onSubmit={this.handleSubmitVacancy} name="add-vacancy-form">
-        <label htmlFor="vacancy-title">Role:</label>
-        <input name="vacancy-title" id="vacancy-title" />
-        <label htmlFor="vacancy-description">Description:</label>
-        <input name="vacancy-description" id="vacancy-description" />
-        <label htmlFor="vacancy-skills">Skills:</label>
-        <p>Add a comma after each skill. example: React, CSS</p>
-        <input name="vacancy-skills" id="vacancy-skills" />
-        <button type="submit">Submit</button>
-        <button onClick={this.handleCloseVacancyModal} type="button">
-          Cancel
-        </button>
-      </form>
-    );
-  };
-
   handleSubmitVacancy = e => {
     e.preventDefault();
     let { project_id } = this.state;
@@ -145,29 +130,6 @@ class ProjectDash extends Component {
     let skills = e.target['vacancy-skills'].value.split(',');
     ProjectDashService.postVacancies(title, description, skills, project_id)
       .then(res => (res ? this.handleCloseVacancyModal() : ''))
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
-  };
-
-  handleDeleteVacancy = e => {
-    e.preventDefault();
-    if (
-      prompt(
-        'Are you sure you want to delete this vacancy? Type "delete" to confirm '
-      ) !== 'delete'
-    ) {
-      return;
-    }
-    let vacancy_id = e.target.value;
-    const { vacancies: prevGuides } = this.state;
-    const filtered = prevGuides.filter(item => item.id != vacancy_id);
-    ProjectDashService.deleteVacancy(vacancy_id)
-      .then(
-        this.setState({
-          vacancies: filtered
-        })
-      )
       .catch(res => {
         this.setState({ error: res.error });
       });
@@ -198,28 +160,6 @@ class ProjectDash extends Component {
       })
       .catch(res => {
         this.setState({ error: res.error });
-      });
-  };
-
-  handleRequest = e => {
-    e.preventDefault();
-    let vacancy_id = e.target.value;
-    let { project_id, requests } = this.state;
-
-    ProjectDashService.postRequest(vacancy_id)
-      .then(res => {
-        requests.push(res);
-        ProjectDashService.getVacancies(project_id).then(vacancies => {
-          this.setState({
-            requests,
-            vacancies
-          });
-        });
-      })
-      .catch(res => {
-        this.setState({
-          error: res.error
-        });
       });
   };
 
@@ -292,52 +232,6 @@ class ProjectDash extends Component {
     });
   };
 
-  handleCancelEdit = () => {
-    this.setState({
-      postToEdit: null
-    });
-  };
-
-  handleRemoveMember = e => {
-    e.preventDefault();
-    if (
-      prompt(
-        'Are you sure you want to remove this member? Type "remove" to confirm '
-      ) !== 'remove'
-    ) {
-      return;
-    }
-    let vacancy_id = e.target.value;
-    let user_id = null;
-    let { project_id } = this.state;
-    ProjectDashService.patchVacancy(vacancy_id, user_id)
-      .then(() => {
-        ProjectDashService.getVacancies(project_id).then(vacancies => {
-          this.setState({
-            vacancies
-          });
-        });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
-  };
-
-  renderChatModal = () => {
-    return (
-      <div className="chat-modal">
-        <form onSubmit={this.handleNewMessage} className="start-chat-form">
-          <label htmlFor="chat-message">What's the message?</label>
-          <input type="text" name="chat-message" id="chat-message" />
-          <button type="submit">Send</button>
-          <button onClick={this.handleCloseChatModal} type="button">
-            Cancel
-          </button>
-        </form>
-      </div>
-    );
-  };
-
   renderTags = () => {
     let { project } = this.state;
     if (!project) {
@@ -348,73 +242,6 @@ class ProjectDash extends Component {
       });
       return tagsList;
     }
-  };
-
-  renderVacancies = () => {
-    let { vacancies, user_role } = this.state;
-    if (!vacancies) {
-      return <p>No vacancies at this time</p>;
-    }
-    let userRequests = vacancies.filter(item => item.request_status !== null);
-
-    let vacancyList = vacancies.map(item => {
-      let userRequest = userRequests.find(req => req.id == item.id) || null;
-      return (
-        <li key={item.id}>
-          <h3>
-            {item.username !== null ? (
-              <Link to={`/users/${item.username}`}>
-                <span>
-                  {item.first_name} {item.last_name}
-                </span>
-              </Link>
-            ) : (
-              <span>This role is available</span>
-            )}
-          </h3>
-          <p>Role: {item.title}</p>
-          <p>Duties: {item.description}</p>
-          <p>Skills: {item.skills.join(', ')}</p>
-          {user_role === 'owner' && item.username !== null ? (
-            <button
-              value={item.id}
-              onClick={this.handleRemoveMember}
-              type="button"
-            >
-              Remove member
-            </button>
-          ) : (
-            ''
-          )}
-          {user_role === 'owner' && item.username === null ? (
-            <button
-              value={item.id}
-              onClick={this.handleDeleteVacancy}
-              type="button"
-            >
-              Delete Vacancy
-            </button>
-          ) : (
-            ''
-          )}
-
-          {user_role === 'user' && userRequest ? (
-            <p>Request {userRequest.request_status}</p>
-          ) : (
-            ''
-          )}
-
-          {user_role === 'user' && item.username === null && !userRequest ? (
-            <button type="button" value={item.id} onClick={this.handleRequest}>
-              Request to join
-            </button>
-          ) : (
-            ''
-          )}
-        </li>
-      );
-    });
-    return vacancyList;
   };
 
   renderRequests = () => {
@@ -464,7 +291,13 @@ class ProjectDash extends Component {
           <h2>{project.name}</h2>
           <p>{project.description}</p>
           <ul className="tags">{this.renderTags()}</ul>
-          <ul className="vacancies">{this.renderVacancies()}</ul>
+          {this.state.project_id && (
+            <ProjectDashVacancies
+              project_id={this.state.project_id}
+              user_role={this.state.user_role}
+              requests={this.state.requests}
+            />
+          )}
         </article>
 
         {user_role === 'team_member' || user_role === 'owner' ? (
@@ -496,10 +329,22 @@ class ProjectDash extends Component {
         ) : (
           ''
         )}
-        {user_role === 'owner' && this.state.showChatModal
-          ? this.renderChatModal()
-          : ''}
-        {this.state.showVacancyModal ? this.renderVacancyModal() : ''}
+        {user_role === 'owner' && this.state.showChatModal ? (
+          <ProjectDashChatModal
+            handleNewMessage={this.handleNewMessage}
+            handleCloseChatModal={this.handleCloseChatModal}
+          />
+        ) : (
+          ''
+        )}
+        {this.state.showVacancyModal ? (
+          <ProjectDashVacancyModal
+            handleSubmitVacancy={this.handleSubmitVacancy}
+            handleCloseVacancyModal={this.handleCloseVacancyModal}
+          />
+        ) : (
+          ''
+        )}
       </section>
     );
   }
