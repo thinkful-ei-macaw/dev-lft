@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './ProjectItem.css';
+import PropTypes from 'prop-types';
 
-export default class FeedItem extends Component {
+export default class ProjectItem extends Component {
   render() {
     let project = this.props.project;
     return (
@@ -40,3 +41,7 @@ export default class FeedItem extends Component {
     );
   }
 }
+
+ProjectItem.propTypes = {
+  project: PropTypes.object.isRequired
+};
