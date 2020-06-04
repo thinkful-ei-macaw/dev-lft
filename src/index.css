@@ -4,25 +4,17 @@
 /* fonts */
 @import url('https://use.typekit.net/vcg0mey.css');
 
-/* global styles */
-html {
-  font-family: 'interstate', sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 20px;
-}
-
-/* ===================================================================== */
-
 /* typography */
 h1 {
   font-size: 5rem;
   font-weight: 900;
+  text-transform: uppercase;
 }
 
 h2 {
   font-size: 3rem;
   font-weight: 900;
+  text-transform: uppercase;
 }
 
 h3 {
@@ -32,4 +24,32 @@ h3 {
 
 em {
   font-style: italic;
+}
+
+/* colors */
+:root {
+  --colorBG: #000000;
+  --colorDarkBG: #1c1c1c;
+  --colorMidBG: #171717;
+  --colorLightBG: #292929;
+  --colorFG: #ffffff;
+  --colorDarkFG: #6f6f6f;
+  --colorMidFG: #c2c2c2;
+  --colorAccent: #04f299;
+  --colorDarkAccent: 3274036;
+}
+
+/* ===================================================================== */
+
+/* global styles */
+html {
+  font-family: 'interstate', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 20px;
+}
+
+body {
+  background: var(--colorBG);
+  color: var(--colorFG);
 }
