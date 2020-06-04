@@ -1,6 +1,11 @@
 footer {
-  background: #dddddd;
   padding: 3rem 0;
+}
+
+footer .wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 footer h2,
@@ -11,4 +16,25 @@ footer p {
 
 footer h2 a {
   text-decoration: none;
+}
+
+footer p.version {
+  color: var(--colorMidFG);
+  text-align: right;
+}
+
+footer .links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+footer .links li {
+  margin-left: 1rem;
+}
+
+footer .links svg {
+  width: 2rem;
+  height: 2rem;
 }

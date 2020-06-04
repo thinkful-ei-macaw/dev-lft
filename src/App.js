@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import './App.css';
 
+import PrivateRoute from './components/Utils/PrivateRoute';
+import PublicOnlyRoute from './components/Utils/PublicOnlyRoute';
 import LandingPage from './components/LandingPage/LandingPage';
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
@@ -36,15 +37,18 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    if (TokenService.hasAuthToken()) {
-      this.handleAuth();
-    }
+    this.handleAuth();
   }
 
   handleAuth = () => {
-    AuthApiService.getUserProfile()
-      .then(user => this.setState({ user: { ...user, isAuth: true } }))
-      .catch(error => this.setState({ ...error, user: { isAuth: false } }));
+    if (TokenService.hasAuthToken()) {
+      AuthApiService.getUserProfile()
+        .then(user => this.setState({ user: { ...user, isAuth: true } }))
+        .catch(error => this.setState({ ...error, user: { isAuth: false } }));
+    } else {
+      this.setState({ user: { isAuth: false } });
+    }
+
   };
 
   handleLogOut = () => {
@@ -67,21 +71,21 @@ export default class App extends Component {
 
     return (
       <UserContext.Provider value={contextValues}>
-        <Nav />
+        <Route path="*" component={Nav} />
         <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route path="/signup" component={Signup} />
-          <Route path="/login" component={Login} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/feed" component={FeedPage} />
-          <Route path="/my-projects" component={ProjectsPage} />
-          <Route path="/project-form" component={ProjectForm} />
-          <Route path="/project-dash/:project_id" component={ProjectDash} />
-          <Route path="/users/:username" component={UserProfile} />
-          <Route exact path="/chats" component={Chat} />
-          <Route path="/chats/messages" component={ChatMessages} />
+          <PublicOnlyRoute exact path="/" component={LandingPage} />
+          <PublicOnlyRoute path="/signup" component={Signup} />
+          <PublicOnlyRoute path="/login" component={Login} />
+          <PrivateRoute path="/settings" component={Settings} />
+          <PrivateRoute path="/feed" component={FeedPage} />
+          <PrivateRoute path="/my-projects" component={ProjectsPage} />
+          <PrivateRoute path="/project-form" component={ProjectForm} />
+          <PrivateRoute path="/project-dash/:project_id" component={ProjectDash} />
+          <PrivateRoute path="/users/:username" component={UserProfile} />
+          <PrivateRoute exact path="/chats" component={Chat} />
+          <PrivateRoute path="/chats/messages" component={ChatMessages} />
         </Switch>
-        <Footer />
+        <Route path="*" component={Footer} />
       </UserContext.Provider>
     );
   }
