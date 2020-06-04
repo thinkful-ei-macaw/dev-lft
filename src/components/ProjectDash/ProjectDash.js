@@ -4,6 +4,7 @@ import ProjectDashPosts from '../ProjectDashPosts/ProjectDashPosts';
 import ProjectDashVacancies from '../ProjectDashVacancies/ProjectDashVacancies';
 import ProjectDashVacancyModal from '../ProjectDashVacancyModal/ProjectDashVacancyModal';
 import ProjectDashChatModal from '../ProjectDashChatModal/ProjectDashChatModal';
+import ProjectDashRequests from '../ProjectDashRequests/ProjectDashRequests';
 import './ProjectDash.css';
 import TokenService from '../../services/token-service';
 import { Link } from 'react-router-dom';
@@ -58,6 +59,14 @@ class ProjectDash extends Component {
         this.setState({ error: res.error });
       });
   }
+
+  // Here be props, we must call back
+  setVacancies = vacancies => {
+    this.setState({ vacancies });
+  };
+  setRequests = requests => {
+    this.setState({ requests });
+  };
 
   determineUserRole = () => {
     let { project, vacancies } = this.state;
@@ -244,40 +253,6 @@ class ProjectDash extends Component {
     }
   };
 
-  renderRequests = () => {
-    let { requests } = this.state;
-    let pendingRequests = requests.filter(item => item.status === 'pending');
-    if (!requests) {
-      return <p>No requests at this time</p>;
-    }
-
-    let requestList = pendingRequests.map(request => {
-      return (
-        <li key={request.id}>
-          <Link to={`/users/${request.username}`}>
-            {request.first_name} {request.last_name}
-          </Link>
-          wants to fill your {request.vacancy_title} role
-          <button value={request.id} onClick={this.handleDecline} type="button">
-            Decline
-          </button>
-          <button value={request.id} onClick={this.handleApprove} type="button">
-            Approve
-          </button>
-          <button
-            value={request.user_id}
-            onClick={this.handleOpenChatModal}
-            type="button"
-          >
-            Message
-          </button>
-        </li>
-      );
-    });
-
-    return requestList;
-  };
-
   render() {
     let { project, user_role, error } = this.state;
     if (!project) {
@@ -295,7 +270,10 @@ class ProjectDash extends Component {
             <ProjectDashVacancies
               project_id={this.state.project_id}
               user_role={this.state.user_role}
+              vacancies={this.state.vacancies}
               requests={this.state.requests}
+              setVacancies={this.setVacancies}
+              setRequests={this.setRequests}
             />
           )}
         </article>
@@ -315,17 +293,14 @@ class ProjectDash extends Component {
         )}
 
         {user_role === 'owner' ? (
-          <article className="creator-options">
-            <div className="pending-requests">
-              <ul className="request">{this.renderRequests()}</ul>
-            </div>
-            <button onClick={this.handleShowVacancyModal} type="button">
-              Add new vacancy
-            </button>
-            <button onClick={this.handleDeleteProject} type="button">
-              Delete this project
-            </button>
-          </article>
+          <ProjectDashRequests
+            requests={this.state.requests}
+            handleDecline={this.handleDecline}
+            handleApprove={this.handleApprove}
+            handleOpenChatModal={this.handleOpenChatModal}
+            handleShowVacancyModal={this.handleShowVacancyModal}
+            handleDeleteProject={this.handleDeleteProject}
+          />
         ) : (
           ''
         )}

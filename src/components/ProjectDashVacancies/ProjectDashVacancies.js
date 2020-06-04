@@ -3,19 +3,10 @@ import { Link } from 'react-router-dom';
 import ProjectDashService from '../ProjectDash/project-dash-service';
 
 class ProjectDashVacancies extends Component {
-  state = {
-    vacancies: []
+  static defaultProps = {
+    vacancies: [],
+    requests: []
   };
-
-  componentDidMount() {
-    ProjectDashService.getVacancies(this.props.project_id)
-      .then(response => {
-        this.setState({ vacancies: response });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
-  }
 
   handleRemoveMember = e => {
     e.preventDefault();
@@ -28,13 +19,11 @@ class ProjectDashVacancies extends Component {
     }
     let vacancy_id = e.target.value;
     let user_id = null;
-    let { project_id } = this.state;
+    let { project_id } = this.props;
     ProjectDashService.patchVacancy(vacancy_id, user_id)
       .then(() => {
         ProjectDashService.getVacancies(project_id).then(vacancies => {
-          this.setState({
-            vacancies
-          });
+          this.props.setVacancies(vacancies);
         });
       })
       .catch(res => {
@@ -51,10 +40,8 @@ class ProjectDashVacancies extends Component {
       .then(res => {
         requests.push(res);
         ProjectDashService.getVacancies(project_id).then(vacancies => {
-          this.setState({
-            requests,
-            vacancies
-          });
+          this.props.setVacancies(vacancies);
+          this.props.setRequests(requests);
         });
       })
       .catch(res => {
@@ -74,22 +61,19 @@ class ProjectDashVacancies extends Component {
       return;
     }
     let vacancy_id = e.target.value;
-    const { vacancies: prevGuides } = this.state;
-    const filtered = prevGuides.filter(item => item.id != vacancy_id);
+    let { vacancies } = this.props;
+    const filtered = vacancies.filter(item => item.id != vacancy_id);
     ProjectDashService.deleteVacancy(vacancy_id)
-      .then(
-        this.setState({
-          vacancies: filtered
-        })
-      )
+      .then(() => {
+        this.props.setVacancies(filtered);
+      })
       .catch(res => {
         this.setState({ error: res.error });
       });
   };
 
   renderVacancies = () => {
-    let { vacancies } = this.state;
-    let { user_role } = this.props;
+    let { user_role, vacancies } = this.props;
     if (!vacancies) {
       return <p>No vacancies at this time</p>;
     }
