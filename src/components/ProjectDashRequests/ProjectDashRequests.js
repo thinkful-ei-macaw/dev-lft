@@ -3,11 +3,11 @@ import ProjectDashRequestsList from '../ProjectDashRequestsList/ProjectDashReque
 
 const ProjectDashRequests = ({
   requests = [],
-  handleDecline = () =>{},
+  handleDecline = () => {},
   handleApprove = () => {},
   handleOpenChatModal = () => {},
-  handleShowVacancyModal = ()=> {},
-  handleDeleteProject = () => 
+  handleShowVacancyModal = () => {},
+  handleDeleteProject = () => {}
 }) => {
   return (
     <article className="creator-options">
