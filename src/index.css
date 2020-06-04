@@ -53,3 +53,21 @@ body {
   background: var(--colorBG);
   color: var(--colorFG);
 }
+
+/* links */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--colorAccent);
+  text-decoration: underline;
+}
+
+/* helper classes */
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
