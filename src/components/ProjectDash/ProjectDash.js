@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ProjectDashService from './project-dash-service';
+import ProjectDashInfo from '../ProjectDashInfo/ProjectDashInfo';
 import ProjectDashPosts from '../ProjectDashPosts/ProjectDashPosts';
 import ProjectDashVacancies from '../ProjectDashVacancies/ProjectDashVacancies';
 import ProjectDashVacancyModal from '../ProjectDashVacancyModal/ProjectDashVacancyModal';
@@ -241,18 +242,6 @@ class ProjectDash extends Component {
     });
   };
 
-  renderTags = () => {
-    let { project } = this.state;
-    if (!project) {
-      return;
-    } else if (project.tags) {
-      let tagsList = project.tags.map(tag => {
-        return <li key={tag}>{tag}</li>;
-      });
-      return tagsList;
-    }
-  };
-
   render() {
     let { project, user_role, error } = this.state;
     if (!project) {
@@ -263,9 +252,11 @@ class ProjectDash extends Component {
         <div role="alert">{error && <p>{error}</p>}</div>
         <h1>Project Dashboard</h1>
         <article className="project">
-          <h2>{project.name}</h2>
-          <p>{project.description}</p>
-          <ul className="tags">{this.renderTags()}</ul>
+          <ProjectDashInfo
+            name={project.name}
+            description={project.description}
+            tags={project.tags}
+          />
           {this.state.project_id && (
             <ProjectDashVacancies
               project_id={this.state.project_id}
