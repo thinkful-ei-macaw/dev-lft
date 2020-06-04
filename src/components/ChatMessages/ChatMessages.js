@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import ChatService from '../../services/chat-service';
+import Avatar from '../Avatar/Avatar';
 import ChatMessageForm from '../ChatMessageForm/ChatMessageForm';
 import './ChatMessages.css';
 import PropTypes from 'prop-types';
@@ -71,11 +72,11 @@ class ChatMessages extends Component {
         <div role="alert">{error && <p>{error.error}</p>}</div>
         <Link to="/chats" className="Messages__header">
           &larr;
-          <span className="Messages__logo">
-            <span className="Messages__logo_initials">
-              {ChatService.getNameInitials(first_name, last_name)}
-            </span>
-          </span>
+          <Avatar
+            first_name={first_name}
+            last_name={last_name}
+            className={'Messages__logo'}
+          />
           <p>
             <span className="Messages__name">{first_name}</span>
             <span className="Messages__project">({project_name})</span>
