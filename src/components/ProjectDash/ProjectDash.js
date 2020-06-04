@@ -7,8 +7,6 @@ import ProjectDashVacancyModal from '../ProjectDashVacancyModal/ProjectDashVacan
 import ProjectDashChatModal from '../ProjectDashChatModal/ProjectDashChatModal';
 import ProjectDashRequests from '../ProjectDashRequests/ProjectDashRequests';
 import './ProjectDash.css';
-import TokenService from '../../services/token-service';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 class ProjectDash extends Component {
