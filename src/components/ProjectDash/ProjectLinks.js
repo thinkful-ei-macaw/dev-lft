@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProjectLinks = ({ github, live, trello }) => {
+const ProjectLinks = ({ github = '', live = '', trello = '' }) => {
   return (
     <>
       <a
