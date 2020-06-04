@@ -11,17 +11,7 @@
 }
 
 .Messages__logo {
-  height: 55px;
-  width: 55px;
-  display: block;
-  text-align: center;
   align-self: center;
-  border: 1px solid black;
-  border-radius: 50%;
-}
-
-.Messages__logo_initials {
-  line-height: 55px;
 }
 
 .Messages__name {

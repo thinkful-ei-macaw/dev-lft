@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Avatar from '../Avatar/Avatar';
 import ChatService from '../../services/chat-service';
 import './Chat.css';
 
@@ -53,14 +54,11 @@ class Chat extends Component {
                   }
                 }}
               >
-                <span className="Chat__logo">
-                  <span className="Chat__logo_initials">
-                    {ChatService.getNameInitials(
-                      chat.first_name,
-                      chat.last_name
-                    )}
-                  </span>
-                </span>
+                <Avatar
+                  first_name={chat.first_name}
+                  last_name={chat.last_name}
+                  className={'Chat__logo'}
+                />
                 <span className="Chat__name">{chat.first_name}</span>
                 <span className="Chat__project">({chat.project_name})</span>
                 <span className="Chat__preview">{chat.body}</span>

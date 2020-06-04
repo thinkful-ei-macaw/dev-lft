@@ -18,11 +18,6 @@ const ChatService = {
         return format(messageDate, 'EEEE, MMM d - hh:mmaa');
     }
   },
-  getNameInitials(firstName, lastName) {
-    // toString () helps avoid NaN warning from React
-    // by ensuring any response is a string.
-    return (firstName[0] + lastName[0]).toString();
-  },
   getChats() {
     return fetch(`${config.API_ENDPOINT}/chats`, {
       method: 'GET',
