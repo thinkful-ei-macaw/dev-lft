@@ -73,7 +73,7 @@ class Vacancies extends Component {
   };
 
   renderVacancies = () => {
-    let { user_role, vacancies } = this.props;
+    let { userRole, vacancies } = this.props;
     if (!vacancies) {
       return <p>No vacancies at this time</p>;
     }
@@ -97,7 +97,7 @@ class Vacancies extends Component {
           <p>Role: {item.title}</p>
           <p>Duties: {item.description}</p>
           <p>Skills: {item.skills.join(', ')}</p>
-          {user_role === 'owner' && item.username !== null ? (
+          {userRole === 'owner' && item.username !== null ? (
             <button
               value={item.id}
               onClick={this.handleRemoveMember}
@@ -108,7 +108,7 @@ class Vacancies extends Component {
           ) : (
             ''
           )}
-          {user_role === 'owner' && item.username === null ? (
+          {userRole === 'owner' && item.username === null ? (
             <button
               value={item.id}
               onClick={this.handleDeleteVacancy}
@@ -120,13 +120,13 @@ class Vacancies extends Component {
             ''
           )}
 
-          {user_role === 'user' && userRequest ? (
+          {userRole === 'user' && userRequest ? (
             <p>Request {userRequest.request_status}</p>
           ) : (
             ''
           )}
 
-          {user_role === 'user' && item.username === null && !userRequest ? (
+          {userRole === 'user' && item.username === null && !userRequest ? (
             <button type="button" value={item.id} onClick={this.handleRequest}>
               Request to join
             </button>

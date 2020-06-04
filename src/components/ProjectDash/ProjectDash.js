@@ -17,7 +17,7 @@ class ProjectDash extends Component {
   };
 
   state = {
-    user_role: '',
+    userRole: '',
     project: {},
     vacancies: [],
     requests: [],
@@ -51,9 +51,6 @@ class ProjectDash extends Component {
       .then(response => {
         this.setState({ vacancies: response });
       })
-      .then(() => {
-        this.determineUserRole();
-      })
       .catch(res => {
         this.setState({ error: res.error });
       });
@@ -65,24 +62,6 @@ class ProjectDash extends Component {
   };
   setRequests = requests => {
     this.setState({ requests });
-  };
-
-  determineUserRole = () => {
-    let { project, vacancies } = this.state;
-    let isMember = vacancies.find(item => item.request_status == 'approved');
-    if (project.isOwner) {
-      this.setState({
-        user_role: 'owner'
-      });
-    } else if (isMember !== undefined) {
-      this.setState({
-        user_role: 'team_member'
-      });
-    } else {
-      this.setState({
-        user_role: 'user'
-      });
-    }
   };
 
   handleDeleteProject = e => {
@@ -162,7 +141,7 @@ class ProjectDash extends Component {
         ProjectDashService.getVacancies(project_id).then(vacancies => {
           this.setState({
             vacancies,
-            user_role: 'user'
+            userRole: 'user'
           });
         });
       })
@@ -241,7 +220,11 @@ class ProjectDash extends Component {
   };
 
   render() {
-    let { project, user_role, error } = this.state;
+    let {
+      project,
+      project: { userRole },
+      error
+    } = this.state;
     if (!project) {
       return <p>Could not find this project</p>;
     }
@@ -258,7 +241,7 @@ class ProjectDash extends Component {
           {this.state.project_id && (
             <Vacancies
               project_id={this.state.project_id}
-              user_role={this.state.user_role}
+              userRole={userRole}
               vacancies={this.state.vacancies}
               requests={this.state.requests}
               setVacancies={this.setVacancies}
@@ -267,7 +250,7 @@ class ProjectDash extends Component {
           )}
         </article>
 
-        {user_role === 'team_member' || user_role === 'owner' ? (
+        {userRole === 'member' || userRole === 'owner' ? (
           /*  Passing the whole project so that the ProjectLinks can render.
               TODO: Find out if these are going to move into this component.
               Looks like it was done for the current layout where it's between
@@ -278,7 +261,7 @@ class ProjectDash extends Component {
           ''
         )}
 
-        {user_role === 'team_member' ? (
+        {userRole === 'member' ? (
           <button onClick={this.handleLeaveTeam} type="button">
             Leave Team
           </button>
@@ -286,7 +269,7 @@ class ProjectDash extends Component {
           ''
         )}
 
-        {user_role === 'owner' ? (
+        {userRole === 'owner' ? (
           <Requests
             requests={this.state.requests}
             handleDecline={this.handleDecline}
@@ -298,7 +281,7 @@ class ProjectDash extends Component {
         ) : (
           ''
         )}
-        {user_role === 'owner' && this.state.showChatModal ? (
+        {userRole === 'owner' && this.state.showChatModal ? (
           <ChatModal
             handleNewMessage={this.handleNewMessage}
             handleCloseChatModal={this.handleCloseChatModal}
