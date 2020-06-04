@@ -84,7 +84,7 @@ const ProjectDashService = {
       method: 'POST',
       headers: {
         authorization: `Bearer ${TokenService.getAuthToken()}`
-      },
+      }
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
@@ -123,7 +123,8 @@ const ProjectDashService = {
       },
       body: JSON.stringify({ message })
     }).then(res => {
-      return !res.ok ? res.json().then(e => Promise.reject(e)) : res.json();
+      // No json response unless error, so send back status
+      return !res.ok ? res.json().then(e => Promise.reject(e)) : res.status;
     });
   },
 
