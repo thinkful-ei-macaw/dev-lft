@@ -1,13 +1,16 @@
 import React from 'react';
 
-const ProjectDashChatModal = props => {
+const ProjectDashChatModal = ({
+  handleNewMessage = () => {},
+  handleCloseChatModal = () => {}
+}) => {
   return (
     <div className="chat-modal">
-      <form onSubmit={props.handleNewMessage} className="start-chat-form">
+      <form onSubmit={handleNewMessage} className="start-chat-form">
         <label htmlFor="chat-message">What's the message?</label>
         <input type="text" name="chat-message" id="chat-message" />
         <button type="submit">Send</button>
-        <button onClick={props.handleCloseChatModal} type="button">
+        <button onClick={handleCloseChatModal} type="button">
           Cancel
         </button>
       </form>

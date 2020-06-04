@@ -1,8 +1,11 @@
 import React from 'react';
 
-const ProjectDashVacancyModal = props => {
+const ProjectDashVacancyModal = ({
+  handleSubmitVacancy = () => {},
+  handleCloseVacancyModal = () => {}
+}) => {
   return (
-    <form onSubmit={props.handleSubmitVacancy} name="add-vacancy-form">
+    <form onSubmit={handleSubmitVacancy} name="add-vacancy-form">
       <label htmlFor="vacancy-title">Role:</label>
       <input name="vacancy-title" id="vacancy-title" />
       <label htmlFor="vacancy-description">Description:</label>
@@ -11,7 +14,7 @@ const ProjectDashVacancyModal = props => {
       <p>Add a comma after each skill. example: React, CSS</p>
       <input name="vacancy-skills" id="vacancy-skills" />
       <button type="submit">Submit</button>
-      <button onClick={props.handleCloseVacancyModal} type="button">
+      <button onClick={handleCloseVacancyModal} type="button">
         Cancel
       </button>
     </form>

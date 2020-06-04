@@ -270,7 +270,15 @@ class ProjectDash extends Component {
         </article>
 
         {user_role === 'team_member' || user_role === 'owner' ? (
-          <ProjectDashPosts project_id={this.state.project_id} />
+          /*  Passing the whole project so that the ProjectDashLinks can render.
+              TODO: Find out if these are going to move into this component.
+              Looks like it was done for the current layout where it's between
+              Posts and Project Links.
+          */
+          <ProjectDashPosts
+            project_id={this.state.project_id}
+            project={project}
+          />
         ) : (
           ''
         )}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ProjectDashService from '../ProjectDash/project-dash-service';
+import ProjectDashLinks from '../ProjectDashLinks/ProjectDashLinks';
 
 class ProjectDashPosts extends Component {
   state = {
@@ -33,7 +34,6 @@ class ProjectDashPosts extends Component {
 
     ProjectDashService.patchPost(post_id, message)
       .then(() => {
-        console.log('im not being fired');
         ProjectDashService.getPosts(project_id).then(posts => {
           this.setState({
             posts,
@@ -113,37 +113,17 @@ class ProjectDashPosts extends Component {
   };
 
   render() {
+    const { project } = this.props;
     return (
       <article className="team-options">
         <div className="team-posts">
           <ul>{this.renderPosts()}</ul>
         </div>
-
-        <a
-          className="links"
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://www.github.com"
-        >
-          Github
-        </a>
-        <a
-          className="links"
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://www.github.com"
-        >
-          Live Page
-        </a>
-        <a
-          className="links"
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://www.trello.com"
-        >
-          Trello
-        </a>
-
+        <ProjectDashLinks
+          github={project.github_url}
+          live={project.live_url}
+          trello={project.trello_url}
+        />
         <form onSubmit={this.handleSubmitPost} id="post-to-project-form">
           <label htmlFor="create-post">What do you want to post?</label>
           <input name="create-post" id="create-post" type="text" required />
