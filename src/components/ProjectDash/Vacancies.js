@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import ProjectDashService from '../ProjectDash/project-dash-service';
+import ProjectDashService from './project-dash-service';
 
-class ProjectDashVacancies extends Component {
+class Vacancies extends Component {
   static defaultProps = {
     vacancies: [],
     requests: []
@@ -143,4 +143,4 @@ class ProjectDashVacancies extends Component {
     return <ul className="vacancies">{this.renderVacancies()}</ul>;
   }
 }
-export default ProjectDashVacancies;
+export default Vacancies;

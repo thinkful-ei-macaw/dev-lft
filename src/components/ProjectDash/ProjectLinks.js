@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProjectDashLinks = ({ github, live, trello }) => {
+const ProjectLinks = ({ github, live, trello }) => {
   return (
     <>
       <a
@@ -31,4 +31,4 @@ const ProjectDashLinks = ({ github, live, trello }) => {
   );
 };
 
-export default ProjectDashLinks;
+export default ProjectLinks;

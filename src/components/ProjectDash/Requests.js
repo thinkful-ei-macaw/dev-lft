@@ -1,7 +1,7 @@
 import React from 'react';
-import ProjectDashRequestsList from '../ProjectDashRequestsList/ProjectDashRequestsList';
+import RequestsList from './RequestsList';
 
-const ProjectDashRequests = ({
+const Requests = ({
   requests = [],
   handleDecline = () => {},
   handleApprove = () => {},
@@ -13,7 +13,7 @@ const ProjectDashRequests = ({
     <article className="creator-options">
       <div className="pending-requests">
         <ul className="request">
-          <ProjectDashRequestsList
+          <RequestsList
             requests={requests}
             handleDecline={handleDecline}
             handleApprove={handleApprove}
@@ -31,4 +31,4 @@ const ProjectDashRequests = ({
   );
 };
 
-export default ProjectDashRequests;
+export default Requests;

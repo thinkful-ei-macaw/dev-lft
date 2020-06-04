@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProjectDashChatModal = ({
+const ChatModal = ({
   handleNewMessage = () => {},
   handleCloseChatModal = () => {}
 }) => {
@@ -18,4 +18,4 @@ const ProjectDashChatModal = ({
   );
 };
 
-export default ProjectDashChatModal;
+export default ChatModal;

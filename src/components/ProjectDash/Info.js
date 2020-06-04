@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProjectDashInfo = ({ name = '', description = '', tags = [] }) => {
+const Info = ({ name = '', description = '', tags = [] }) => {
   const renderTags = tags => {
     if (!tags.length) {
       return;
@@ -21,4 +21,4 @@ const ProjectDashInfo = ({ name = '', description = '', tags = [] }) => {
   );
 };
 
-export default ProjectDashInfo;
+export default Info;

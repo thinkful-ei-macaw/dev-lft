@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const ProjectDashRequests = ({
+const RequestsList = ({
   requests = [],
   handleDecline = () => {},
   handleApprove = () => {},
@@ -40,4 +40,4 @@ const ProjectDashRequests = ({
   );
 };
 
-export default ProjectDashRequests;
+export default RequestsList;

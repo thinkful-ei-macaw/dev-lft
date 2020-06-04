@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProjectDashVacancyModal = ({
+const VacancyModal = ({
   handleSubmitVacancy = () => {},
   handleCloseVacancyModal = () => {}
 }) => {
@@ -21,4 +21,4 @@ const ProjectDashVacancyModal = ({
   );
 };
 
-export default ProjectDashVacancyModal;
+export default VacancyModal;

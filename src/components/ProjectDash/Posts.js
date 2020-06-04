@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import ProjectDashService from '../ProjectDash/project-dash-service';
-import ProjectDashLinks from '../ProjectDashLinks/ProjectDashLinks';
+import ProjectDashService from './project-dash-service';
+import ProjectLinks from './ProjectLinks';
 
-class ProjectDashPosts extends Component {
+class Posts extends Component {
   state = {
     posts: [],
     postToEdit: null
@@ -119,7 +119,7 @@ class ProjectDashPosts extends Component {
         <div className="team-posts">
           <ul>{this.renderPosts()}</ul>
         </div>
-        <ProjectDashLinks
+        <ProjectLinks
           github={project.github_url}
           live={project.live_url}
           trello={project.trello_url}
@@ -133,4 +133,4 @@ class ProjectDashPosts extends Component {
     );
   }
 }
-export default ProjectDashPosts;
+export default Posts;

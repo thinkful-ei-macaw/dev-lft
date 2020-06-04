@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import ProjectDashService from './project-dash-service';
-import ProjectDashInfo from '../ProjectDashInfo/ProjectDashInfo';
-import ProjectDashPosts from '../ProjectDashPosts/ProjectDashPosts';
-import ProjectDashVacancies from '../ProjectDashVacancies/ProjectDashVacancies';
-import ProjectDashVacancyModal from '../ProjectDashVacancyModal/ProjectDashVacancyModal';
-import ProjectDashChatModal from '../ProjectDashChatModal/ProjectDashChatModal';
-import ProjectDashRequests from '../ProjectDashRequests/ProjectDashRequests';
+import Info from './Info';
+import Posts from './Posts';
+import Vacancies from './Vacancies';
+import VacancyModal from './VacancyModal';
+import ChatModal from './ChatModal';
+import Requests from './Requests';
 import './ProjectDash.css';
 import PropTypes from 'prop-types';
 
@@ -250,13 +250,13 @@ class ProjectDash extends Component {
         <div role="alert">{error && <p>{error}</p>}</div>
         <h1>Project Dashboard</h1>
         <article className="project">
-          <ProjectDashInfo
+          <Info
             name={project.name}
             description={project.description}
             tags={project.tags}
           />
           {this.state.project_id && (
-            <ProjectDashVacancies
+            <Vacancies
               project_id={this.state.project_id}
               user_role={this.state.user_role}
               vacancies={this.state.vacancies}
@@ -268,15 +268,12 @@ class ProjectDash extends Component {
         </article>
 
         {user_role === 'team_member' || user_role === 'owner' ? (
-          /*  Passing the whole project so that the ProjectDashLinks can render.
+          /*  Passing the whole project so that the ProjectLinks can render.
               TODO: Find out if these are going to move into this component.
               Looks like it was done for the current layout where it's between
               Posts and Project Links.
           */
-          <ProjectDashPosts
-            project_id={this.state.project_id}
-            project={project}
-          />
+          <Posts project_id={this.state.project_id} project={project} />
         ) : (
           ''
         )}
@@ -290,7 +287,7 @@ class ProjectDash extends Component {
         )}
 
         {user_role === 'owner' ? (
-          <ProjectDashRequests
+          <Requests
             requests={this.state.requests}
             handleDecline={this.handleDecline}
             handleApprove={this.handleApprove}
@@ -302,7 +299,7 @@ class ProjectDash extends Component {
           ''
         )}
         {user_role === 'owner' && this.state.showChatModal ? (
-          <ProjectDashChatModal
+          <ChatModal
             handleNewMessage={this.handleNewMessage}
             handleCloseChatModal={this.handleCloseChatModal}
           />
@@ -310,7 +307,7 @@ class ProjectDash extends Component {
           ''
         )}
         {this.state.showVacancyModal ? (
-          <ProjectDashVacancyModal
+          <VacancyModal
             handleSubmitVacancy={this.handleSubmitVacancy}
             handleCloseVacancyModal={this.handleCloseVacancyModal}
           />
