@@ -91,12 +91,10 @@ class Vacancies extends Component {
                 </span>
               </Link>
             ) : (
-              <span>This role is available</span>
+              <span>?</span>
             )}
           </h3>
-          <p>Role: {item.title}</p>
-          <p>Duties: {item.description}</p>
-          <p>Skills: {item.skills.join(', ')}</p>
+          <p>{item.title}</p>
           {userRole === 'owner' && item.username !== null ? (
             <button
               value={item.id}
