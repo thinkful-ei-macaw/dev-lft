@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ProjectDashService from './project-dash-service';
 import ProjectLinks from './ProjectLinks';
+import { format, differenceInHours, differenceInMinutes } from 'date-fns';
 
 class Posts extends Component {
   state = {
@@ -71,18 +72,35 @@ class Posts extends Component {
     });
   };
 
+  renderDate = date => {
+    let currentTime = new Date();
+    let postDate = new Date(date);
+    let diffInHrs = differenceInHours(currentTime, postDate);
+    let diffInMins = differenceInMinutes(currentTime, postDate);
+    switch (true) {
+      case diffInHrs < 1:
+        return `${diffInMins}m ago`
+      case diffInHrs < 24:
+        return `${diffInHrs}h ago`;
+      case diffInHrs < 48:
+        return `Yesterday`;
+      default:
+        return format(postDate, 'EEEE');
+    }
+  };
+
   renderPosts = () => {
     let { posts, postToEdit } = this.state;
     if (!posts) {
       return <p>No posts at this time</p>;
     }
-
     let allPosts = posts.map(post => {
       return (
         <li key={post.id}>
           <p>
             {post.first_name} {post.last_name}: {post.message}
           </p>
+          <p>{this.renderDate(post.date_created)}</p>
           {post.canEdit ? (
             <button value={post.id} onClick={this.handleEditPost} type="button">
               edit
@@ -117,18 +135,26 @@ class Posts extends Component {
     return (
       <article className="team-options">
         <div className="team-posts">
+          <h3>Discussion</h3>
           <ul>{this.renderPosts()}</ul>
         </div>
+
+        <form onSubmit={this.handleSubmitPost} id="post-to-project-form">
+          <label htmlFor="create-post">What do you want to post?</label>
+          <input
+            name="create-post"
+            id="create-post"
+            type="text"
+            placeholder="Say Something"
+            required
+          />
+          <button type="submit">Send Message</button>
+        </form>
         <ProjectLinks
           github={project.github_url}
           live={project.live_url}
           trello={project.trello_url}
         />
-        <form onSubmit={this.handleSubmitPost} id="post-to-project-form">
-          <label htmlFor="create-post">What do you want to post?</label>
-          <input name="create-post" id="create-post" type="text" required />
-          <button type="submit">Submit Post</button>
-        </form>
       </article>
     );
   }

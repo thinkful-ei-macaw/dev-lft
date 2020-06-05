@@ -17,6 +17,7 @@ import ChatMessages from './components/ChatMessages/ChatMessages';
 import Settings from './components/Settings/Settings';
 import ProjectDash from './components/ProjectDash/ProjectDash';
 import GlobalErrorBoundary from './components/ErrorBoundaries/GlobalErrorBoundary';
+import PageNotFound from './components/Utils/PageNoteFound/PageNotFound';
 
 import UserContext from './contexts/UserContext';
 import TokenService from './services/token-service';
@@ -88,6 +89,7 @@ export default class App extends Component {
             <PrivateRoute path="/users/:username" component={UserProfile} />
             <PrivateRoute exact path="/chats" component={Chat} />
             <PrivateRoute path="/chats/messages" component={ChatMessages} />
+            <Route path="/" component={PageNotFound} />
           </Switch>
         </GlobalErrorBoundary>
         <Route path="*" component={Footer} />
