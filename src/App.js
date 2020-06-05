@@ -16,6 +16,7 @@ import Chat from './components/Chat/Chat';
 import ChatMessages from './components/ChatMessages/ChatMessages';
 import Settings from './components/Settings/Settings';
 import ProjectDash from './components/ProjectDash/ProjectDash';
+import PageNotFound from './components/Utils/PageNoteFound/PageNotFound';
 
 import UserContext from './contexts/UserContext';
 import TokenService from './services/token-service';
@@ -48,7 +49,6 @@ export default class App extends Component {
     } else {
       this.setState({ user: { isAuth: false } });
     }
-
   };
 
   handleLogOut = () => {
@@ -80,10 +80,14 @@ export default class App extends Component {
           <PrivateRoute path="/feed" component={FeedPage} />
           <PrivateRoute path="/my-projects" component={ProjectsPage} />
           <PrivateRoute path="/project-form" component={ProjectForm} />
-          <PrivateRoute path="/project-dash/:project_id" component={ProjectDash} />
+          <PrivateRoute
+            path="/project-dash/:project_id"
+            component={ProjectDash}
+          />
           <PrivateRoute path="/users/:username" component={UserProfile} />
           <PrivateRoute exact path="/chats" component={Chat} />
           <PrivateRoute path="/chats/messages" component={ChatMessages} />
+          <Route path="/" component={PageNotFound} />
         </Switch>
         <Route path="*" component={Footer} />
       </UserContext.Provider>
