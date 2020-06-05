@@ -4,3 +4,6 @@ export { ReactComponent as Logo } from './svg/logo.svg';
 export { ReactComponent as FacebookIcon } from './svg/facebook.svg';
 export { ReactComponent as TwitterIcon } from './svg/twitter.svg';
 export { ReactComponent as LinkedInIcon } from './svg/linkedin.svg';
+
+export { ReactComponent as CalendarIcon } from './svg/calendar.svg';
+export { ReactComponent as VacanciesIcon } from './svg/vacancies.svg';

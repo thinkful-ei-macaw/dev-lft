@@ -27,7 +27,11 @@ export default class Carousel extends Component {
     return (
       <div className="carousel">
         <div className="carousel-slider" style={style}>
-          {slides}
+          {slides.map((slide, index) => (
+            <div className="slide" key={index}>
+              {slide}
+            </div>
+          ))}
         </div>
         <div className="dots">
           {slides.map((slide, index) => (
