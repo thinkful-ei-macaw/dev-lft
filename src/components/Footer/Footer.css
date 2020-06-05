@@ -14,8 +14,9 @@ footer p {
   line-height: 1.2;
 }
 
-footer h2 a {
-  text-decoration: none;
+footer .logo svg {
+  height: 4rem;
+  width: 4rem;
 }
 
 footer p.version {
@@ -37,4 +38,10 @@ footer .links li {
 footer .links svg {
   width: 2rem;
   height: 2rem;
+  fill: var(--colorMidFG);
+  transition: all 0.2s ease;
+}
+
+footer .links svg:hover {
+  fill: var(--colorAccent);
 }
