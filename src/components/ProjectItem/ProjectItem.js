@@ -23,13 +23,15 @@ export default class ProjectItem extends Component {
               return <span key={i} className="tag">{tag}</span>;
             })}
           </p>
-          <div className="info-item">
-            <CalendarIcon />
-            <p>{new Date(date_created).toLocaleDateString()}</p>
-          </div>
-          <div className="info-item">
-            <VacanciesIcon />
-            <p>2 open positions</p>
+          <div className="project-info">
+            <div className="info-item">
+              <CalendarIcon />
+              <p>{new Date(date_created).toLocaleDateString()}</p>
+            </div>
+            <div className="info-item">
+              <VacanciesIcon />
+              <p>2 open positions</p>
+            </div>
           </div>
         </div>
       </article>

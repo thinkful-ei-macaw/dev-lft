@@ -95,6 +95,13 @@ body {
   color: var(--colorFG);
 }
 
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 /* links */
 a {
   color: inherit;
@@ -112,4 +119,10 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+}
+
+.card {
+  background: var(--colorLightBG);
+  padding: 1.3rem;
+  box-shadow: 0 0.5em 1em var(--colorMidBG);
 }

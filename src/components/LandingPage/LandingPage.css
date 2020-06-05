@@ -105,6 +105,10 @@
   padding: 3rem 0;
 }
 
+.landing-page .projects .wrapper {
+  padding: 0;
+}
+
 .landing-page .projects h2 {
   text-align: center;
   text-transform: capitalize;

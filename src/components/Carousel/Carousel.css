@@ -1,7 +1,7 @@
 .carousel {
   overflow: hidden;
   width: 100%;
-  margin-bottom: 2em;
+  margin-bottom: 2rem;
 }
 
 .carousel .carousel-slider {
@@ -12,9 +12,6 @@
 .carousel .slide {
   flex: 1;
   margin: 0 1rem;
-  background: var(--colorLightBG);
-  border-radius: 0.3em;
-  padding: 1.5rem;
 }
 
 .carousel .dots {

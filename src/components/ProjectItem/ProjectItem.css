@@ -3,6 +3,7 @@
   align-items: flex-start;
   justify-content: space-between;
   font-weight: 500;
+  height: 100%;
   font-size: 1.3rem;
 }
 
@@ -19,6 +20,7 @@
 .project .project-right {
   margin-right: 1rem;
   width: 30%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -50,18 +52,22 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+  align-items: flex-start;
   user-select: none;
   margin-bottom: 1rem;
 }
 
 .tags .tag {
+  display: inline-flex;
+  align-items: center;
+  height: 1.5rem;
   text-transform: uppercase;
   font-size: 1rem;
   font-weight: 700;
   background: var(--colorAccent);
   color: var(--colorBG);
   white-space: nowrap;
-  padding: 0.2rem;
+  padding: 0 0.3rem;
   margin-left: 0.5rem;
   margin-bottom: 0.5rem;
 }
