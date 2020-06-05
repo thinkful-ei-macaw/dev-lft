@@ -11,7 +11,7 @@ export default class Footer extends Component {
       <footer>
         <div className="wrapper">
           <div className="footer-left">
-            <h2><Link to="/"><Logo /></Link></h2>
+            <Link to="/" className="logo"><Logo /></Link>
             <p>All rights reserved.</p>
           </div>
 
