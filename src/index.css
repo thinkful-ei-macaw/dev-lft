@@ -5,25 +5,33 @@
 @import url('https://use.typekit.net/vcg0mey.css');
 
 /* typography */
-h1 {
+h1,
+.h1 {
   font-size: 5rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-h2 {
+h2,
+.h2 {
   font-size: 3rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-h3 {
+h3,
+.h3 {
   font-size: 2rem;
   font-weight: 700;
 }
 
 em {
   font-style: italic;
+}
+
+/* icons */
+svg {
+  fill: currentColor;
 }
 
 /* grid */
@@ -33,16 +41,24 @@ em {
 }
 
 .column {
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 2rem;
+  object-fit: cover;
 }
 
 .column:nth-child(2n) {
   margin-right: 0;
 }
 
-.column-1-2 {
-  width: calc((100% - 1rem) / 2);
+@media screen and (min-width: 500px) {
+  .column {
+    margin-right: 2rem;
+  }
+
+  .column-1-2 {
+    width: calc((100% - 2rem) / 2);
+  }
 }
 
 /* colors */
@@ -65,7 +81,13 @@ html {
   font-family: 'interstate', sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 20px;
+  font-size: 14px;
+}
+
+@media screen and (min-width: 500px) {
+  html {
+    font-size: 18px;
+  }
 }
 
 body {
@@ -89,4 +111,5 @@ a:hover {
 .wrapper {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 2rem;
 }

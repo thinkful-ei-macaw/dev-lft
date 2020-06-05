@@ -3,7 +3,14 @@ import { Link } from 'react-router-dom';
 import ProjectApiService from '../../services/project-api-service';
 import AuthApiService from '../../services/auth-api-service';
 import Carousel from '../Carousel/Carousel';
+import Button from '../Button/Button';
+import ProjectItem from '../ProjectItem/ProjectItem';
 import './LandingPage.css';
+
+// images
+import BuidATeamPhoto from '../../images/build-a-team.jpg';
+import BringYourToolsPhoto from '../../images/bring-your-tools.jpg';
+import JoinATeamPhoto from '../../images/join-a-team.jpg';
 
 export default class LandingPage extends Component {
   state = {
@@ -37,49 +44,82 @@ export default class LandingPage extends Component {
       <main className="landing-page">
         <section className="hero">
           <div className="wrapper">
-            <h1>Side Projects <i>Conquered.</i></h1>
-            <p>Lorem ipsum something something something something something</p>
-            <Link to="/signup" className="cta">Start Yours</Link>
+            <h1>
+              Side Projects<br />
+              <em>Conquered.</em>
+            </h1>
+            <p>
+              Take side projects from concept to completion with
+              teams of passionate pros like yourself.
+            </p>
+            <Link to="/signup">
+              <Button>Start Yours</Button>
+            </Link>
           </div>
         </section>
 
         <section className="wrapper features">
-          <article>
-            <img src="https://picsum.photos/760/360?random=1" alt="build a team" />
-            <h2>Build a team</h2>
-            <p>Lorem ipsum something something something something something</p>
+          <div className="features-title">
+            <h2>Features</h2>
+            <div className="line-after"></div>
+          </div>
+
+          <article className="grid">
+            <img className="column column-1-2" src={BuidATeamPhoto} alt="team looking at a board with post-its" />
+            <div className="column column-1-2">
+              <h3>Build a team</h3>
+              <p>Find great developers and designers to turn your project idea into a reality.</p>
+            </div>
           </article>
 
-          <article>
-            <img src="https://picsum.photos/760/360?random=2" alt="build a team" />
-            <h2>Join a team</h2>
-            <p>Lorem ipsum something something something something something</p>
+          <article className="grid">
+            <img className="column column-1-2" src={BringYourToolsPhoto} alt="a screenshot of the GitHub workflow" />
+            <div className="column column-1-2">
+              <h3>Bring your tools</h3>
+              <p>Keep your existing workflow with integrations like GitHub, Trello and more to come.</p>
+            </div>
           </article>
 
-          <article>
-            <img src="https://picsum.photos/760/360?random=3" alt="build a team" />
-            <h2>Bring your tools</h2>
-            <p>Lorem ipsum something something something something something</p>
+          <article className="grid">
+            <img className="column column-1-2" src={JoinATeamPhoto} alt="join a team" />
+            <div className="column column-1-2">
+              <h3>Join a team</h3>
+              <p>Lend your expertise in design or development to others working on the next big thing.</p>
+            </div>
           </article>
         </section>
 
-        {projects.length && <section className="wrapper projects">
-          <h2>Projects that could use someone like you</h2>
-          <Carousel>
-            {projects.map(project => (
-              <article key={project.id} className="project slide">
-                <h3>{project.name}</h3>
-                <p>{project.description}</p>
-              </article>
-            ))}
-          </Carousel>
-          <Link to="/signup" className="cta">Sign up to join this team</Link>
-        </section>}
+        {projects.length
+          ? (
+            <section className="projects">
+              <div className="wrapper">
+                <h2 className="h3">
+                  Projects that could use<br />
+                  someone like you
+                </h2>
+                <Carousel>
+                  {projects.map(project => (
+                    <ProjectItem key={project.id} project={project} />
+                  ))}
+                </Carousel>
+                <Link to="/signup"><Button>Sign up to join this team</Button></Link>
+              </div>
+            </section>
+          )
+          : ''}
 
-        <section className="push">
-          <h2>What are you waiting for?</h2>
-          <p>{formattedUserCount}+ users are using Dev LFT to crush their side projects.</p>
-          <Link to="/signup" className="cta">Get #LFTed</Link>
+        <section className="cta">
+          <h2>
+            What are you<br />
+            waiting for?
+          </h2>
+          <p>
+            {formattedUserCount}+ users are using Dev LFT<br />
+            to crush their side projects.
+          </p>
+          <Link to="/signup">
+            <Button>Get #LFTed</Button>
+          </Link>
         </section>
       </main>
     );

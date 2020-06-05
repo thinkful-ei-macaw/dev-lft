@@ -1,6 +1,7 @@
 nav {
   background: none;
   position: absolute;
+  z-index: 1000;
   left: 0;
   right: 0;
   font-size: 1.2rem;
@@ -8,7 +9,14 @@ nav {
 
 nav,
 .nav-push {
-  height: 6rem;
+  height: 10rem;
+}
+
+@media screen and (min-width: 500px) {
+  nav,
+  .nav-push {
+    height: 7rem;
+  }
 }
 
 nav .wrapper {
