@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Info = ({ name = '', description = '', tags = [] }) => {
+const Info = ({description = '', tags = [] }) => {
   const renderTags = tags => {
     if (!tags.length) {
       return;
@@ -14,7 +14,7 @@ const Info = ({ name = '', description = '', tags = [] }) => {
 
   return (
     <>
-      <h2>{name}</h2>
+    <h3>Project Info</h3>
       <p>{description}</p>
       <ul className="tags">{renderTags(tags)}</ul>
     </>

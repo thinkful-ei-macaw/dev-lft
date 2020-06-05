@@ -3,6 +3,7 @@ import ProjectDashService from './project-dash-service';
 import Info from './Info';
 import Posts from './Posts';
 import Vacancies from './Vacancies';
+import OpenVacancies from './OpenVacancies';
 import VacancyModal from './VacancyModal';
 import ChatModal from './ChatModal';
 import Requests from './Requests';
@@ -232,24 +233,8 @@ class ProjectDash extends Component {
       <section className="ProjectDash">
         <div role="alert">{error && <p>{error}</p>}</div>
         <h1>Project Dashboard</h1>
-        <article className="project">
-          <Info
-            name={project.name}
-            description={project.description}
-            tags={project.tags}
-          />
-          {this.state.project_id && (
-            <Vacancies
-              project_id={this.state.project_id}
-              userRole={userRole}
-              vacancies={this.state.vacancies}
-              requests={this.state.requests}
-              setVacancies={this.setVacancies}
-              setRequests={this.setRequests}
-            />
-          )}
-        </article>
-
+      <h2>{project.name}
+</h2>
         {userRole === 'member' || userRole === 'owner' ? (
           /*  Passing the whole project so that the ProjectLinks can render.
               TODO: Find out if these are going to move into this component.
@@ -260,6 +245,7 @@ class ProjectDash extends Component {
         ) : (
           ''
         )}
+        
 
         {userRole === 'member' ? (
           <button onClick={this.handleLeaveTeam} type="button">
@@ -297,6 +283,28 @@ class ProjectDash extends Component {
         ) : (
           ''
         )}
+        {this.state.project_id && (
+            <Vacancies
+              project_id={this.state.project_id}
+              userRole={userRole}
+              vacancies={this.state.vacancies}
+              requests={this.state.requests}
+              setVacancies={this.setVacancies}
+              setRequests={this.setRequests}
+            />
+          )}
+        <OpenVacancies
+          handleRequest={this.handleRequest}
+          project_id={this.state.project_id}
+          userRole={userRole}
+          vacancies={this.state.vacancies}
+        />
+        <article className="project">
+          <Info
+            description={project.description}
+            tags={project.tags}
+          />
+        </article>
       </section>
     );
   }

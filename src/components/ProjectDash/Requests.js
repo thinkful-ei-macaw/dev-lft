@@ -11,7 +11,14 @@ const Requests = ({
 }) => {
   return (
     <article className="creator-options">
+    <button onClick={handleShowVacancyModal} type="button">
+        Add new vacancy
+      </button>
+      <button onClick={handleDeleteProject} type="button">
+        Delete this project
+      </button>
       <div className="pending-requests">
+      <h3>Requests</h3>
         <ul className="request">
           <RequestsList
             requests={requests}
@@ -21,12 +28,7 @@ const Requests = ({
           />
         </ul>
       </div>
-      <button onClick={handleShowVacancyModal} type="button">
-        Add new vacancy
-      </button>
-      <button onClick={handleDeleteProject} type="button">
-        Delete this project
-      </button>
+      
     </article>
   );
 };
