@@ -1,0 +1,37 @@
+.btn {
+  background: var(--colorAccent);
+  color: var(--colorBG);
+  display: inline-block;
+  text-transform: uppercase;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.5em 1em;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--colorFG);
+  clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 0% 100%);
+  z-index: -1;
+  transform: translateX(-100%);
+  transition: all 0.2s ease;
+}
+
+.btn:hover::after {
+  transform: translateX(0);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}

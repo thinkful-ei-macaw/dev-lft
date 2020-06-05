@@ -26,6 +26,25 @@ em {
   font-style: italic;
 }
 
+/* grid */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.column {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.column:nth-child(2n) {
+  margin-right: 0;
+}
+
+.column-1-2 {
+  width: calc((100% - 1rem) / 2);
+}
+
 /* colors */
 :root {
   --colorBG: #000000;
