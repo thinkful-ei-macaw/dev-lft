@@ -12,7 +12,6 @@ export default class ProjectItem extends Component {
     const projectDate = new Date(date);
     const currentDate = new Date();
     const diffInDays = differenceInDays(currentDate, projectDate);
-    console.log(diffInDays);
     if (diffInDays > 7) {
       return format(projectDate, 'L/d/yyyy');
     } else return `${diffInDays} days ago`;
