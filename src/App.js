@@ -16,6 +16,7 @@ import Chat from './components/Chat/Chat';
 import ChatMessages from './components/ChatMessages/ChatMessages';
 import Settings from './components/Settings/Settings';
 import ProjectDash from './components/ProjectDash/ProjectDash';
+import GlobalErrorBoundary from './components/ErrorBoundaries/GlobalErrorBoundary';
 import PageNotFound from './components/Utils/PageNoteFound/PageNotFound';
 
 import UserContext from './contexts/UserContext';
@@ -72,23 +73,25 @@ export default class App extends Component {
     return (
       <UserContext.Provider value={contextValues}>
         <Route path="*" component={Nav} />
-        <Switch>
-          <PublicOnlyRoute exact path="/" component={LandingPage} />
-          <PublicOnlyRoute path="/signup" component={Signup} />
-          <PublicOnlyRoute path="/login" component={Login} />
-          <PrivateRoute path="/settings" component={Settings} />
-          <PrivateRoute path="/feed" component={FeedPage} />
-          <PrivateRoute path="/my-projects" component={ProjectsPage} />
-          <PrivateRoute path="/project-form" component={ProjectForm} />
-          <PrivateRoute
-            path="/project-dash/:project_id"
-            component={ProjectDash}
-          />
-          <PrivateRoute path="/users/:username" component={UserProfile} />
-          <PrivateRoute exact path="/chats" component={Chat} />
-          <PrivateRoute path="/chats/messages" component={ChatMessages} />
-          <Route path="/" component={PageNotFound} />
-        </Switch>
+        <GlobalErrorBoundary>
+          <Switch>
+            <PublicOnlyRoute exact path="/" component={LandingPage} />
+            <PublicOnlyRoute path="/signup" component={Signup} />
+            <PublicOnlyRoute path="/login" component={Login} />
+            <PrivateRoute path="/settings" component={Settings} />
+            <PrivateRoute path="/feed" component={FeedPage} />
+            <PrivateRoute path="/my-projects" component={ProjectsPage} />
+            <PrivateRoute path="/project-form" component={ProjectForm} />
+            <PrivateRoute
+              path="/project-dash/:project_id"
+              component={ProjectDash}
+            />
+            <PrivateRoute path="/users/:username" component={UserProfile} />
+            <PrivateRoute exact path="/chats" component={Chat} />
+            <PrivateRoute path="/chats/messages" component={ChatMessages} />
+            <Route path="/" component={PageNotFound} />
+          </Switch>
+        </GlobalErrorBoundary>
         <Route path="*" component={Footer} />
       </UserContext.Provider>
     );
