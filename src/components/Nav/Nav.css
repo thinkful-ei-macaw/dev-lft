@@ -10,12 +10,40 @@ nav {
 nav,
 .nav-push {
   height: 10rem;
+  transition: all 0.3s ease;
+}
+
+nav .logo {
+  transform-origin: left center;
+  transition: all 0.2s ease;
+}
+
+nav.fixed {
+  background: var(--colorBG);
+}
+
+nav.fixed,
+nav.fixed .nav-push {
+  height: 8rem;
+}
+
+nav.fixed .logo {
+  transform: scale(0.8);
 }
 
 @media screen and (min-width: 500px) {
+  nav {
+    position: fixed;
+  }
+
   nav,
   .nav-push {
     height: 7rem;
+  }
+
+  nav.fixed,
+  nav.fixed .nav-push {
+    height: 5rem;
   }
 }
 

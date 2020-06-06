@@ -71,12 +71,80 @@ svg {
   --colorDarkFG: #6f6f6f;
   --colorMidFG: #c2c2c2;
   --colorAccent: #04f299;
-  --colorDarkAccent: 3274036;
+  --colorDarkAccent: #274036;
+}
+
+/* forms */
+form {
+  font-size: 1.2rem;
+  width: 100%;
+  max-width: 32rem;
+}
+
+form label,
+form input,
+form select {
+  font-family: inherit;
+  font-size: inherit;
+  display: block;
+  width: 100%;
+  margin-bottom: 0.75rem;
+  color: inherit;
+}
+
+form input,
+form select {
+  padding: 0.4em;
+  margin-bottom: 1rem;
+  background: var(--colorDarkBG);
+  border: none;
+  border-bottom: 1px solid transparent;
+  outline: none;
+}
+
+form input:focus,
+form select:focus {
+  border-bottom-color: var(--colorAccent);
+}
+
+form .title {
+  margin-bottom: 0.5rem;
+  color: var(--colorAccent);
+}
+
+form .subtitle {
+  margin: 0 0 1.5rem;
+  color: var(--colorMidFG);
+}
+
+form .input-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+form .input-group .input {
+  flex: 1;
+}
+
+form .input-group .input:nth-of-type(2n) {
+  margin-left: 1em;
+}
+
+form .btn {
+  margin: 1rem 0 3rem;
+}
+
+form a {
+  color: var(--colorAccent);
 }
 
 /* ===================================================================== */
 
 /* global styles */
+* {
+  box-sizing: border-box;
+}
+
 html {
   font-family: 'interstate', sans-serif;
   font-weight: 400;
@@ -93,6 +161,32 @@ html {
 body {
   background: var(--colorBG);
   color: var(--colorFG);
+  overflow-y: scroll;
+}
+
+/* selection */
+::selection {
+  background: var(--colorAccent);
+  color: var(--colorFG);
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 0.6rem;
+  position: absolute;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--colorMidBG);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--colorAccent);
+  transition: all 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--colorFG);
 }
 
 .app {
@@ -118,7 +212,7 @@ a:hover {
 .wrapper {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 3rem;
 }
 
 .card {

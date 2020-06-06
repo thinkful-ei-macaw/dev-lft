@@ -1,15 +1,16 @@
 import React from 'react';
-import './Login.css';
-import TokenService from '../../services/token-service';
-import ApiAuthService from '../../services/auth-api-service.js';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+import TokenService from '../../services/token-service';
+import ApiAuthService from '../../services/auth-api-service.js';
 import UserContext from '../../contexts/UserContext';
+import './Login.css';
 
 class Login extends React.Component {
   static defaultProps = {
     history: {
-      push: () => {}
+      push: () => { }
     }
   };
 
@@ -41,6 +42,11 @@ class Login extends React.Component {
     const error = this.state.error;
     return (
       <div className="loginpage">
+
+        <Helmet>
+          <title>Log In - Dev LFT</title>
+        </Helmet>
+
         <header>
           <h2 className="devlogin">DEV LFT</h2>
         </header>

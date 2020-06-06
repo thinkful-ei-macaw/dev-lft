@@ -7,30 +7,36 @@ import { Logo, FacebookIcon, TwitterIcon, LinkedInIcon } from '../../images';
 
 export default class Footer extends Component {
   render() {
-    return (
-      <footer>
-        <div className="wrapper">
-          <div className="footer-left">
-            <Link to="/" className="logo"><Logo /></Link>
-            <p>All rights reserved.</p>
-          </div>
+    // hide the footer on the login and signup pages
+    const currentPath = this.props.location.pathname;
+    const isLoginOrSignup = currentPath === "/signup" || currentPath === "/login";
 
-          <div className="footer-right">
-            <ul className="links">
-              <li>
-                <a href="https://facebook.com/" rel="noreferrer noopener" target="_blank"><FacebookIcon /></a>
-              </li>
-              <li>
-                <a href="https://twitter.com/" rel="noreferrer noopener" target="_blank"><TwitterIcon /></a>
-              </li>
-              <li>
-                <a href="https://linkedin.com/" rel="noreferrer noopener" target="_blank"><LinkedInIcon /></a>
-              </li>
-            </ul>
-            <p className="version">App version 1.0.0</p>
+    return !isLoginOrSignup
+      ? (
+        <footer>
+          <div className="wrapper">
+            <div className="footer-left">
+              <Link to="/" className="logo"><Logo /></Link>
+              <p>All rights reserved.</p>
+            </div>
+
+            <div className="footer-right">
+              <ul className="links">
+                <li>
+                  <a href="https://facebook.com/" rel="noreferrer noopener" target="_blank"><FacebookIcon /></a>
+                </li>
+                <li>
+                  <a href="https://twitter.com/" rel="noreferrer noopener" target="_blank"><TwitterIcon /></a>
+                </li>
+                <li>
+                  <a href="https://linkedin.com/" rel="noreferrer noopener" target="_blank"><LinkedInIcon /></a>
+                </li>
+              </ul>
+              <p className="version">App version 1.0.0</p>
+            </div>
           </div>
-        </div>
-      </footer>
-    )
+        </footer>
+      )
+      : ''
   }
 }

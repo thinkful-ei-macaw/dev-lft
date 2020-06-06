@@ -14,12 +14,12 @@ export default class ProjectItem extends Component {
     const diffInDays = differenceInDays(currentDate, projectDate);
     if (diffInDays > 7) {
       return format(projectDate, 'L/d/yyyy');
-    } else return `${diffInDays} days ago`;
+    } else return `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ago`;
   };
 
   render() {
     const {
-      project: { id, name, description, tags, date_created }
+      project: { id, name, description, tags, date_created, openVacancies = 1 }
     } = this.props;
     return (
       <article className="project">
@@ -39,13 +39,15 @@ export default class ProjectItem extends Component {
               );
             })}
           </p>
-          <div className="info-item">
-            <CalendarIcon />
-            <p>{this.formatProjectDate(date_created)}</p>
-          </div>
-          <div className="info-item">
-            <VacanciesIcon />
-            <p>2 open positions</p>
+          <div>
+            <div className="info-item">
+              <CalendarIcon />
+              <p>{this.formatProjectDate(date_created)}</p>
+            </div>
+            <div className="info-item">
+              <VacanciesIcon />
+              <p>{openVacancies} open position{+openVacancies !== 1 ? 's' : ''}</p>
+            </div>
           </div>
         </div>
       </article>

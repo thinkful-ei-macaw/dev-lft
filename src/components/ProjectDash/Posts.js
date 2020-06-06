@@ -106,9 +106,9 @@ class Posts extends Component {
               edit
             </button>
           ) : (
-            ''
-          )}
-          {post.canEdit && postToEdit == post.id ? (
+              ''
+            )}
+          {post.canEdit && postToEdit === post.id ? (
             <form
               name="edit-post-form"
               className="edit-post-form"
@@ -122,8 +122,8 @@ class Posts extends Component {
               </button>
             </form>
           ) : (
-            ''
-          )}
+              ''
+            )}
         </li>
       );
     });

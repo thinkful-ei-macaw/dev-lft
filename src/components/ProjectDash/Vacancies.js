@@ -60,9 +60,9 @@ class Vacancies extends Component {
     ) {
       return;
     }
-    let vacancy_id = e.target.value;
+    let vacancy_id = +e.target.value;
     let { vacancies } = this.props;
-    const filtered = vacancies.filter(item => item.id != vacancy_id);
+    const filtered = vacancies.filter(item => item.id !== vacancy_id);
     ProjectDashService.deleteVacancy(vacancy_id)
       .then(() => {
         this.props.setVacancies(filtered);
@@ -80,7 +80,7 @@ class Vacancies extends Component {
     let userRequests = vacancies.filter(item => item.request_status !== null);
 
     let vacancyList = vacancies.map(item => {
-      let userRequest = userRequests.find(req => req.id == item.id) || null;
+      let userRequest = userRequests.find(req => req.id === item.id) || null;
       return (
         <li key={item.id}>
           <h3>
@@ -91,8 +91,8 @@ class Vacancies extends Component {
                 </span>
               </Link>
             ) : (
-              <span>?</span>
-            )}
+                <span>?</span>
+              )}
           </h3>
           <p>{item.title}</p>
           {userRole === 'owner' && item.username !== null ? (
@@ -104,8 +104,8 @@ class Vacancies extends Component {
               Remove member
             </button>
           ) : (
-            ''
-          )}
+              ''
+            )}
           {userRole === 'owner' && item.username === null ? (
             <button
               value={item.id}
@@ -115,22 +115,22 @@ class Vacancies extends Component {
               Delete Vacancy
             </button>
           ) : (
-            ''
-          )}
+              ''
+            )}
 
           {userRole === 'user' && userRequest ? (
             <p>Request {userRequest.request_status}</p>
           ) : (
-            ''
-          )}
+              ''
+            )}
 
           {userRole === 'user' && item.username === null && !userRequest ? (
             <button type="button" value={item.id} onClick={this.handleRequest}>
               Request to join
             </button>
           ) : (
-            ''
-          )}
+              ''
+            )}
         </li>
       );
     });

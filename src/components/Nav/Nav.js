@@ -1,14 +1,33 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import './Nav.css';
-
 import UserContext from '../../contexts/UserContext';
+import './Nav.css';
 
 // images
 import { Logo } from '../../images/'
 
 export default class Nav extends Component {
   static contextType = UserContext;
+  state = {
+    fixed: false
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll = () => {
+    let isFixed = false;
+    if (window.scrollY > 0) {
+      isFixed = true;
+    }
+
+    if (this.state.fixed !== isFixed) this.setState({ fixed: isFixed });
+  }
 
   renderLinks(links) {
     const currentPath = this.props.location.pathname;
@@ -63,6 +82,7 @@ export default class Nav extends Component {
 
   render() {
     const { user } = this.context;
+    const { fixed } = this.state;
 
     // the nav bar is absolutely positioned
     // this variable being `true` will render
@@ -72,9 +92,9 @@ export default class Nav extends Component {
 
     return (
       <React.Fragment>
-        <nav>
+        <nav className={fixed ? 'fixed' : ''}>
           <div className="wrapper">
-            <Link to='/'><Logo /></Link>
+            <Link to='/'><Logo className="logo" /></Link>
             {
               user.isAuth
                 ? this.renderPrivateLinks()

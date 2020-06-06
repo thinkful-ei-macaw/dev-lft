@@ -11,10 +11,11 @@
   text-decoration: none;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
   z-index: 5;
+  box-shadow: 0 0.5rem 1rem transparent;
+  transition: all 0.2s ease 0.1s;
 }
 
 .btn::after {
@@ -31,7 +32,17 @@
   transition: all 0.2s ease;
 }
 
+.btn:hover {
+  transform: translateY(-0.2em);
+  box-shadow: 0 0.5rem 1rem var(--colorMidBG);
+}
+
 .btn:hover::after {
   transform: translateX(0);
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.btn:active {
+  transition: all 0.2s ease;
+  transform: none;
 }
