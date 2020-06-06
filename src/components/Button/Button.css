@@ -76,7 +76,7 @@
   height: 100%;
 }
 
-.btn .content {
+.btn.has-swap .content {
   display: none;
 }
 
@@ -93,7 +93,7 @@
     display: none;
   }
 
-  .btn .content {
+  .btn.has-swap .content {
     display: block;
   }
 
