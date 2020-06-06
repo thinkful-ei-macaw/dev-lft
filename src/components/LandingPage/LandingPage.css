@@ -144,32 +144,3 @@
 .landing-page .cta p {
   margin: 0 auto 2em;
 }
-
-/* globalizing hero background styles */
-.hero {
-  height: 100vh;
-  background-image: url('../../images/hero-banner.jpg');
-  background-size: auto 100vh;
-  background-position: top center;
-  z-index: 3;
-  position: relative;
-}
-
-.hero::before,
-.hero::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  pointer-events: none;
-  z-index: -1;
-  background-color: var(--colorBG);
-  opacity: 0.7;
-}
-
-.hero::after {
-  background: linear-gradient(transparent 75%, var(--colorBG));
-  opacity: 1;
-}

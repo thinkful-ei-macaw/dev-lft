@@ -6,7 +6,14 @@
 
 .carousel .carousel-slider {
   display: flex;
+  align-items: flex-start;
   transition: all 0.3s ease;
+}
+
+@media screen and (min-width: 500px) {
+  .carousel .carousel-slider {
+    align-items: initial;
+  }
 }
 
 .carousel .slide {
@@ -26,7 +33,6 @@
   width: 1rem;
   border-radius: 50%;
   background: none;
-  outline: none;
   border: 2px solid var(--colorAccent);
   margin: 0 0.5rem;
   cursor: pointer;
@@ -34,7 +40,8 @@
   transition: all 0.2s ease;
 }
 
-.carousel .dot:hover {
+.carousel .dot:hover,
+.carousel .dot:focus {
   background: var(--colorAccent);
 }
 

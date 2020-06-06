@@ -49,7 +49,7 @@ export default class LandingPage extends Component {
               teams of passionate pros like yourself.
             </p>
             <Link to="/signup">
-              <Button>Start Yours</Button>
+              <Button isLink={true}>Start Yours</Button>
             </Link>
           </div>
         </section>
@@ -98,7 +98,9 @@ export default class LandingPage extends Component {
                     <ProjectItem key={project.id} project={project} />
                   ))}
                 </Carousel>
-                <Link to="/signup"><Button>Sign up to join this team</Button></Link>
+                <Link to="/signup">
+                  <Button isLink={true}>Sign up to join this team</Button>
+                </Link>
               </div>
             </section>
           )
@@ -114,7 +116,7 @@ export default class LandingPage extends Component {
             and crush your side projects.
           </p>
           <Link to="/signup">
-            <Button>Get #LFTed</Button>
+            <Button isLink={true}>Get #LFTed</Button>
           </Link>
         </section>
       </main>

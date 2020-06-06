@@ -9,26 +9,13 @@ nav {
 
 nav,
 .nav-push {
-  height: 10rem;
+  height: 8rem;
   transition: all 0.3s ease;
 }
 
 nav .logo {
   transform-origin: left center;
   transition: all 0.2s ease;
-}
-
-nav.fixed {
-  background: var(--colorBG);
-}
-
-nav.fixed,
-nav.fixed .nav-push {
-  height: 8rem;
-}
-
-nav.fixed .logo {
-  transform: scale(0.8);
 }
 
 @media screen and (min-width: 500px) {
@@ -44,6 +31,14 @@ nav.fixed .logo {
   nav.fixed,
   nav.fixed .nav-push {
     height: 5rem;
+  }
+
+  nav.fixed {
+    background: var(--colorBG);
+  }
+
+  nav.fixed .logo {
+    transform: scale(0.8);
   }
 }
 
@@ -74,7 +69,7 @@ nav .link-container {
   width: 100%;
   max-width: 70vw;
   background: var(--colorDarkBG);
-  padding: 4rem 2rem 2rem;
+  padding: 3rem 2rem 2rem;
   font-size: 2rem;
   opacity: 0;
   transform: translateX(100%);
@@ -126,6 +121,7 @@ nav .links li {
     opacity: 1;
     pointer-events: all;
     transform: none;
+    transition: none;
   }
 
   nav .link-container-shadow {
