@@ -85,7 +85,7 @@ export default class Nav extends Component {
 
     const rightLinks = [
       { text: 'Settings', path: '/settings' },
-      { text: 'Log Out', path: '/', onClick: this.context.onLogOut }
+      { text: 'Log Out', path: '/login', onClick: this.context.onLogOut }
     ]
 
     return (

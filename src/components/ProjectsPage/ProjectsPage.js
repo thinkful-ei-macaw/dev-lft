@@ -6,6 +6,9 @@ import ProjectForm from '../ProjectForm/ProjectForm';
 import ProjectApiService from '../../services/project-api-service';
 import ProjectItem from '../ProjectItem/ProjectItem';
 
+// images
+import { PlusIcon } from '../../images';
+
 export default class ProjectsPage extends Component {
   state = {
     projects: [],
@@ -41,6 +44,7 @@ export default class ProjectsPage extends Component {
 
   render() {
     const { creating } = this.state;
+
     return (
       <section className="page projects">
         <Helmet>
@@ -50,7 +54,7 @@ export default class ProjectsPage extends Component {
         <header>
           <div className="wrapper">
             <h2>Your Projects</h2>
-            <Button disabled={creating} onClick={this.createNewProject}>Create new project</Button>
+            <Button disabled={creating} swap={PlusIcon} onClick={this.createNewProject}>Create new project</Button>
           </div>
         </header>
 

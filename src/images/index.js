@@ -8,3 +8,5 @@ export { ReactComponent as LinkedInIcon } from './svg/linkedin.svg';
 
 export { ReactComponent as CalendarIcon } from './svg/calendar.svg';
 export { ReactComponent as VacanciesIcon } from './svg/vacancies.svg';
+
+export { ReactComponent as PlusIcon } from './svg/plus.svg';

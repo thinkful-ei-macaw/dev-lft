@@ -70,3 +70,36 @@
   opacity: 0.3;
   pointer-events: none;
 }
+
+/* swap elements */
+.btn .swap {
+  height: 100%;
+}
+
+.btn .content {
+  display: none;
+}
+
+.btn.has-swap {
+  height: 3em;
+  width: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (min-width: 500px) {
+  .btn .swap {
+    display: none;
+  }
+
+  .btn .content {
+    display: block;
+  }
+
+  .btn.has-swap {
+    display: inline-block;
+    height: auto;
+    width: auto;
+  }
+}
