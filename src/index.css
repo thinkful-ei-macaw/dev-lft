@@ -147,7 +147,7 @@ form a {
 
 /* page */
 .page {
-  min-height: 75vh;
+  min-height: max(75vh, 35rem);
   display: flex;
   flex-direction: column;
 }

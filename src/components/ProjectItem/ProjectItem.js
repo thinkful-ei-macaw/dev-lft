@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { format, differenceInDays } from 'date-fns';
+import { differenceInDays, differenceInWeeks, differenceInMonths, differenceInYears } from 'date-fns';
 import PropTypes from 'prop-types';
 import './ProjectItem.css';
 
@@ -12,9 +12,32 @@ export default class ProjectItem extends Component {
     const projectDate = new Date(date);
     const currentDate = new Date();
     const diffInDays = differenceInDays(currentDate, projectDate);
-    if (diffInDays > 7) {
-      return format(projectDate, 'L/d/yyyy');
-    } else return `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ago`;
+    let output = null, interval = 'day', number = 0;
+
+    if (diffInDays === 0) {
+      output = 'Today';
+    } else if (diffInDays === 1) {
+      output = 'Yesterday';
+    } else if (diffInDays < 7) {
+      interval = 'day';
+      number = diffInDays;
+    } else if (diffInDays < 30) {
+      interval = 'week';
+      number = differenceInWeeks(currentDate, projectDate);
+    } else if (diffInDays < 365) {
+      interval = 'month';
+      number = differenceInMonths(currentDate, projectDate);
+    } else {
+      interval = 'year';
+      number = differenceInYears(currentDate, projectDate);
+    }
+
+    if (output === null) {
+      return `${number} ${interval}${number !== 1 ? 's' : ''} ago`;
+    } else {
+      return output;
+    }
+
   };
 
   render() {

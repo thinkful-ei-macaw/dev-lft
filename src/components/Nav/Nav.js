@@ -15,7 +15,8 @@ export default class Nav extends Component {
   }
 
   state = {
-    fixed: false
+    fixed: false,
+    menuOpen: false,
   }
 
   componentDidMount() {
@@ -87,25 +88,27 @@ export default class Nav extends Component {
   }
 
   render() {
-    const { user } = this.context;
-    const { fixed } = this.state;
+    const { user: { isAuth } } = this.context;
+    const { fixed, menuOpen } = this.state;
 
     // the nav bar is absolutely positioned
     // this variable being `true` will render
-    // a div push the rest of the content down
+    // a div to push the rest of the content down
     // if user is on any private page (as per design)
-    const push = user.isAuth;
+    const push = isAuth;
 
     return (
       <React.Fragment>
         <nav className={fixed ? 'fixed' : ''}>
           <div className="wrapper">
             <Link to='/'><Logo className="logo" /></Link>
-            {
-              user.isAuth
-                ? this.renderPrivateLinks()
-                : this.renderPublicLinks()
-            }
+            <div className={`link-container ${menuOpen ? 'active' : ''}`}>
+              {
+                isAuth
+                  ? this.renderPrivateLinks()
+                  : this.renderPublicLinks()
+              }
+            </div>
           </div>
         </nav>
         {push ? <div className="nav-push"></div> : ''}
