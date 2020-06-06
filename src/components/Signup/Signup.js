@@ -19,7 +19,7 @@ class Signup extends React.Component {
 
   state = { error: null };
 
-  getUserCredentials = e => {
+  handleSignup = e => {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
@@ -38,7 +38,6 @@ class Signup extends React.Component {
         this.props.history.push('/feed');
       })
       .catch(res => {
-        console.log(res);
         this.setState({ error: res.error });
       });
   };
@@ -52,8 +51,8 @@ class Signup extends React.Component {
           <title>Sign Up - Dev LFT</title>
         </Helmet>
 
-        <form className="card" onSubmit={this.getUserCredentials} autoComplete="off">
-          <h2 className="h3 title">Let's get started</h2>
+        <form className="card" onSubmit={this.handleSignup} autoComplete="off">
+          <h2 className="h3 title">Let's get started.</h2>
           <p className="subtitle">Fill in the fields below to sign up.</p>
           {error ? <p role="alert" className="error">{error}</p> : ''}
           <div className="input-group">
@@ -79,9 +78,7 @@ class Signup extends React.Component {
             </div>
           </div>
 
-          <Button type="submit">
-            SIGN UP
-          </Button>
+          <Button type="submit">Sign Up</Button>
 
           <p>
             Already a Dev LFT member? <Link to="/login">Log In</Link>
