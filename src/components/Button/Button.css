@@ -57,3 +57,16 @@
 .btn-clear::after {
   display: none;
 }
+
+.btn-clear:hover {
+  box-shadow: none;
+  transform: none;
+  background: var(--colorDarkBG);
+  color: var(--colorFG);
+}
+
+/* disabled buttons */
+.btn:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}

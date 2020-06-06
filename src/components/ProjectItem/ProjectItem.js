@@ -48,7 +48,7 @@ export default class ProjectItem extends Component {
       <article className="project card">
         <div className="project-left">
           <h3>
-            <Link to={`/project-dash/${id}`}>{name}</Link>
+            <Link to={`/projects/${id}`}>{name}</Link>
           </h3>
           <p className="description">{description}</p>
         </div>

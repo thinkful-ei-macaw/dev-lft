@@ -6,7 +6,6 @@ import PublicOnlyRoute from './components/Utils/PublicOnlyRoute';
 import LandingPage from './components/LandingPage/LandingPage';
 import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
-import ProjectForm from './components/ProjectForm/ProjectForm';
 import ProjectsPage from './components/ProjectsPage/ProjectsPage';
 import FeedPage from './components/FeedPage/FeedPage';
 import Login from './components/Login/Login';
@@ -80,12 +79,8 @@ export default class App extends Component {
             <PublicOnlyRoute path="/login" component={Login} />
             <PrivateRoute path="/settings" component={Settings} />
             <PrivateRoute path="/feed" component={FeedPage} />
-            <PrivateRoute path="/my-projects" component={ProjectsPage} />
-            <PrivateRoute path="/project-form" component={ProjectForm} />
-            <PrivateRoute
-              path="/project-dash/:project_id"
-              component={ProjectDash}
-            />
+            <PrivateRoute exact path="/projects" component={ProjectsPage} />
+            <PrivateRoute path="/projects/:project_id" component={ProjectDash} />
             <PrivateRoute path="/users/:username" component={UserProfile} />
             <PrivateRoute exact path="/chats" component={Chat} />
             <PrivateRoute path="/chats/messages" component={ChatMessages} />

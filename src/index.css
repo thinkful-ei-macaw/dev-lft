@@ -84,7 +84,8 @@ form {
 
 form label,
 form input,
-form select {
+form select,
+form textarea {
   font-family: inherit;
   font-size: inherit;
   display: block;
@@ -94,17 +95,20 @@ form select {
 }
 
 form input,
-form select {
+form select,
+form textarea {
   padding: 0.4em;
   margin-bottom: 1rem;
   background: var(--colorDarkBG);
   border: none;
   border-bottom: 1px solid transparent;
   outline: none;
+  resize: none;
 }
 
 form input:focus,
-form select:focus {
+form select:focus,
+form textarea:focus {
   border-bottom-color: var(--colorAccent);
 }
 

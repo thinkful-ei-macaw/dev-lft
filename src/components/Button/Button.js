@@ -4,7 +4,7 @@ import "./Button.css";
 
 class Button extends Component {
   render() {
-    const { children, className, disabled = false, onClick = () => null, type = "button", isLink = false } = this.props;
+    const { children, className = 'default', disabled = false, onClick = () => null, type = "button", isLink = false } = this.props;
     return !isLink
       ? (
         <button className={`btn btn-${className}`} disabled={disabled} onClick={onClick} type={type}>

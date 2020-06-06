@@ -51,7 +51,7 @@ export default class Nav extends Component {
       <li key={path}>
         <Link
           to={path}
-          className={path === currentPath ? 'active' : ''}
+          className={currentPath.includes(path) ? 'active' : ''}
           onClick={() => {
             this.toggleMenu(false);
             onClick();
@@ -79,7 +79,7 @@ export default class Nav extends Component {
   renderPrivateLinks() {
     const privateLinks = [
       { text: 'Feed', path: '/feed' },
-      { text: 'Projects', path: '/my-projects' },
+      { text: 'Projects', path: '/projects' },
       { text: 'Chats', path: '/chats' }
     ]
 

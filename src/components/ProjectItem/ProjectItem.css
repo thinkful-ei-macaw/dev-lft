@@ -2,6 +2,7 @@
   font-weight: 500;
   height: 100%;
   font-size: 1.3rem;
+  margin-bottom: 2rem;
 }
 
 .project h3 {
@@ -29,8 +30,12 @@
     justify-content: space-between;
   }
 
+  .project .project-left {
+    flex: 3;
+  }
+
   .project .project-right {
-    width: 30%;
+    flex: 2;
     height: 100%;
     margin-left: 1rem;
     display: flex;
