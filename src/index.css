@@ -51,7 +51,7 @@ svg {
   margin-right: 0;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 680px) {
   .column {
     margin-right: 2rem;
   }
@@ -219,7 +219,7 @@ html {
   }
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 680px) {
   html {
     font-size: 18px;
   }
@@ -312,7 +312,7 @@ a:hover {
   padding: 0 2rem;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 680px) {
   .wrapper {
     padding: 0 3rem;
   }

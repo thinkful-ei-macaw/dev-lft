@@ -39,7 +39,7 @@
   color: var(--colorMidFG);
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 680px) {
   .landing-page .hero {
     justify-content: center;
     padding-top: 0;

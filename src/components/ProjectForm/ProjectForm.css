@@ -5,6 +5,14 @@
   margin-bottom: 2rem;
 }
 
+.project-form .project {
+  margin-bottom: 0;
+}
+
+.project-form .name-input {
+  margin-bottom: 0.5rem;
+}
+
 .project-form .project-right .input-group {
   width: 100%;
 }

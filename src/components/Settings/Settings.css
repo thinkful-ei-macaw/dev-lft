@@ -12,7 +12,7 @@
   color: blue;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 680px) {
   .settingSection {
     flex-direction: row;
   }

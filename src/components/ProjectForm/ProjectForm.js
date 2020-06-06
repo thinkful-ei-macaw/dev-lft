@@ -30,10 +30,10 @@ export default class ProjectForm extends Component {
       <form className="project-form card" onSubmit={this.handleSubmit} autoComplete="off">
         <div className="project">
           <div className="project-left">
-            <div className="input-group">
+            <div className="input-group name-input">
               <div className="input">
                 <label htmlFor="project_name">Project Name *</label>
-                <input autoFocus={true} className="name" placeholder="New Project" type="text" name="project_name" id="project_name" required />
+                <input autoFocus={true} placeholder="New Project" type="text" name="project_name" id="project_name" required />
               </div>
             </div>
             <div className="input-group">

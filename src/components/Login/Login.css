@@ -3,7 +3,7 @@
   height: 100%;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 680px) {
   .log-in {
     display: flex;
     justify-content: center;
