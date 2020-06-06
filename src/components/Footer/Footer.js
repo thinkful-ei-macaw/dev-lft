@@ -6,6 +6,12 @@ import './Footer.css';
 import { Logo, FacebookIcon, TwitterIcon, LinkedInIcon } from '../../images';
 
 export default class Footer extends Component {
+  static defaultProps = {
+    location: {
+      pathname: "/"
+    }
+  }
+
   render() {
     // hide the footer on the login and signup pages
     const currentPath = this.props.location.pathname;

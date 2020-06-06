@@ -8,6 +8,12 @@ import { Logo } from '../../images/'
 
 export default class Nav extends Component {
   static contextType = UserContext;
+  static defaultProps = {
+    location: {
+      pathname: "/"
+    }
+  }
+
   state = {
     fixed: false
   }
