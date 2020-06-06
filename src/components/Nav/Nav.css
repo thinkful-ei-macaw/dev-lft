@@ -1,7 +1,7 @@
 nav {
   background: none;
   position: absolute;
-  z-index: 1000;
+  z-index: 10;
   left: 0;
   right: 0;
   font-size: 1.2rem;
@@ -54,27 +54,102 @@ nav .wrapper {
   justify-content: space-between;
 }
 
+nav .menu-btn {
+  margin-left: 1rem;
+  margin-right: -1em;
+}
+
+nav .menu {
+  height: 1em;
+  fill: currentColor;
+  transition: all 0.2s ease;
+}
+
 nav .link-container {
-  flex: 1;
-  display: flex;
+  position: fixed;
+  z-index: 12;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 70vw;
+  background: var(--colorDarkBG);
+  padding: 4rem 2rem 2rem;
+  font-size: 2rem;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
 }
 
-nav .links {
-  display: flex;
-  flex: 1;
+nav .link-container.active {
+  pointer-events: all;
+  transform: none;
+  opacity: 1;
 }
 
-nav .links-left {
-  padding-left: 2rem;
-  justify-content: flex-start;
+nav .link-container-shadow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--colorBG);
+  opacity: 0;
+  z-index: 11;
+  pointer-events: none;
+  transition: all 0.3s ease;
 }
 
-nav .links-right {
-  justify-content: flex-end;
+nav .link-container-shadow.active {
+  opacity: 0.4;
+  pointer-events: all;
 }
 
 nav .links li {
-  margin-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media screen and (min-width: 500px) {
+  nav .menu-btn {
+    display: none;
+  }
+
+  nav .link-container {
+    position: static;
+    flex: 1;
+    display: flex;
+    font-size: inherit;
+    padding: 0;
+    width: initial;
+    max-width: initial;
+    background: transparent;
+    opacity: 1;
+    pointer-events: all;
+    transform: none;
+  }
+
+  nav .link-container-shadow {
+    display: none;
+  }
+
+  nav .links {
+    display: flex;
+    flex: 1;
+  }
+
+  nav .links-left {
+    padding-left: 2rem;
+    justify-content: flex-start;
+  }
+
+  nav .links-right {
+    justify-content: flex-end;
+  }
+
+  nav .links li {
+    margin-left: 1rem;
+    margin-bottom: 0;
+  }
 }
 
 nav .links a {

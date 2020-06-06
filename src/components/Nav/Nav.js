@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext';
+import Button from '../Button/Button';
 import './Nav.css';
 
 // images
-import { Logo } from '../../images/'
+import { Logo, MenuIcon } from '../../images/';
 
 export default class Nav extends Component {
   static contextType = UserContext;
@@ -36,11 +37,28 @@ export default class Nav extends Component {
     if (this.state.fixed !== isFixed) this.setState({ fixed: isFixed });
   }
 
+  toggleMenu = (newState = !this.state.menuOpen) => {
+    if (newState === this.state.menuOpen) return;
+
+    this.setState({
+      menuOpen: newState
+    });
+  }
+
   renderLinks(links) {
     const currentPath = this.props.location.pathname;
-    return links.map(({ text, path }) => (
+    return links.map(({ text, path, onClick = () => { } }) => (
       <li key={path}>
-        <Link to={path} className={path === currentPath ? 'active' : ''}>{text}</Link>
+        <Link
+          to={path}
+          className={path === currentPath ? 'active' : ''}
+          onClick={() => {
+            this.toggleMenu(false);
+            onClick();
+          }}
+        >
+          {text}
+        </Link>
       </li>
     ))
   }
@@ -66,7 +84,8 @@ export default class Nav extends Component {
     ]
 
     const rightLinks = [
-      { text: 'Settings', path: '/settings' }
+      { text: 'Settings', path: '/settings' },
+      { text: 'Log Out', path: '/', onClick: this.context.onLogOut }
     ]
 
     return (
@@ -77,11 +96,6 @@ export default class Nav extends Component {
 
         <ul className="links links-right">
           {this.renderLinks(rightLinks)}
-          <li>
-            <Link to="/" onClick={this.context.onLogOut}>
-              Log Out
-          </Link>
-          </li>
         </ul>
       </React.Fragment>
     );
@@ -102,6 +116,11 @@ export default class Nav extends Component {
         <nav className={fixed ? 'fixed' : ''}>
           <div className="wrapper">
             <Link to='/'><Logo className="logo" /></Link>
+            <div
+              className={`link-container-shadow ${menuOpen ? 'active' : ''}`}
+              onClick={() => this.toggleMenu(false)}
+            >
+            </div>
             <div className={`link-container ${menuOpen ? 'active' : ''}`}>
               {
                 isAuth
@@ -109,6 +128,9 @@ export default class Nav extends Component {
                   : this.renderPublicLinks()
               }
             </div>
+            <Button className="clear menu-btn" onClick={this.toggleMenu}>
+              <MenuIcon className="menu" />
+            </Button>
           </div>
         </nav>
         {push ? <div className="nav-push"></div> : ''}

@@ -46,3 +46,14 @@
   transition: all 0.2s ease;
   transform: none;
 }
+
+/* clear buttons */
+.btn-clear {
+  background: transparent;
+  color: var(--colorMidFG);
+}
+
+.btn-clear::before,
+.btn-clear::after {
+  display: none;
+}
