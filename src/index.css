@@ -145,6 +145,55 @@ form a {
   color: var(--colorAccent);
 }
 
+/* page */
+.page {
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page header {
+  padding-bottom: 2rem;
+}
+
+.page header .wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page header h2 {
+  font-size: 2.3rem;
+  flex: 1;
+}
+
+.page .page-content {
+  flex: 1;
+  position: relative;
+}
+
+.page .page-content::before,
+.page .page-content::after {
+  content: '';
+  position: absolute;
+  top: 2rem;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  background: var(--colorDarkBG);
+  clip-path: polygon(0% 100%, 100% 100%, 100% 0%);
+  z-index: -1;
+}
+
+.page .page-content::after {
+  top: 5rem;
+  bottom: 0;
+  height: initial;
+  background: var(--colorDarkBG);
+  clip-path: none;
+  z-index: -1;
+}
+
 /* ===================================================================== */
 
 /* global styles */

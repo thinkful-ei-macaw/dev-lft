@@ -22,7 +22,7 @@ export default class ProjectItem extends Component {
       project: { id, name, description, tags, date_created, openVacancies = 1 }
     } = this.props;
     return (
-      <article className="project">
+      <article className="project card">
         <div className="project-left">
           <h3>
             <Link to={`/project-dash/${id}`}>{name}</Link>

@@ -1,8 +1,6 @@
-footer {
-  padding: 3rem 0;
-}
-
 footer .wrapper {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;

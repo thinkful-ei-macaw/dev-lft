@@ -44,14 +44,14 @@
   }
 }
 
-.projects .info-item svg {
+.project .info-item svg {
   fill: var(--colorFG);
   height: 1.3em;
   width: 1.3em;
   margin-right: 0.7em;
 }
 
-.projects .info-item p {
+.project .info-item p {
   width: 8em;
 }
 
