@@ -117,11 +117,12 @@ export default class Nav extends Component {
           <div className="wrapper">
             <Link to='/'><Logo className="logo" /></Link>
             <div
+              role="button"
               className={`link-container-shadow ${menuOpen ? 'active' : ''}`}
               onClick={() => this.toggleMenu(false)}
             >
             </div>
-            <div className={`link-container ${menuOpen ? 'active' : ''}`}>
+            <div aria-hidden={!menuOpen} role={menuOpen ? 'alert' : ''} className={`link-container ${menuOpen ? 'active' : ''}`}>
               {
                 isAuth
                   ? this.renderPrivateLinks()

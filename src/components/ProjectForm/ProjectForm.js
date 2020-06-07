@@ -27,7 +27,7 @@ export default class ProjectForm extends Component {
 
   render() {
     return (
-      <form className="project-form card" onSubmit={this.handleSubmit} autoComplete="off">
+      <form role="alert" className="project-form card" onSubmit={this.handleSubmit} autoComplete="off">
         <div className="project">
           <div className="project-left">
             <div className="input-group name-input">

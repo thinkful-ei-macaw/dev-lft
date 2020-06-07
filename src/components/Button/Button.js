@@ -29,7 +29,7 @@ class Button extends Component {
     return (
       <ButtonTag className={`btn btn-${className} ${swap ? 'has-swap' : ''}`} disabled={disabled} onClick={onClick} type={type}>
         <i className="content">{children}</i>
-        {swap ? <SwapElement className="swap" title={children} /> : ''}
+        {swap ? <SwapElement aria-hidden={true} className="swap" title={children} /> : ''}
       </ButtonTag>
     )
   }

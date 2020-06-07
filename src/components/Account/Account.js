@@ -99,7 +99,7 @@ export default class Account extends Component {
           {this.state.updateSuccess || this.error
             ? (
               <div className="wrapper">
-                <div className={`info card ${error ? 'error' : ''}`}>
+                <div role="alert" className={`info card ${error ? 'error' : ''}`}>
                   <p>{error ? error : 'Your profile has been updated'}</p>
                   <Button className="clear" onClick={this.dismissSuccessMsg}><CloseIcon /></Button>
                 </div>
