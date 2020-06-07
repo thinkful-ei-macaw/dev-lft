@@ -157,10 +157,18 @@ export default class Account extends Component {
                 </div>
                 <div className="input-group">
                   <div className="input">
-                    <label className="check"><input name="notifications" defaultChecked={!!notifications.chat} value="chat" type="checkbox" />New chat messages</label>
-                    <label className="check"><input name="notifications" defaultChecked={!!notifications.join} value="join" type="checkbox" />People joining your teams</label>
-                    <label className="check"><input name="notifications" defaultChecked={!!notifications.leave} value="leave" type="checkbox" />People leaving your teams</label>
-                    <label className="check"><input name="notifications" defaultChecked={!!notifications.post} value="post" type="checkbox" />New posts to your teams' discussion boards</label>
+                    <label className="check"><input name="notifications" defaultChecked={!!notifications.chat} value="chat" type="checkbox" />
+                      <span>New chat messages</span>
+                    </label>
+                    <label className="check"><input name="notifications" defaultChecked={!!notifications.join} value="join" type="checkbox" />
+                      <span>People joining your teams</span>
+                    </label>
+                    <label className="check"><input name="notifications" defaultChecked={!!notifications.leave} value="leave" type="checkbox" />
+                      <span>People leaving your teams</span>
+                    </label>
+                    <label className="check"><input name="notifications" defaultChecked={!!notifications.post} value="post" type="checkbox" />
+                      <span>New posts to your teams' discussion boards</span>
+                    </label>
                   </div>
                 </div>
               </article>

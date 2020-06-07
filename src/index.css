@@ -130,16 +130,52 @@ form textarea:read-only {
 form label {
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 form label.check {
   margin: 1rem 0;
   font-size: 0.9em;
+  position: relative;
 }
 
 form label.check input[type='checkbox'] {
-  display: inline-block;
-  margin-right: 0.6rem;
+  position: absolute;
+  height: 0;
+  width: 0;
+  opacity: 0;
+}
+
+form label.check span {
+  display: flex;
+}
+
+form label.check span::before {
+  content: '';
+  height: 0.8rem;
+  width: 0.8rem;
+  background: none;
+  border: 2px solid var(--colorAccent);
+  margin-right: 0.7rem;
+  opacity: 0.5;
+  transition: all 0.2s ease, outline 0s ease;
+}
+
+form label.check input:focus + span::before {
+  outline: 2px solid var(--colorMidFG);
+}
+
+form label.check input:checked + span::before {
+  opacity: 1;
+  background-color: var(--colorAccent);
+  background-image: url('./images/svg/check.svg');
+  background-size: 75% auto;
+  background-position: 25% 70%;
+  background-repeat: no-repeat;
+}
+
+form label.check:hover span::before {
+  background: var(--colorAccent);
 }
 
 form .title {
