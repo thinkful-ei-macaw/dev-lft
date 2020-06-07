@@ -42,18 +42,18 @@ svg {
 
 .column {
   display: inline-block;
-  max-width: 100%;
-  margin-bottom: 2rem;
+  width: 100%;
   object-fit: cover;
-}
-
-.column:nth-child(2n) {
-  margin-right: 0;
 }
 
 @media screen and (min-width: 680px) {
   .column {
     margin-right: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .column:nth-child(2n) {
+    margin-right: 0;
   }
 
   .column-1-2 {
@@ -83,7 +83,7 @@ form {
 }
 
 form label,
-form input,
+form input:not([type='checkbox']),
 form select,
 form textarea {
   font-family: inherit;
@@ -94,7 +94,7 @@ form textarea {
   color: inherit;
 }
 
-form input,
+form input:not([type='checkbox']),
 form select,
 form textarea {
   padding: 0.4em;
@@ -106,10 +106,40 @@ form textarea {
   resize: none;
 }
 
-form input:focus,
+form input:not([type='checkbox']):focus,
 form select:focus,
 form textarea:focus {
   border-bottom-color: var(--colorAccent);
+}
+
+form input:not([type='checkbox']):disabled,
+form select:disabled,
+form textarea:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+form input:not([type='checkbox']):read-only,
+form select:read-only,
+form textarea:read-only {
+  color: var(--colorMidFG);
+  user-select: none;
+}
+
+form label {
+  display: flex;
+  align-items: center;
+}
+
+form label.check {
+  margin: 1rem 0;
+  font-size: 0.9em;
+}
+
+form label.check input[type='checkbox'] {
+  display: inline-block;
+  margin-right: 0.6rem;
 }
 
 form .title {
@@ -147,6 +177,11 @@ form .btn {
 
 form a {
   color: var(--colorAccent);
+}
+
+form hr {
+  margin: 1rem 0 2rem;
+  border-color: var(--colorDarkFG);
 }
 
 /* page */
@@ -197,6 +232,10 @@ form a {
   background: var(--colorDarkBG);
   clip-path: none;
   z-index: -1;
+}
+
+.page .card {
+  margin-bottom: 2rem;
 }
 
 /* ===================================================================== */
@@ -322,4 +361,8 @@ a:hover {
   background: var(--colorLightBG);
   padding: 1.3rem;
   box-shadow: 0 0.5em 1em var(--colorMidBG);
+}
+
+.card .title {
+  margin-bottom: 1.5rem;
 }

@@ -39,7 +39,7 @@ export default class ProjectForm extends Component {
             <div className="input-group">
               <div className="input">
                 <label htmlFor="description">Project Description *</label>
-                <textarea rows="8" className="description" name="description" id="description" required placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."></textarea>
+                <textarea rows="8" name="description" id="description" required placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."></textarea>
               </div>
             </div>
           </div>

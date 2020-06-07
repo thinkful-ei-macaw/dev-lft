@@ -10,3 +10,5 @@ export { ReactComponent as CalendarIcon } from './svg/calendar.svg';
 export { ReactComponent as VacanciesIcon } from './svg/vacancies.svg';
 
 export { ReactComponent as PlusIcon } from './svg/plus.svg';
+export { ReactComponent as CloseIcon } from './svg/close.svg';
+export { ReactComponent as SaveIcon } from './svg/save.svg';

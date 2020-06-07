@@ -13,7 +13,7 @@ import Signup from './components/Signup/Signup';
 import UserProfile from './components/UserProfile/UserProfile';
 import Chat from './components/Chat/Chat';
 import ChatMessages from './components/ChatMessages/ChatMessages';
-import Settings from './components/Settings/Settings';
+import Account from './components/Account/Account';
 import ProjectDash from './components/ProjectDash/ProjectDash';
 import GlobalErrorBoundary from './components/ErrorBoundaries/GlobalErrorBoundary';
 import PageNotFound from './components/Utils/PageNoteFound/PageNotFound';
@@ -77,7 +77,7 @@ export default class App extends Component {
             <PublicOnlyRoute exact path="/" component={LandingPage} />
             <PublicOnlyRoute path="/signup" component={Signup} />
             <PublicOnlyRoute path="/login" component={Login} />
-            <PrivateRoute path="/settings" component={Settings} />
+            <PrivateRoute path="/account" component={Account} />
             <PrivateRoute path="/feed" component={FeedPage} />
             <PrivateRoute exact path="/projects" component={ProjectsPage} />
             <PrivateRoute path="/projects/:project_id" component={ProjectDash} />
