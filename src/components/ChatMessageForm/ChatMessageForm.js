@@ -24,11 +24,11 @@ class ChatMessageForm extends Component {
     this.setState({ error: null });
 
     const { body } = this.state;
-    const { recipient_id, project_id } = this.props;
+    const { recipient_username, request_id } = this.props;
     const newMessage = {
       body,
-      recipient_id,
-      project_id
+      recipient_username,
+      request_id
     };
     ChatService.postChatMessage(newMessage)
       .then(res => {
