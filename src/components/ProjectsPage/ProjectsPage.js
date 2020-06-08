@@ -1,50 +1,84 @@
 import React, { Component } from 'react';
-import './ProjectPage.css';
-import { Button, Section } from '../Utils/Utils';
+import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
+import Button from '../Button/Button';
+import ProjectForm from '../ProjectForm/ProjectForm';
 import ProjectApiService from '../../services/project-api-service';
 import ProjectItem from '../ProjectItem/ProjectItem';
-import PropTypes from 'prop-types';
+
+// images
+import { PlusIcon } from '../../images';
 
 export default class ProjectsPage extends Component {
-  static defaultProps = {
-    history: {
-      push: () => {}
-    }
-  };
-
   state = {
-    projects: []
+    projects: [],
+    creating: false
   };
 
   componentDidMount() {
+    this.getUserProjects();
+  }
+
+  getUserProjects() {
     ProjectApiService.getAllUserProjects().then(res => {
       this.setState({ projects: res });
     });
   }
 
+  createNewProject = () => {
+    this.setState({
+      creating: true
+    });
+  }
+
+  handleCreation = () => {
+    this.getUserProjects();
+    this.handleCreateCancelled();
+  }
+
+  handleCreateCancelled = () => {
+    this.setState({
+      creating: false
+    });
+  }
+
   render() {
+    const { creating } = this.state;
+
     return (
-      <Section className="projects-page">
-        <Button
-          className="start-project"
-          onClick={e => {
-            e.preventDefault();
-            this.props.history.push('/project-form');
-          }}
-        >
-          Create a new project
-        </Button>
-        <h2>Projects i'm involved in:</h2>
-        {this.state.projects.length !== 0 ? (
-          <div>
-            {this.state.projects.map((project, i) => {
-              return <ProjectItem key={i} project={project} />;
-            })}
+      <section className="page projects">
+        <Helmet>
+          <title>Your Projects - Dev LFT</title>
+        </Helmet>
+
+        <header>
+          <div className="wrapper">
+            <h2>Your Projects</h2>
+            <Button disabled={creating} swap={PlusIcon} onClick={this.createNewProject}>Create new project</Button>
           </div>
-        ) : (
-          'No projects available!'
-        )}
-      </Section>
+        </header>
+
+        <div className="page-content">
+          <div className="wrapper">
+            {creating
+              ? <ProjectForm onCreate={this.handleCreation} onCancel={this.handleCreateCancelled} />
+              : ''}
+
+            {this.state.projects.length !== 0
+              ? (
+                <div>
+                  {this.state.projects.map((project, i) => {
+                    return <ProjectItem key={i} project={project} />;
+                  })}
+                </div>
+              )
+              : (
+                'No projects available!'
+              )}
+          </div>
+        </div>
+
+      </section>
     );
   }
 }

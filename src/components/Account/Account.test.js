@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Settings from './Settings';
+import Account from './Account';
 import { BrowserRouter } from 'react-router-dom';
 
 it('renders without crashing', () => {
@@ -11,7 +11,7 @@ it('renders without crashing', () => {
   };
   ReactDOM.render(
     <BrowserRouter>
-      <Settings {...props} />
+      <Account {...props} />
     </BrowserRouter>,
     div
   );

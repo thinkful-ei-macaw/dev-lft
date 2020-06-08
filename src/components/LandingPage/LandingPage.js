@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import ProjectApiService from '../../services/project-api-service';
-import AuthApiService from '../../services/auth-api-service';
 import Carousel from '../Carousel/Carousel';
 import Button from '../Button/Button';
 import ProjectItem from '../ProjectItem/ProjectItem';
@@ -22,26 +22,22 @@ export default class LandingPage extends Component {
     // get projects
     ProjectApiService.getAllProjects()
       .then(projects => {
-
-        // get user count, since we're already making calls yeah?
-        AuthApiService.getUserCount()
-          .then(({ count }) => {
-            this.setState({
-              projects: projects.slice(0, 3),
-              userCount: count
-            });
-          })
-          .catch(console.error)
-
+        this.setState({
+          projects: projects.slice(0, 3)
+        });
       })
       .catch(console.error)
   }
 
   render() {
-    const { projects, userCount } = this.state;
-    const formattedUserCount = new Intl.NumberFormat().format(userCount);
+    const { projects } = this.state;
     return (
       <main className="landing-page">
+
+        <Helmet>
+          <title>Dev LFT | Side Projects Conquered</title>
+        </Helmet>
+
         <section className="hero">
           <div className="wrapper">
             <h1>
@@ -53,7 +49,7 @@ export default class LandingPage extends Component {
               teams of passionate pros like yourself.
             </p>
             <Link to="/signup">
-              <Button>Start Yours</Button>
+              <Button isLink={true}>Start Yours</Button>
             </Link>
           </div>
         </section>
@@ -102,7 +98,9 @@ export default class LandingPage extends Component {
                     <ProjectItem key={project.id} project={project} />
                   ))}
                 </Carousel>
-                <Link to="/signup"><Button>Sign up to join this team</Button></Link>
+                <Link to="/signup">
+                  <Button isLink={true}>Sign up to join this team</Button>
+                </Link>
               </div>
             </section>
           )
@@ -114,11 +112,11 @@ export default class LandingPage extends Component {
             waiting for?
           </h2>
           <p>
-            {formattedUserCount}+ users are using Dev LFT<br />
-            to crush their side projects.
+            Start using Dev LFT now<br />
+            and crush your side projects.
           </p>
           <Link to="/signup">
-            <Button>Get #LFTed</Button>
+            <Button isLink={true}>Get #LFTed</Button>
           </Link>
         </section>
       </main>

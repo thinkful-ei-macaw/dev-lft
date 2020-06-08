@@ -1,20 +1,64 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import UserContext from '../../contexts/UserContext';
+import Button from '../Button/Button';
 import './Nav.css';
 
-import UserContext from '../../contexts/UserContext';
-
 // images
-import { Logo } from '../../images/'
+import { Logo, MenuIcon } from '../../images/';
 
 export default class Nav extends Component {
   static contextType = UserContext;
+  static defaultProps = {
+    location: {
+      pathname: "/"
+    }
+  }
+
+  state = {
+    fixed: false,
+    menuOpen: false,
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll = () => {
+    let isFixed = false;
+    if (window.scrollY > 0) {
+      isFixed = true;
+    }
+
+    if (this.state.fixed !== isFixed) this.setState({ fixed: isFixed });
+  }
+
+  toggleMenu = (newState = !this.state.menuOpen) => {
+    if (newState === this.state.menuOpen) return;
+
+    this.setState({
+      menuOpen: newState
+    });
+  }
 
   renderLinks(links) {
     const currentPath = this.props.location.pathname;
-    return links.map(({ text, path }) => (
+    return links.map(({ text, path, onClick = () => { } }) => (
       <li key={path}>
-        <Link to={path} className={path === currentPath ? 'active' : ''}>{text}</Link>
+        <Link
+          to={path}
+          className={currentPath.includes(path) ? 'active' : ''}
+          onClick={() => {
+            this.toggleMenu(false);
+            onClick();
+          }}
+        >
+          {text}
+        </Link>
       </li>
     ))
   }
@@ -35,12 +79,13 @@ export default class Nav extends Component {
   renderPrivateLinks() {
     const privateLinks = [
       { text: 'Feed', path: '/feed' },
-      { text: 'Projects', path: '/my-projects' },
+      { text: 'Projects', path: '/projects' },
       { text: 'Chats', path: '/chats' }
     ]
 
     const rightLinks = [
-      { text: 'Settings', path: '/settings' }
+      { text: 'Account', path: '/account' },
+      { text: 'Log Out', path: '/login', onClick: this.context.onLogOut }
     ]
 
     return (
@@ -51,35 +96,41 @@ export default class Nav extends Component {
 
         <ul className="links links-right">
           {this.renderLinks(rightLinks)}
-          <li>
-            <Link to="/" onClick={this.context.onLogOut}>
-              Log Out
-          </Link>
-          </li>
         </ul>
       </React.Fragment>
     );
   }
 
   render() {
-    const { user } = this.context;
+    const { user: { isAuth } } = this.context;
+    const { fixed, menuOpen } = this.state;
 
     // the nav bar is absolutely positioned
     // this variable being `true` will render
-    // a div push the rest of the content down
+    // a div to push the rest of the content down
     // if user is on any private page (as per design)
-    const push = user.isAuth;
+    const push = isAuth;
 
     return (
       <React.Fragment>
-        <nav>
+        <nav className={fixed ? 'fixed' : ''}>
           <div className="wrapper">
-            <Link to='/'><Logo /></Link>
-            {
-              user.isAuth
-                ? this.renderPrivateLinks()
-                : this.renderPublicLinks()
-            }
+            <Link to='/'><Logo className="logo" /></Link>
+            <div
+              className={`link-container-shadow ${menuOpen ? 'active' : ''}`}
+              onClick={() => this.toggleMenu(false)}
+            >
+            </div>
+            <div className={`link-container ${menuOpen ? 'active' : ''}`}>
+              {
+                isAuth
+                  ? this.renderPrivateLinks()
+                  : this.renderPublicLinks()
+              }
+            </div>
+            <Button className="clear menu-btn" onClick={this.toggleMenu}>
+              <MenuIcon className="menu" />
+            </Button>
           </div>
         </nav>
         {push ? <div className="nav-push"></div> : ''}

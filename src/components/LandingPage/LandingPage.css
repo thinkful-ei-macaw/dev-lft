@@ -1,11 +1,7 @@
 .landing-page .hero {
   font-size: 1.5rem;
-  background-image: url('../../images/hero-banner.jpg');
-  background-size: cover;
-  background-position: center;
-  z-index: 3;
-  position: relative;
   height: 80vh;
+  min-height: 50rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -43,7 +39,7 @@
   color: var(--colorMidFG);
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 680px) {
   .landing-page .hero {
     justify-content: center;
     padding-top: 0;
@@ -103,6 +99,10 @@
 .landing-page .projects {
   background: var(--colorDarkBG);
   padding: 3rem 0;
+}
+
+.landing-page .projects .wrapper {
+  padding: 0;
 }
 
 .landing-page .projects h2 {

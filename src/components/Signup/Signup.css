@@ -1,56 +1,17 @@
-.signuppage fieldset {
-  text-align: center;
-  padding: 50px;
-  margin-left: 25%;
-  margin-right: 25%;
-  border-radius: 10%;
+.sign-up form {
+  padding: 10rem 3rem 3rem;
+  height: 100%;
 }
 
-.devsignup {
-  text-align: center;
-  padding: 15px;
-  border: 2px solid black;
-  border-radius: 50%;
-  width: 100px;
-  margin-left: auto;
-  margin-right: auto;
-}
+@media screen and (min-width: 680px) {
+  .sign-up {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-.signuppage .error {
-  color: red;
-}
-
-.signuppage h3 {
-  margin: 20px;
-}
-
-.signuppage label {
-  padding: 5px;
-}
-
-.signuppage input {
-  padding: 5px;
-  margin: 20px;
-  width: 125px;
-}
-
-.signupbtn {
-  padding: 10px;
-  margin: 25px;
-  margin-bottom: 50px;
-  width: 100px;
-  border-radius: 15%;
-  cursor: pointer;
-}
-
-.signuppage a {
-  text-decoration: none;
-  color: black;
-  font-size: 11px;
-  padding: 10px 25px;
-  margin: 25px;
-  width: 100px;
-  border: 0.5px solid lightgrey;
-  border-radius: 15%;
-  cursor: pointer;
+  .sign-up form {
+    height: initial;
+    padding: 2rem 1.5rem;
+  }
 }

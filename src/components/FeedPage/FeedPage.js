@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Section } from '../Utils/Utils';
+import { Helmet } from 'react-helmet';
 import ProjectApiService from '../../services/project-api-service';
 import ProjectItem from '../ProjectItem/ProjectItem';
+import './FeedPage.css';
 
 export default class FeedPage extends Component {
   state = {
@@ -16,18 +17,31 @@ export default class FeedPage extends Component {
 
   render() {
     return (
-      <Section className="projects-page">
-        <h2>Projects with vacancies</h2>
-        {this.state.vacantProjects.length !== 0 ? (
-          <div>
-            {this.state.vacantProjects.map((project, i) => {
-              return <ProjectItem key={i} project={project} />;
-            })}
+      <section className="page feed">
+        <Helmet>
+          <title>Latest Projects - Dev LFT</title>
+        </Helmet>
+
+        <header>
+          <div className="wrapper">
+            <h2>Latest Projects</h2>
           </div>
-        ) : (
-            'No projects available!'
-          )}
-      </Section>
+        </header>
+
+        <div className="page-content">
+          <div className="wrapper">
+            {this.state.vacantProjects.length !== 0 ? (
+              <div>
+                {this.state.vacantProjects.map((project, i) => {
+                  return <ProjectItem key={i} project={project} />;
+                })}
+              </div>
+            ) : (
+                <p>No projects available!</p>
+              )}
+          </div>
+        </div>
+      </section>
     );
   }
 }

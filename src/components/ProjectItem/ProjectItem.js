@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { format, differenceInDays } from 'date-fns';
+import { differenceInDays, differenceInWeeks, differenceInMonths, differenceInYears } from 'date-fns';
 import PropTypes from 'prop-types';
 import './ProjectItem.css';
 
@@ -12,20 +12,43 @@ export default class ProjectItem extends Component {
     const projectDate = new Date(date);
     const currentDate = new Date();
     const diffInDays = differenceInDays(currentDate, projectDate);
-    if (diffInDays > 7) {
-      return format(projectDate, 'L/d/yyyy');
-    } else return `${diffInDays} days ago`;
+    let output = null, interval = 'day', number = 0;
+
+    if (diffInDays === 0) {
+      output = 'Today';
+    } else if (diffInDays === 1) {
+      output = 'Yesterday';
+    } else if (diffInDays < 7) {
+      interval = 'day';
+      number = diffInDays;
+    } else if (diffInDays < 30) {
+      interval = 'week';
+      number = differenceInWeeks(currentDate, projectDate);
+    } else if (diffInDays < 365) {
+      interval = 'month';
+      number = differenceInMonths(currentDate, projectDate);
+    } else {
+      interval = 'year';
+      number = differenceInYears(currentDate, projectDate);
+    }
+
+    if (output === null) {
+      return `${number} ${interval}${number !== 1 ? 's' : ''} ago`;
+    } else {
+      return output;
+    }
+
   };
 
   render() {
     const {
-      project: { id, name, description, tags, date_created }
+      project: { id, name, description, tags, date_created, openVacancies = 1 }
     } = this.props;
     return (
-      <article className="project">
+      <article className="project card">
         <div className="project-left">
           <h3>
-            <Link to={`/project-dash/${id}`}>{name}</Link>
+            <Link to={`/projects/${id}`}>{name}</Link>
           </h3>
           <p className="description">{description}</p>
         </div>
@@ -39,13 +62,15 @@ export default class ProjectItem extends Component {
               );
             })}
           </p>
-          <div className="info-item">
-            <CalendarIcon />
-            <p>{this.formatProjectDate(date_created)}</p>
-          </div>
-          <div className="info-item">
-            <VacanciesIcon />
-            <p>2 open positions</p>
+          <div>
+            <div className="info-item">
+              <CalendarIcon />
+              <p>{this.formatProjectDate(date_created)}</p>
+            </div>
+            <div className="info-item">
+              <VacanciesIcon />
+              <p>{openVacancies} open position{+openVacancies !== 1 ? 's' : ''}</p>
+            </div>
           </div>
         </div>
       </article>

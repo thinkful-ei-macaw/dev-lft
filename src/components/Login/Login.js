@@ -1,15 +1,17 @@
 import React from 'react';
-import './Login.css';
-import TokenService from '../../services/token-service';
-import ApiAuthService from '../../services/auth-api-service.js';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+import Button from '../Button/Button';
+import TokenService from '../../services/token-service';
+import ApiAuthService from '../../services/auth-api-service.js';
 import UserContext from '../../contexts/UserContext';
+import './Login.css';
 
 class Login extends React.Component {
   static defaultProps = {
     history: {
-      push: () => {}
+      push: () => { }
     }
   };
 
@@ -17,7 +19,7 @@ class Login extends React.Component {
 
   state = { error: null };
 
-  handleJWTSubmission = e => {
+  handleLogin = e => {
     e.preventDefault();
     const { user_name, password } = e.target;
     this.setState({ error: null });
@@ -40,29 +42,34 @@ class Login extends React.Component {
   render() {
     const error = this.state.error;
     return (
-      <div className="loginpage">
-        <header>
-          <h2 className="devlogin">DEV LFT</h2>
-        </header>
-        <form onSubmit={this.handleJWTSubmission}>
-          <fieldset>
-            <h3>Sign In</h3>
-            <div role="alert">
-              <p className="error">{error}</p>
+      <div className="log-in hero">
+
+        <Helmet>
+          <title>Log In - Dev LFT</title>
+        </Helmet>
+
+        <form className="card" onSubmit={this.handleLogin} autoComplete="off">
+          <h2 className="h3 title">Welcome Back.</h2>
+          <p className="subtitle">Fill in the fields below to log in.</p>
+          {error ? <p role="alert" className="error">{error}</p> : ''}
+          <div className="input-group">
+            <div className="input">
+              <label htmlFor="username">Username</label>
+              <input type="text" id="username" placeholder="johndoe" name="user_name" required />
             </div>
-            <label htmlFor="username">username:</label>
-            <input type="text" id="username" name="user_name" required />
-            <br />
-            <label htmlFor="pwd">password:</label>
-            <input type="password" id="pwd" name="password" required />
-            <br />
-            <button type="submit" className="loginbtn">
-              LOG IN
-            </button>
-            <br />
-            <label htmlFor="member">Not a member?</label>
-            <Link to={`/signup`}>SIGN UP</Link>
-          </fieldset>
+          </div>
+          <div className="input-group">
+            <div className="input">
+              <label htmlFor="pwd">Password</label>
+              <input type="password" id="pwd" name="password" required />
+            </div>
+          </div>
+
+          <Button type="submit">Log In</Button>
+
+          <p>
+            Don't have an account yet? <Link to="/signup">Sign Up</Link>
+          </p>
         </form>
       </div>
     );

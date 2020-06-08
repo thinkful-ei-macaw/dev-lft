@@ -1,15 +1,17 @@
 import React from 'react';
-import './Signup.css';
-import ApiAuthService from '../../services/auth-api-service';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+import Button from '../Button/Button';
+import ApiAuthService from '../../services/auth-api-service';
 import TokenService from '../../services/token-service';
 import UserContext from '../../contexts/UserContext';
+import './Signup.css';
 
 class Signup extends React.Component {
   static defaultProps = {
     history: {
-      push: () => {}
+      push: () => { }
     }
   };
 
@@ -17,7 +19,7 @@ class Signup extends React.Component {
 
   state = { error: null };
 
-  getUserCredentials = e => {
+  handleSignup = e => {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
@@ -36,7 +38,6 @@ class Signup extends React.Component {
         this.props.history.push('/feed');
       })
       .catch(res => {
-        console.log(res);
         this.setState({ error: res.error });
       });
   };
@@ -44,33 +45,44 @@ class Signup extends React.Component {
   render() {
     const error = this.state.error;
     return (
-      <div className="signuppage">
-        <header>
-          <h2 className="devsignup">DEV LFT</h2>
-        </header>
-        <form onSubmit={this.getUserCredentials}>
-          <fieldset>
-            <h3>Sign Up</h3>
-            <div role="alert">{error && <p className="error">{error}</p>}</div>
-            <label htmlFor="firstname">first name:</label>
-            <input type="text" id="firstname" name="first_name" required />
-            <br />
-            <label htmlFor="lastname">last name:</label>
-            <input type="text" id="lastname" name="last_name" required />
-            <br />
-            <label htmlFor="username">username:</label>
-            <input type="text" id="username" name="user_name" required />
-            <br />
-            <label htmlFor="pwd">password:</label>
-            <input type="password" id="pwd" name="password" required />
-            <br />
-            <button type="submit" className="signupbtn">
-              SIGN UP
-            </button>
-            <br />
-            <label htmlFor="member">Already a member?</label>
-            <Link to={`/login`}>LOG IN</Link>
-          </fieldset>
+      <div className="sign-up hero">
+
+        <Helmet>
+          <title>Sign Up - Dev LFT</title>
+        </Helmet>
+
+        <form className="card" onSubmit={this.handleSignup} autoComplete="off">
+          <h2 className="h3 title">Let's get started.</h2>
+          <p className="subtitle">Fill in the fields below to sign up.</p>
+          {error ? <p role="alert" className="error">{error}</p> : ''}
+          <div className="input-group">
+            <div className="input">
+              <label htmlFor="firstname">First Name</label>
+              <input type="text" id="firstname" placeholder="John" name="first_name" required />
+            </div>
+            <div className="input">
+              <label htmlFor="lastname">Last Name</label>
+              <input type="text" id="lastname" placeholder="Doe" name="last_name" required />
+            </div>
+          </div>
+          <div className="input-group">
+            <div className="input">
+              <label htmlFor="username">Username</label>
+              <input type="text" id="username" placeholder="johndoe" name="user_name" required />
+            </div>
+          </div>
+          <div className="input-group">
+            <div className="input">
+              <label htmlFor="pwd">Password</label>
+              <input type="password" id="pwd" name="password" required />
+            </div>
+          </div>
+
+          <Button type="submit">Sign Up</Button>
+
+          <p>
+            Already a Dev LFT member? <Link to="/login">Log In</Link>
+          </p>
         </form>
       </div>
     );
