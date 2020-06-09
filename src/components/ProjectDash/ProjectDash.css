@@ -63,11 +63,12 @@
   width: 100%;
 }
 
-.project-dash .project.links {
+/* global links styles */
+.project.links {
   justify-content: flex-start;
 }
 
-.project-dash .project.links li {
+.project.links li {
   margin-right: 1em;
 }
 
@@ -87,6 +88,24 @@
 
 .project-dash .chats {
   min-height: 10rem;
-  max-height: 50rem;
+  max-height: 32rem;
   overflow-y: auto;
+}
+
+.project-dash .modal {
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--colorDarkFG);
+}
+
+.project-dash .modal input {
+  margin-bottom: 0;
+}
+
+.project-dash .modal .btn {
+  transform: none;
+  box-shadow: none;
+  margin-right: 0.5rem;
+  margin-bottom: 0;
+  font-size: 1rem;
 }

@@ -19,17 +19,12 @@ class Posts extends Component {
       postToEdit: null
     }
     this.postForm = React.createRef();
+    this.postList = React.createRef();
   }
 
 
   componentDidMount() {
-    ProjectDashService.getPosts(this.props.project_id)
-      .then(posts => {
-        this.setState({ posts });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
+    this.getPosts();
   }
 
   handleEditPost = (post_id) => {
@@ -38,21 +33,27 @@ class Posts extends Component {
     });
   };
 
+  getPosts = () => {
+    const { project_id } = this.props;
+    ProjectDashService.getPosts(project_id)
+      .then(posts => {
+        this.setState({
+          posts,
+          postToEdit: null
+        });
+        this.postList.current.scrollTop = this.postList.current.scrollHeight;
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
+      });
+  }
+
   handlePatchPost = e => {
     e.preventDefault();
-    let { project_id } = this.props;
     let post_id = this.state.postToEdit;
     let message = e.target['edit-post'].value;
-
     ProjectDashService.patchPost(post_id, message)
-      .then(() => {
-        ProjectDashService.getPosts(project_id).then(posts => {
-          this.setState({
-            posts,
-            postToEdit: null
-          });
-        });
-      })
+      .then(this.getPosts)
       .catch(res => {
         this.setState({ error: res.error });
       });
@@ -65,13 +66,7 @@ class Posts extends Component {
     this.postForm.current.reset();
 
     ProjectDashService.postPost(project_id, message)
-      .then(() => {
-        ProjectDashService.getPosts(project_id).then(posts => {
-          this.setState({
-            posts
-          });
-        });
-      })
+      .then(this.getPosts)
       .catch(res => {
         this.setState({ error: res.error });
       });
@@ -103,10 +98,11 @@ class Posts extends Component {
   renderPosts = () => {
     const { posts, postToEdit } = this.state;
     const { user: { username } } = this.context;
-    if (!posts) {
-      return <li className="project">No posts at this time</li>;
+    if (!posts.length) {
+      return <li className="project">No posts, yet!</li>;
     }
-    let allPosts = posts.map(post => {
+
+    let allPosts = [...posts].reverse().map(post => {
       return (
         <li key={post.id} className="message">
           <header className="user-info">
@@ -160,7 +156,7 @@ class Posts extends Component {
       <article className="card">
         <div className="team-posts">
           <h3 className="title">Discussion</h3>
-          <ul className="chats">{this.renderPosts()}</ul>
+          <ul ref={this.postList} className="chats">{this.renderPosts()}</ul>
         </div>
 
         <form onSubmit={this.handleSubmitPost} ref={this.postForm} autoComplete="off">
@@ -171,7 +167,7 @@ class Posts extends Component {
                 name="create-post"
                 id="create-post"
                 type="text"
-                placeholder="Say Something"
+                placeholder="Say something"
                 required
               />
             </div>

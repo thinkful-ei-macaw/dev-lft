@@ -1,20 +1,24 @@
 import React from 'react';
+import Button from '../Button/Button';
 
 const ChatModal = ({
-  handleNewMessage = () => {},
-  handleCloseChatModal = () => {}
+  handleNewMessage = () => { },
+  handleCloseChatModal = () => { },
+  request = {}
 }) => {
   return (
-    <div className="chat-modal">
-      <form onSubmit={handleNewMessage} className="start-chat-form">
-        <label htmlFor="chat-message">What's the message?</label>
-        <input type="text" name="chat-message" id="chat-message" />
-        <button type="submit">Send</button>
-        <button onClick={handleCloseChatModal} type="button">
-          Cancel
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleNewMessage} className="modal" autoComplete="off">
+      <div className="input-group">
+        <div className="input">
+          <label htmlFor="chat-message">Message {request.first_name} {request.last_name}:</label>
+          <input autoFocus type="text" name="chat-message" id="chat-message" placeholder="Say something" required />
+        </div>
+      </div>
+      <Button type="submit">Send</Button>
+      <Button className="clear" onClick={handleCloseChatModal}>
+        Cancel
+      </Button>
+    </form>
   );
 };
 

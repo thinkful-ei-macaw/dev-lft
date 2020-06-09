@@ -6,7 +6,7 @@ const VacancyModal = ({
   onCloseVacancyModal = () => { }
 }) => {
   return (
-    <form onSubmit={onSubmitVacancy} className="open-position" name="add-vacancy-form">
+    <form onSubmit={onSubmitVacancy} className="open-position" name="add-vacancy-form" autoComplete="off">
       <div className="project">
         <div className="project-left">
           <div className="input-group">

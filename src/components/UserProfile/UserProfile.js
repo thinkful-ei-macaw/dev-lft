@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import AuthApiService from '../../services/auth-api-service';
-import { Section } from '../Utils/Utils';
-import { format } from 'date-fns';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
+import AuthApiService from '../../services/auth-api-service';
+import './UserProfile.css';
 
 export default class UserProfile extends Component {
   state = {
-    loading: false,
+    user: {},
     error: null
   };
 
@@ -15,9 +16,9 @@ export default class UserProfile extends Component {
     let username = this.props.match.params.username;
     AuthApiService.getUserInfo(username)
       .then(userInfo => {
-        this.setState({ ...userInfo, loading: false });
+        this.setState({ user: { ...userInfo } });
       })
-      .catch(error => this.setState({ ...error, loading: false }));
+      .catch(res => this.setState({ error: res.error }));
   }
 
   getDate = date => {
@@ -27,31 +28,109 @@ export default class UserProfile extends Component {
 
   render() {
     const {
-      error,
-      loading,
-      first_name,
-      last_name,
-      date_created,
-      github_url,
-      linkedin_url,
-      twitter_url
+      user: {
+        skills = [],
+        bio,
+        username,
+        first_name,
+        last_name,
+        date_created,
+        github_url,
+        linkedin_url,
+        twitter_url
+      },
+      error
     } = this.state;
+
+    const title = first_name ? `${first_name} ${last_name}` : 'User Profile';
     return (
-      <Section>
-        <div role="alert">{error && <p>{error}</p>}</div>
-        {!loading && !error && (
-          <div>
-            <h2>{first_name}'s profile</h2>
-            <p>
-              {first_name} {last_name} | Active since{' '}
-              {date_created ? this.getDate(date_created) : null}
-            </p>
-            <p>GitHub: {github_url ? github_url : 'N/A'}</p>
-            <p>Linkedin: {linkedin_url ? linkedin_url : 'N/A'}</p>
-            <p>Twitter: {twitter_url ? twitter_url : 'NA'}</p>
+      <section className="page profile">
+        <Helmet>
+          <title>{first_name ? `${title}'s Profile` : title} - Dev LFT</title>
+        </Helmet>
+
+        <header>
+          <div className="wrapper">
+            <h2>{title}</h2>
+            <span className="highlight">@{username}</span>
           </div>
-        )}
-      </Section>
+        </header>
+
+        <div className="page-content">
+          <div className="wrapper">
+            {error
+              ? (
+                <div role="alert" className="info card error">
+                  <p>{error}</p>
+                </div>
+              )
+              : ''}
+
+            <div className="grid">
+              <div className="column column-1-2">
+                <article className="card">
+                  <h3 className="title">Bio</h3>
+                  <p className="project">{bio || 'An awesome DevLFT user.'}</p>
+                  <p>
+                    Active since {date_created ? this.getDate(date_created) : 'you loaded this page'}
+                  </p>
+                </article>
+
+                <article className="card">
+                  <h3 className="title">Links</h3>
+                  <ul className="project links">
+                    {!github_url && !twitter_url && !linkedin_url && (
+                      <li>No links, yet!</li>
+                    )}
+                    {github_url && <li>
+                      <a
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href={github_url}
+                      >
+                        Github
+                      </a>
+                    </li>}
+                    {twitter_url && <li>
+                      <a
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href={twitter_url}
+                      >
+                        Twitter
+                      </a>
+                    </li>}
+                    {linkedin_url && <li>
+                      <a
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href={linkedin_url}
+                      >
+                        LinkedIn
+                      </a>
+                    </li>}
+                  </ul>
+
+                </article>
+              </div>
+
+              <div className="column column-1-2">
+                <article className="card">
+                  <h3 className="title">Skills</h3>
+                  <ul>
+                    {skills.length
+                      ? skills.map((skill, i) => (
+                        <li key={i} className="project">{skill}</li>
+                      ))
+                      : <li className="project">Experienced #LFTer</li>}
+                  </ul>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
     );
   }
 }

@@ -97,7 +97,7 @@ export default class Account extends Component {
 
         <div className="page-content">
           <div className="wrapper">
-            {this.state.updateSuccess || this.error
+            {this.state.updateSuccess || error
               ? (
                 <div role="alert" className={`info card ${error ? 'error' : ''}`}>
                   <p>{error ? error : 'Your profile has been updated'}</p>
