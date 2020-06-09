@@ -48,7 +48,7 @@ class ProjectDash extends Component {
       }
 
     } catch (res) {
-      this.setState({ error: res.error });
+      this.setState({ error: res.error || res.message });
     }
   }
 
@@ -80,7 +80,7 @@ class ProjectDash extends Component {
         this.props.history.push('/projects');
       })
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 
@@ -98,7 +98,7 @@ class ProjectDash extends Component {
     ProjectDashService.patchVacancy(vacancy_id, user_id)
       .then(() => this.getData)
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 
@@ -121,7 +121,7 @@ class ProjectDash extends Component {
         });
       })
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 
@@ -138,7 +138,7 @@ class ProjectDash extends Component {
         });
       })
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 

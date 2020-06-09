@@ -44,7 +44,7 @@ class Posts extends Component {
         this.postList.current.scrollTop = this.postList.current.scrollHeight;
       })
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   }
 
@@ -55,7 +55,7 @@ class Posts extends Component {
     ProjectDashService.patchPost(post_id, message)
       .then(this.getPosts)
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 
@@ -68,7 +68,7 @@ class Posts extends Component {
     ProjectDashService.postPost(project_id, message)
       .then(this.getPosts)
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 

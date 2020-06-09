@@ -41,7 +41,7 @@ export default class Requests extends React.Component {
     ProjectDashService.postChat(username, id, body)
       .then(this.handleCloseChatModal)
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 

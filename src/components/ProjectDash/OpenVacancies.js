@@ -44,7 +44,7 @@ class OpenVacancies extends Component {
       })
       .catch(res => {
         this.setState({
-          error: res.error
+          error: res.error || res.message
         });
       });
   };
@@ -64,7 +64,7 @@ class OpenVacancies extends Component {
         });
       })
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 

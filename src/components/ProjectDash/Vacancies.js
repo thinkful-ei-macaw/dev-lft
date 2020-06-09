@@ -32,7 +32,7 @@ class Vacancies extends Component {
         });
       })
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 
@@ -52,7 +52,7 @@ class Vacancies extends Component {
         this.props.setVacancies(filtered);
       })
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 

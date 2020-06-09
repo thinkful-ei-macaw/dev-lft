@@ -32,7 +32,7 @@ export default class App extends Component {
       linkedin_url: '',
       twitter_url: '',
       date_created: '',
-      isAuth: TokenService.hasAuthToken()
+      isAuth: false
     },
     error: null
   };
@@ -45,7 +45,12 @@ export default class App extends Component {
     if (TokenService.hasAuthToken()) {
       AuthApiService.getUserProfile()
         .then(user => this.setState({ user: { ...user, isAuth: true } }))
-        .catch(error => this.setState({ ...error, user: { isAuth: false } }));
+        .catch(res => {
+          // TODO: some kind of notification that they were logged out due to an error
+
+          TokenService.clearAuthToken();
+          this.setState({ error: res.error || res.message, user: { isAuth: false } })
+        });
     } else {
       this.setState({ user: { isAuth: false } });
     }
