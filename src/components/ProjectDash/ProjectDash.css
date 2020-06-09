@@ -63,11 +63,12 @@
   width: 100%;
 }
 
-.project-dash .project.links {
+/* global links styles */
+.project.links {
   justify-content: flex-start;
 }
 
-.project-dash .project.links li {
+.project.links li {
   margin-right: 1em;
 }
 

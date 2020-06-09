@@ -98,8 +98,8 @@ class Posts extends Component {
   renderPosts = () => {
     const { posts, postToEdit } = this.state;
     const { user: { username } } = this.context;
-    if (!posts) {
-      return <li className="project">No posts at this time</li>;
+    if (!posts.length) {
+      return <li className="project">No posts, yet!</li>;
     }
 
     let allPosts = [...posts].reverse().map(post => {

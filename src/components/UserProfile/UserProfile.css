@@ -1,0 +1,8 @@
+.profile .project {
+  margin-bottom: 1rem;
+}
+
+.profile .highlight {
+  color: var(--colorAccent);
+  font-size: 1.2rem;
+}

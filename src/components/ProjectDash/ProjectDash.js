@@ -22,7 +22,6 @@ class ProjectDash extends Component {
   };
 
   state = {
-    userRole: '',
     project: {},
     vacancies: [],
     requests: [],
@@ -40,11 +39,13 @@ class ProjectDash extends Component {
       const project = await ProjectDashService.getProject(project_handle);
       this.setState({ project });
 
-      const requests = await ProjectDashService.getRequests(project.id);
-      this.setState({ requests });
-
       const vacancies = await ProjectDashService.getVacancies(project.id);
       this.setState({ vacancies });
+
+      if (project.userRole === 'owner') {
+        const requests = await ProjectDashService.getRequests(project.id);
+        this.setState({ requests });
+      }
 
     } catch (res) {
       this.setState({ error: res.error });
