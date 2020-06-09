@@ -128,14 +128,14 @@ const ProjectDashService = {
     });
   },
 
-  postChat(project_id, recipient_id, body) {
+  postChat(recipient_username, request_id, body) {
     return fetch(`${config.API_ENDPOINT}/chats`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         authorization: `Bearer ${TokenService.getAuthToken()}`
       },
-      body: JSON.stringify({ recipient_id, project_id, body })
+      body: JSON.stringify({ recipient_username, request_id, body })
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );

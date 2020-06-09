@@ -7,13 +7,12 @@ import Posts from './Posts';
 import ProjectLinks from './ProjectLinks';
 import Vacancies from './Vacancies';
 import OpenVacancies from './OpenVacancies';
-import ChatModal from './ChatModal';
 import Requests from './Requests';
 import Button from '../Button/Button';
 import './ProjectDash.css';
 
 // images
-import { CloseIcon, DotsIcon } from '../../images';
+import { CloseIcon } from '../../images';
 
 class ProjectDash extends Component {
   static defaultProps = {
@@ -27,7 +26,6 @@ class ProjectDash extends Component {
     project: {},
     vacancies: [],
     requests: [],
-    showChatModal: false,
     error: null
   };
 
@@ -65,8 +63,16 @@ class ProjectDash extends Component {
     e.preventDefault();
     if (
       prompt(
-        'Are you really sure you want to delete this project??? Type "delete my project" to confirm'
+        'Are you sure you want to delete this project? Type "delete my project" to confirm'
       ) !== 'delete my project'
+    ) {
+      return;
+    }
+
+    if (
+      prompt(
+        'Are you REALLY sure you want to delete this project? This CANNOT be undone. Type "delete" to confirm'
+      ) !== 'delete'
     ) {
       return;
     }
@@ -152,32 +158,6 @@ class ProjectDash extends Component {
       });
   };
 
-  handleNewMessage = e => {
-    e.preventDefault();
-    let { recipient_id } = this.state;
-    let project_id = this.state.project.id;
-    let body = e.target['chat-message'].value;
-    ProjectDashService.postChat(project_id, recipient_id, body)
-      .then(() => this.handleCloseChatModal())
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
-  };
-
-  handleOpenChatModal = (recipient_id) => {
-    this.setState({
-      showChatModal: true,
-      recipient_id: recipient_id
-    });
-  };
-
-  handleCloseChatModal = () => {
-    this.setState({
-      showChatModal: false,
-      recipient_id: null
-    });
-  };
-
   dismissErrorMsg = () => {
     this.setState({
       error: null
@@ -202,7 +182,14 @@ class ProjectDash extends Component {
         <header>
           <div className="wrapper">
             <h2>{project.name}</h2>
-            <Button className="clear"><DotsIcon /></Button>
+            {userRole === 'owner'
+              ? <Button
+                onClick={this.handleDeleteProject} className="clear"
+                title="Delete project"
+              >
+                <CloseIcon />
+              </Button>
+              : ''}
           </div>
         </header>
 
@@ -218,7 +205,7 @@ class ProjectDash extends Component {
               : ''}
 
             {userRole === 'member' || userRole === 'owner'
-              ? <Posts project_id={this.state.project.id} />
+              ? <Posts project_id={project.id} />
               : ''}
 
             <div className="grid">
@@ -229,9 +216,7 @@ class ProjectDash extends Component {
                       requests={this.state.requests}
                       handleDecline={this.handleDecline}
                       handleApprove={this.handleApprove}
-                      handleOpenChatModal={this.handleOpenChatModal}
-                      handleShowVacancyModal={this.handleShowVacancyModal}
-                      handleDeleteProject={this.handleDeleteProject}
+                      project_id={project.id}
                     />
                   ) : ''}
 
@@ -252,7 +237,7 @@ class ProjectDash extends Component {
 
                 {this.state.project.id && (
                   <Vacancies
-                    project_id={this.state.project.id}
+                    project_id={project.id}
                     userRole={userRole}
                     vacancies={this.state.vacancies}
                     setVacancies={this.setVacancies}
@@ -268,20 +253,11 @@ class ProjectDash extends Component {
               handleApprove={this.handleApprove}
               vacancies={this.state.vacancies}
               requests={this.state.requests}
-              project_id={this.state.project.id}
+              project_id={project.id}
               userRole={userRole}
             />
           </div>
         </div>
-
-        {userRole === 'owner' && this.state.showChatModal
-          ? (
-            <ChatModal
-              handleNewMessage={this.handleNewMessage}
-              handleCloseChatModal={this.handleCloseChatModal}
-            />
-          )
-          : ''}
 
       </section>
     );
