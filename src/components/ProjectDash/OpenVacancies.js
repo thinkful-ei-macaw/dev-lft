@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import Button from '../Button/Button';
 import ProjectDashService from './project-dash-service';
+import VacancyModal from './VacancyModal';
+
+// images
+import { PlusIcon } from '../../images';
 
 class OpenVacancies extends Component {
   static defaultProps = {
@@ -29,9 +33,9 @@ class OpenVacancies extends Component {
   };
 
   renderOpenVacancies = () => {
-    let { vacancies, userRole, handleApprove } = this.props;
-    let openVacancies = vacancies.filter(item => item.username === null);
-    let userRequests = vacancies.filter(item => item.request_status !== null);
+    const { vacancies, userRole, handleApprove } = this.props;
+    const openVacancies = vacancies.filter(item => item.username === null);
+    const userRequests = vacancies.filter(item => item.request_status !== null);
 
     return (
       <>
@@ -83,9 +87,30 @@ class OpenVacancies extends Component {
   };
 
   render() {
+    const { userRole, onAddVacancy, onCancelVacancy, onSubmitVacancy, addingVacancy } = this.props;
     return (
       <article className="card">
-        <h3 className="title">Open Positions</h3>
+        <header className="title">
+          <h3>Open Positions</h3>
+          {userRole === 'owner'
+            ? <Button
+              title="Add new position"
+              className="clear"
+              disabled={addingVacancy}
+              onClick={onAddVacancy}
+            >
+              <PlusIcon />
+            </Button>
+            : ''}
+        </header>
+
+        {addingVacancy
+          ? <VacancyModal
+            handleSubmitVacancy={onSubmitVacancy}
+            handleCloseVacancyModal={onCancelVacancy}
+          />
+          : ''}
+
         {this.renderOpenVacancies()}
       </article>
     );

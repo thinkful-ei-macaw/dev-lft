@@ -230,6 +230,7 @@ form .input-group.pinned label {
   width: 0;
   opacity: 0;
   margin: 0;
+  pointer-events: none;
 }
 
 form .input-group.pinned .btn {
@@ -446,6 +447,10 @@ a[href*='//']::after
 .card .title {
   margin-bottom: 1.5rem;
   color: var(--colorAccent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
 }
 
 .card form {

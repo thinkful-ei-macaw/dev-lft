@@ -33,6 +33,10 @@ footer .links li {
   margin-left: 1rem;
 }
 
+footer .links a::after {
+  display: none;
+}
+
 footer .links svg {
   width: 2rem;
   height: 2rem;

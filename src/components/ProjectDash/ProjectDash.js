@@ -7,7 +7,6 @@ import Posts from './Posts';
 import ProjectLinks from './ProjectLinks';
 import Vacancies from './Vacancies';
 import OpenVacancies from './OpenVacancies';
-import VacancyModal from './VacancyModal';
 import ChatModal from './ChatModal';
 import Requests from './Requests';
 import Button from '../Button/Button';
@@ -29,6 +28,7 @@ class ProjectDash extends Component {
     vacancies: [],
     requests: [],
     showChatModal: false,
+    showVacancyModal: false,
     error: null
   };
 
@@ -224,7 +224,7 @@ class ProjectDash extends Component {
     let {
       project,
       project: { userRole },
-      error
+      error,
     } = this.state;
     if (!project) {
       return <p>Could not find this project</p>;
@@ -305,6 +305,10 @@ class ProjectDash extends Component {
               vacancies={this.state.vacancies}
               requests={this.state.requests}
               project_id={this.state.project_id}
+              onAddVacancy={this.handleShowVacancyModal}
+              addingVacancy={this.state.showVacancyModal}
+              onSubmitVacancy={this.handleSubmitVacancy}
+              onCancelVacancy={this.handleCloseVacancyModal}
               userRole={userRole}
             />
           </div>
@@ -315,15 +319,6 @@ class ProjectDash extends Component {
             <ChatModal
               handleNewMessage={this.handleNewMessage}
               handleCloseChatModal={this.handleCloseChatModal}
-            />
-          )
-          : ''}
-
-        {userRole === 'owner' && this.state.showVacancyModal
-          ? (
-            <VacancyModal
-              handleSubmitVacancy={this.handleSubmitVacancy}
-              handleCloseVacancyModal={this.handleCloseVacancyModal}
             />
           )
           : ''}
