@@ -84,3 +84,9 @@
 .project-dash .btn-clear {
   opacity: 1;
 }
+
+.project-dash .chats {
+  min-height: 10rem;
+  max-height: 50rem;
+  overflow-y: auto;
+}

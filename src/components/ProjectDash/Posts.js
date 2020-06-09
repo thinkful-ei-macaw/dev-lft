@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { format, differenceInHours, differenceInMinutes } from 'date-fns';
+import UserContext from '../../contexts/UserContext';
 import ProjectDashService from './project-dash-service';
 import Button from '../Button/Button';
+import Avatar from '../Avatar/Avatar';
+
+// images
+import { EditIcon } from '../../images';
 
 class Posts extends Component {
+  static contextType = UserContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -93,39 +101,53 @@ class Posts extends Component {
   };
 
   renderPosts = () => {
-    let { posts, postToEdit } = this.state;
+    const { posts, postToEdit } = this.state;
+    const { user: { username } } = this.context;
     if (!posts) {
-      return <p>No posts at this time</p>;
+      return <li className="project">No posts at this time</li>;
     }
     let allPosts = posts.map(post => {
       return (
-        <li key={post.id}>
-          <p>
-            {post.first_name} {post.last_name}: {post.message}
-          </p>
-          <p>{this.renderDate(post.date_created)}</p>
-          {post.canEdit ? (
-            <button onClick={() => this.handleEditPost(post.id)} type="button">
-              edit
-            </button>
-          ) : (
-              ''
-            )}
-          {post.canEdit && postToEdit === post.id ? (
-            <form
-              name="edit-post-form"
-              className="edit-post-form"
-              onSubmit={this.handlePatchPost}
-            >
-              <label htmlFor="edit-post">Change to:</label>
-              <input type="text" name="edit-post" id="edit-post" />
-              <button type="submit">Submit</button>
-              <button onClick={this.handleCancelEdit} type="button">
-                Cancel
-              </button>
-            </form>
-          ) : (
-              ''
+        <li key={post.id} className="message">
+          <header className="user-info">
+            <Avatar first_name={post.first_name} last_name={post.last_name} />
+            <h4 className="h5">
+              {post.username === username
+                ? 'You'
+                : <Link to={`/users/${post.username}`}>{post.first_name} {post.last_name}</Link>}
+            </h4>
+            <span className="date">{this.renderDate(post.date_created)}</span>
+            {post.canEdit
+              ? (
+                <Button
+                  onClick={() => this.handleEditPost(post.id)}
+                  disabled={postToEdit === post.id}
+                  className="clear"
+                  title="Edit post"
+                >
+                  <EditIcon />
+                </Button>
+              )
+              : ''}
+          </header>
+
+          {postToEdit === post.id
+            ? (
+              <form
+                name="edit-post-form"
+                className="body"
+                onSubmit={this.handlePatchPost}
+              >
+                <label className="hidden" htmlFor="edit-post">Change to:</label>
+                <input autoFocus type="text" name="edit-post" id="edit-post" defaultValue={post.message} placeholder="Say something" />
+                <Button type="submit">Update</Button>
+                <Button onClick={this.handleCancelEdit} className="clear">Cancel</Button>
+              </form>
+            )
+            : (
+              <p className="body">
+                {post.message}
+              </p>
             )}
         </li>
       );
@@ -138,7 +160,7 @@ class Posts extends Component {
       <article className="card">
         <div className="team-posts">
           <h3 className="title">Discussion</h3>
-          <ul>{this.renderPosts()}</ul>
+          <ul className="chats">{this.renderPosts()}</ul>
         </div>
 
         <form onSubmit={this.handleSubmitPost} ref={this.postForm} autoComplete="off">

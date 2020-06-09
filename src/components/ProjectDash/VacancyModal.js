@@ -2,17 +2,17 @@ import React from 'react';
 import Button from '../Button/Button';
 
 const VacancyModal = ({
-  handleSubmitVacancy = () => { },
-  handleCloseVacancyModal = () => { }
+  onSubmitVacancy = () => { },
+  onCloseVacancyModal = () => { }
 }) => {
   return (
-    <form onSubmit={handleSubmitVacancy} className="open-position" name="add-vacancy-form">
+    <form onSubmit={onSubmitVacancy} className="open-position" name="add-vacancy-form">
       <div className="project">
         <div className="project-left">
           <div className="input-group">
             <div className="input">
               <label htmlFor="vacancy-title">Role *</label>
-              <input name="vacancy-title" id="vacancy-title" placeholder="New Role" required />
+              <input autoFocus={true} name="vacancy-title" id="vacancy-title" placeholder="New Role" required />
             </div>
           </div>
           <div className="input-group">
@@ -35,7 +35,7 @@ const VacancyModal = ({
       </div>
 
       <Button type="submit">Submit</Button>
-      <Button className="clear" onClick={handleCloseVacancyModal}>Cancel</Button>
+      <Button className="clear" onClick={onCloseVacancyModal}>Cancel</Button>
 
     </form>
   );

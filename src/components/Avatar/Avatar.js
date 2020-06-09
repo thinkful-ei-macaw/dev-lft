@@ -1,7 +1,7 @@
 import React from 'react';
 import './Avatar.css';
 
-const Avatar = ({ first_name = '', last_name = '', className = '' }) => {
+const Avatar = ({ first_name = null, last_name = null }) => {
   const empty = first_name === null || last_name === null;
 
   const getNameInitials = (firstName, lastName) => {
@@ -12,8 +12,8 @@ const Avatar = ({ first_name = '', last_name = '', className = '' }) => {
   };
 
   return (
-    <span className={`Avatar__logo ${empty ? 'Avatar__logo-grey' : ''}`}>
-      <span className="Avatar__logo_initials">
+    <span className={`avatar ${empty ? 'avatar-grey' : ''}`}>
+      <span>
         {getNameInitials(first_name, last_name)}
       </span>
     </span>

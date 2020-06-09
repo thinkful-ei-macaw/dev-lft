@@ -10,7 +10,7 @@ class OpenVacancies extends Component {
   static defaultProps = {
     vacancies: [],
     requests: [],
-    project_id: null,
+    project_id: null
   };
 
   state = {
@@ -24,6 +24,7 @@ class OpenVacancies extends Component {
   }
 
   onCancelVacancy = () => {
+    console.log('here')
     this.setState({
       addingVacancy: false
     })
@@ -45,6 +46,25 @@ class OpenVacancies extends Component {
         this.setState({
           error: res.error
         });
+      });
+  };
+
+  handleSubmitVacancy = e => {
+    e.preventDefault();
+    let { project_id } = this.props;
+
+    let title = e.target['vacancy-title'].value;
+    let description = e.target['vacancy-description'].value;
+    let skills = e.target['vacancy-skills'].value.split(',');
+    ProjectDashService.postVacancies(title, description, skills, project_id)
+      .then(() => {
+        this.setState({ addingVacancy: false });
+        ProjectDashService.getVacancies(project_id).then(vacancies => {
+          this.props.setVacancies(vacancies);
+        });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
       });
   };
 
@@ -97,13 +117,13 @@ class OpenVacancies extends Component {
   };
 
   renderSkills = skills => {
-    return skills.map(element => {
-      return <li className="tag tag-grey" key={element}>{element}</li>;
+    return skills.map((element, i) => {
+      return <li className="tag tag-grey" key={i}>{element}</li>;
     });
   };
 
   render() {
-    const { userRole, onSubmitVacancy } = this.props;
+    const { userRole } = this.props;
     const { addingVacancy } = this.state;
     return (
       <article className="card">
@@ -123,8 +143,8 @@ class OpenVacancies extends Component {
 
         {addingVacancy
           ? <VacancyModal
-            handleSubmitVacancy={onSubmitVacancy}
-            handleCloseVacancyModal={this.onCancelVacancy}
+            onSubmitVacancy={this.handleSubmitVacancy}
+            onCloseVacancyModal={this.onCancelVacancy}
           />
           : ''}
 
