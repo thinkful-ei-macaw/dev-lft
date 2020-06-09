@@ -11,35 +11,3 @@
 .account .btn {
   margin: 0;
 }
-
-.account .info {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.account .info.error {
-  color: var(--colorError);
-}
-
-.account .info .btn {
-  padding: 0;
-  background: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.account .info .btn:hover,
-.account .info .btn:focus {
-  padding: 0;
-  background: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.account .info .btn svg {
-  height: 1em;
-  display: block;
-}

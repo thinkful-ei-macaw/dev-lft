@@ -15,6 +15,13 @@
   color: var(--colorMidFG);
 }
 
+.project .btn {
+  margin-top: 1rem;
+  font-size: 1rem;
+  transform: none;
+  box-shadow: none;
+}
+
 .project .info-item {
   margin-bottom: 0.7rem;
   display: flex;
@@ -60,36 +67,17 @@
   width: 8em;
 }
 
-/* making this globally accessible, might move to own component */
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  user-select: none;
+.project .tags {
   margin: 1rem 0;
 }
 
-.tags .tag {
-  display: inline-flex;
-  align-items: center;
-  height: 1.5rem;
-  text-transform: uppercase;
-  font-size: 1rem;
-  font-weight: 700;
-  background: var(--colorAccent);
-  color: var(--colorBG);
-  white-space: nowrap;
-  padding: 0 0.3rem;
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
 @media screen and (min-width: 680px) {
-  .tags {
+  .project .tags {
     justify-content: flex-end;
+    margin: 0.5rem 0 1rem;
   }
 
-  .tags .tag {
+  .project .tags .tag {
     margin-right: 0;
     margin-left: 0.5rem;
   }

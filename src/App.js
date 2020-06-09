@@ -80,7 +80,7 @@ export default class App extends Component {
             <PrivateRoute path="/account" component={Account} />
             <PrivateRoute path="/feed" component={FeedPage} />
             <PrivateRoute exact path="/projects" component={ProjectsPage} />
-            <PrivateRoute path="/projects/:project_id" component={ProjectDash} />
+            <PrivateRoute path="/projects/:project_handle" component={ProjectDash} />
             <PrivateRoute path="/users/:username" component={UserProfile} />
             <PrivateRoute exact path="/chats" component={Chat} />
             <PrivateRoute path="/chats/messages" component={ChatMessages} />

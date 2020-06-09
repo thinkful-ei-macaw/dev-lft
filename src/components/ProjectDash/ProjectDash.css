@@ -1,23 +1,70 @@
-.ProjectDash {
-  box-sizing: border-box;
-  text-align: center;
+.project-dash .project-info {
+  font-size: 1.2rem;
 }
 
-.ProjectDash li {
-  list-style: none;
+.project-dash .project-info p {
+  margin-bottom: 3rem;
 }
 
-.ProjectDash .vacancies li {
-  border: 1px black solid;
-  margin: 1em;
-  padding: 5%;
+.project-dash .column {
+  margin-bottom: 0;
 }
 
-.ProjectDash .vacancies p {
+.project-dash .user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.project-dash .user .content {
+  margin: 0 0.6rem;
+  flex: 1;
+}
+
+.project-dash .user p {
+  color: var(--colorMidFG);
+  font-size: 0.9em;
+}
+
+.project-dash .user .btn-clear {
   padding: 0;
-  margin: auto;
+  background: none;
+  height: 1.5rem;
+  width: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.8rem;
 }
 
-.ProjectDash a {
-  margin: 1em;
+.project-dash .user .btn-clear:hover {
+  color: var(--colorAccent);
+}
+
+.project-dash .project {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--colorDarkFG);
+}
+
+.project-dash .project.links {
+  justify-content: flex-start;
+}
+
+.project-dash .project.links li {
+  margin-right: 1em;
+}
+
+.project-dash .project h4 {
+  margin-bottom: 0.5rem;
+}
+
+.project-dash .project:last-of-type {
+  padding-bottom: 0;
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.project-dash .btn-clear {
+  opacity: 1;
 }

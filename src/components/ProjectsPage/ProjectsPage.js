@@ -72,9 +72,7 @@ export default class ProjectsPage extends Component {
                   })}
                 </div>
               )
-              : (
-                'No projects available!'
-              )}
+              : 'No projects available!'}
           </div>
         </div>
 

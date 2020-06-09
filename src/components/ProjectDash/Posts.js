@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import ProjectDashService from './project-dash-service';
-import ProjectLinks from './ProjectLinks';
 import { format, differenceInHours, differenceInMinutes } from 'date-fns';
+import ProjectDashService from './project-dash-service';
+import Button from '../Button/Button';
 
 class Posts extends Component {
   state = {
@@ -131,30 +131,29 @@ class Posts extends Component {
   };
 
   render() {
-    const { project } = this.props;
     return (
-      <article className="team-options">
+      <article className="card">
         <div className="team-posts">
-          <h3>Discussion</h3>
+          <h3 className="title">Discussion</h3>
           <ul>{this.renderPosts()}</ul>
         </div>
 
-        <form onSubmit={this.handleSubmitPost} id="post-to-project-form">
-          <label htmlFor="create-post">What do you want to post?</label>
-          <input
-            name="create-post"
-            id="create-post"
-            type="text"
-            placeholder="Say Something"
-            required
-          />
-          <button type="submit">Send Message</button>
+        <form onSubmit={this.handleSubmitPost} autoComplete="off">
+          <div className="input-group pinned">
+            <div className="input">
+              <label htmlFor="create-post">What do you want to post?</label>
+              <input
+                name="create-post"
+                id="create-post"
+                type="text"
+                placeholder="Say Something"
+                required
+              />
+            </div>
+            <Button type="submit">Send Message</Button>
+          </div>
         </form>
-        <ProjectLinks
-          github={project.github_url}
-          live={project.live_url}
-          trello={project.trello_url}
-        />
+
       </article>
     );
   }

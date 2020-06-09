@@ -42,26 +42,26 @@ export default class ProjectItem extends Component {
 
   render() {
     const {
-      project: { id, name, description, tags, date_created, openVacancies = 1 }
+      project: { handle, name, description, tags, date_created, openVacancies = 0 }
     } = this.props;
     return (
       <article className="project card">
         <div className="project-left">
           <h3>
-            <Link to={`/projects/${id}`}>{name}</Link>
+            <Link to={`/projects/${handle}`}>{name}</Link>
           </h3>
           <p className="description">{description}</p>
         </div>
         <div className="project-right">
-          <p className="tags">
+          <ul className="tags">
             {tags.map((tag, i) => {
               return (
-                <span key={i} className="tag">
+                <li key={i} className="tag">
                   {tag}
-                </span>
+                </li>
               );
             })}
-          </p>
+          </ul>
           <div>
             <div className="info-item">
               <CalendarIcon />

@@ -54,12 +54,6 @@ nav .menu-btn {
   margin-right: -1em;
 }
 
-nav .menu-btn .content,
-nav .menu-btn svg {
-  display: block;
-  height: 100%;
-}
-
 nav .menu {
   height: 1em;
   fill: currentColor;
