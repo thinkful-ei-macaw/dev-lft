@@ -61,8 +61,8 @@ class ChatMessages extends Component {
       first_name,
       last_name,
       project_name,
-      project_id,
-      recipient_id,
+      request_id,
+      recipient_username,
       error
     } = this.state;
 
@@ -85,7 +85,7 @@ class ChatMessages extends Component {
         <ul className="Messages__list">
           {allMessages.map(message => (
             <li
-              key={message.id}
+              key={message.author_username + message.date_created}
               className={`Messages__item ${message.isAuthor ? 'author' : ''}`}
             >
               <span className="Messages__body">{message.body}</span>
@@ -101,8 +101,8 @@ class ChatMessages extends Component {
           </p>
         ) : (
           <ChatMessageForm
-            project_id={project_id}
-            recipient_id={recipient_id}
+            request_id={request_id}
+            recipient_username={recipient_username}
             setNewMessage={this.setNewMessage}
           />
         )}
