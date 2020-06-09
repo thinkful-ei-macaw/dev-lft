@@ -29,12 +29,12 @@ class ProjectDash extends Component {
     error: null
   };
 
-  async componentDidMount() {
-    let project_handle = this.props.match.params.project_handle;
+  componentDidMount() {
+    this.getData();
+  }
 
-    this.setState({
-      project_handle
-    });
+  async getData() {
+    const project_handle = this.props.match.params.project_handle;
 
     try {
       const project = await ProjectDashService.getProject(project_handle);
@@ -69,14 +69,6 @@ class ProjectDash extends Component {
       return;
     }
 
-    if (
-      prompt(
-        'Are you REALLY sure you want to delete this project? This CANNOT be undone. Type "delete" to confirm'
-      ) !== 'delete'
-    ) {
-      return;
-    }
-
     let project_id = this.state.project.id;
 
     ProjectDashService.deleteProject(project_id)
@@ -100,19 +92,10 @@ class ProjectDash extends Component {
       return;
     }
 
-    let project_id = this.state.project.id;
-
-    //set user_id to null to update server
+    // set user_id to null to update server
     let user_id = null;
     ProjectDashService.patchVacancy(vacancy_id, user_id)
-      .then(() => {
-        ProjectDashService.getVacancies(project_id).then(vacancies => {
-          this.setState({
-            vacancies,
-            userRole: 'user'
-          });
-        });
-      })
+      .then(() => this.getData)
       .catch(res => {
         this.setState({ error: res.error });
       });
