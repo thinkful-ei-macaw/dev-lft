@@ -10,8 +10,24 @@ class OpenVacancies extends Component {
   static defaultProps = {
     vacancies: [],
     requests: [],
-    project_id: null
+    project_id: null,
   };
+
+  state = {
+    addingVacancy: false
+  }
+
+  onAddVacancy = () => {
+    this.setState({
+      addingVacancy: true
+    })
+  }
+
+  onCancelVacancy = () => {
+    this.setState({
+      addingVacancy: false
+    })
+  }
 
   handleRequest = (vacancy_id, callback = () => null) => {
     let { requests, project_id } = this.props;
@@ -87,7 +103,8 @@ class OpenVacancies extends Component {
   };
 
   render() {
-    const { userRole, onAddVacancy, onCancelVacancy, onSubmitVacancy, addingVacancy } = this.props;
+    const { userRole, onSubmitVacancy } = this.props;
+    const { addingVacancy } = this.state;
     return (
       <article className="card">
         <header className="title">
@@ -97,7 +114,7 @@ class OpenVacancies extends Component {
               title="Add new position"
               className="clear"
               disabled={addingVacancy}
-              onClick={onAddVacancy}
+              onClick={this.onAddVacancy}
             >
               <PlusIcon />
             </Button>
@@ -107,7 +124,7 @@ class OpenVacancies extends Component {
         {addingVacancy
           ? <VacancyModal
             handleSubmitVacancy={onSubmitVacancy}
-            handleCloseVacancyModal={onCancelVacancy}
+            handleCloseVacancyModal={this.onCancelVacancy}
           />
           : ''}
 

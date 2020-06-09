@@ -28,7 +28,6 @@ class ProjectDash extends Component {
     vacancies: [],
     requests: [],
     showChatModal: false,
-    showVacancyModal: false,
     error: null
   };
 
@@ -80,27 +79,6 @@ class ProjectDash extends Component {
           project: []
         });
         this.props.history.push('/my-projects');
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
-  };
-
-  handleShowVacancyModal = e => {
-    this.setState({
-      showVacancyModal: true
-    });
-  };
-
-  handleCloseVacancyModal = () => {
-    let project_id = this.state.project.id;
-
-    ProjectDashService.getVacancies(project_id)
-      .then(response => {
-        this.setState({
-          vacancies: response,
-          showVacancyModal: false
-        });
       })
       .catch(res => {
         this.setState({ error: res.error });
@@ -302,13 +280,10 @@ class ProjectDash extends Component {
               setRequests={this.setRequests}
               setVacancies={this.setVacancies}
               handleApprove={this.handleApprove}
+              onSubmitVacancy={this.handleSubmitVacancy}
               vacancies={this.state.vacancies}
               requests={this.state.requests}
               project_id={this.state.project_id}
-              onAddVacancy={this.handleShowVacancyModal}
-              addingVacancy={this.state.showVacancyModal}
-              onSubmitVacancy={this.handleSubmitVacancy}
-              onCancelVacancy={this.handleCloseVacancyModal}
               userRole={userRole}
             />
           </div>

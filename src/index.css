@@ -159,6 +159,7 @@ form label.check span::before {
   content: '';
   height: 0.8rem;
   width: 0.8rem;
+  min-width: 0.8rem;
   background: none;
   border: 2px solid var(--colorAccent);
   margin-right: 0.7rem;
