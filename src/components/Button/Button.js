@@ -20,16 +20,23 @@ class Button extends Component {
       onClick,
       type,
       isLink,
-      swap
+      swap,
+      title
     } = this.props;
 
     const ButtonTag = !isLink ? 'button' : 'span';
     const SwapElement = swap;
 
     return (
-      <ButtonTag className={`btn btn-${className} ${swap ? 'has-swap' : ''}`} disabled={disabled} onClick={onClick} type={type}>
+      <ButtonTag
+        className={`btn btn-${className} ${swap ? 'has-swap' : ''}`}
+        disabled={disabled}
+        onClick={onClick}
+        type={type}
+        title={title}
+      >
         <i className="content">{children}</i>
-        {swap ? <SwapElement className="swap" title={children} /> : ''}
+        {swap ? <SwapElement aria-hidden={true} className="swap" title={children} /> : ''}
       </ButtonTag>
     )
   }
@@ -42,7 +49,8 @@ Button.propTypes = {
   onClick: PropTypes.func,
   type: PropTypes.oneOf(['button', 'submit', 'reset']),
   isLink: PropTypes.bool,
-  swap: PropTypes.oneOfType([PropTypes.node, PropTypes.object])
+  swap: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),
+  title: PropTypes.string
 }
 
 export default Button;

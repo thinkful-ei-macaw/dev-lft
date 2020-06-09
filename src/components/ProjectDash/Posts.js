@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import ProjectDashService from './project-dash-service';
-import ProjectLinks from './ProjectLinks';
 import { format, differenceInHours, differenceInMinutes } from 'date-fns';
+import ProjectDashService from './project-dash-service';
+import Button from '../Button/Button';
 
 class Posts extends Component {
-  state = {
-    posts: [],
-    postToEdit: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      posts: [],
+      postToEdit: null
+    }
+    this.postForm = React.createRef();
+  }
+
 
   componentDidMount() {
     ProjectDashService.getPosts(this.props.project_id)
@@ -19,9 +24,7 @@ class Posts extends Component {
       });
   }
 
-  handleEditPost = e => {
-    e.preventDefault();
-    let post_id = e.target.value;
+  handleEditPost = (post_id) => {
     this.setState({
       postToEdit: post_id
     });
@@ -51,7 +54,7 @@ class Posts extends Component {
     e.preventDefault();
     let { project_id } = this.props;
     let message = e.target['create-post'].value;
-    document.getElementById('post-to-project-form').reset();
+    this.postForm.current.reset();
 
     ProjectDashService.postPost(project_id, message)
       .then(() => {
@@ -102,7 +105,7 @@ class Posts extends Component {
           </p>
           <p>{this.renderDate(post.date_created)}</p>
           {post.canEdit ? (
-            <button value={post.id} onClick={this.handleEditPost} type="button">
+            <button onClick={() => this.handleEditPost(post.id)} type="button">
               edit
             </button>
           ) : (
@@ -131,30 +134,29 @@ class Posts extends Component {
   };
 
   render() {
-    const { project } = this.props;
     return (
-      <article className="team-options">
+      <article className="card">
         <div className="team-posts">
-          <h3>Discussion</h3>
+          <h3 className="title">Discussion</h3>
           <ul>{this.renderPosts()}</ul>
         </div>
 
-        <form onSubmit={this.handleSubmitPost} id="post-to-project-form">
-          <label htmlFor="create-post">What do you want to post?</label>
-          <input
-            name="create-post"
-            id="create-post"
-            type="text"
-            placeholder="Say Something"
-            required
-          />
-          <button type="submit">Send Message</button>
+        <form onSubmit={this.handleSubmitPost} ref={this.postForm} autoComplete="off">
+          <div className="input-group pinned">
+            <div className="input">
+              <label htmlFor="create-post">What do you want to post?</label>
+              <input
+                name="create-post"
+                id="create-post"
+                type="text"
+                placeholder="Say Something"
+                required
+              />
+            </div>
+            <Button type="submit">Send Message</Button>
+          </div>
         </form>
-        <ProjectLinks
-          github={project.github_url}
-          live={project.live_url}
-          trello={project.trello_url}
-        />
+
       </article>
     );
   }

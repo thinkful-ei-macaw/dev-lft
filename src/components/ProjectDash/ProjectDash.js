@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
 import ProjectDashService from './project-dash-service';
 import Info from './Info';
 import Posts from './Posts';
+import ProjectLinks from './ProjectLinks';
 import Vacancies from './Vacancies';
 import OpenVacancies from './OpenVacancies';
-import VacancyModal from './VacancyModal';
 import ChatModal from './ChatModal';
 import Requests from './Requests';
+import Button from '../Button/Button';
 import './ProjectDash.css';
-import PropTypes from 'prop-types';
+
+// images
+import { CloseIcon, DotsIcon } from '../../images';
 
 class ProjectDash extends Component {
   static defaultProps = {
     history: {
-      push: () => {}
+      push: () => { }
     }
   };
 
@@ -22,39 +27,31 @@ class ProjectDash extends Component {
     project: {},
     vacancies: [],
     requests: [],
-    showChatModal: false
+    showChatModal: false,
+    showVacancyModal: false,
+    error: null
   };
 
-  componentDidMount() {
-    let project_id = this.props.match.params.project_id;
+  async componentDidMount() {
+    let project_handle = this.props.match.params.project_handle;
 
     this.setState({
-      project_id
+      project_handle
     });
 
-    ProjectDashService.getProjects(project_id)
-      .then(project => {
-        this.setState({ project });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
+    try {
+      const project = await ProjectDashService.getProject(project_handle);
+      this.setState({ project });
 
-    ProjectDashService.getRequests(project_id)
-      .then(res => {
-        this.setState({ requests: res });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
+      const requests = await ProjectDashService.getRequests(project.id);
+      this.setState({ requests });
 
-    ProjectDashService.getVacancies(project_id)
-      .then(response => {
-        this.setState({ vacancies: response });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
+      const vacancies = await ProjectDashService.getVacancies(project.id);
+      this.setState({ vacancies });
+
+    } catch (res) {
+      this.setState({ error: res.error });
+    }
   }
 
   // Here be props, we must call back
@@ -69,12 +66,13 @@ class ProjectDash extends Component {
     e.preventDefault();
     if (
       prompt(
-        'Are you really sure you want to delete this project??? Type "delete my project" to confirm '
+        'Are you really sure you want to delete this project??? Type "delete my project" to confirm'
       ) !== 'delete my project'
     ) {
       return;
     }
-    let { project_id } = this.state;
+
+    let project_id = this.state.project.id;
 
     ProjectDashService.deleteProject(project_id)
       .then(() => {
@@ -95,7 +93,7 @@ class ProjectDash extends Component {
   };
 
   handleCloseVacancyModal = () => {
-    let { project_id } = this.state;
+    let project_id = this.state.project.id;
 
     ProjectDashService.getVacancies(project_id)
       .then(response => {
@@ -111,7 +109,7 @@ class ProjectDash extends Component {
 
   handleSubmitVacancy = e => {
     e.preventDefault();
-    let { project_id } = this.state;
+    let project_id = this.state.project.id;
 
     let title = e.target['vacancy-title'].value;
     let description = e.target['vacancy-description'].value;
@@ -123,18 +121,17 @@ class ProjectDash extends Component {
       });
   };
 
-  handleLeaveTeam = e => {
-    e.preventDefault();
+  handleLeavePosition = (vacancy_id) => {
     if (
       prompt(
-        'Are you sure you want to leave this team? Type "leave" to confirm '
+        'Are you sure you want to leave this position? Type "leave" to confirm'
       ) !== 'leave'
     ) {
       return;
     }
-    let { vacancies, project_id } = this.state;
-    let vacancy = vacancies.find(item => item.request_status === 'approved');
-    let vacancy_id = vacancy.id;
+
+    let project_id = this.state.project.id;
+
     //set user_id to null to update server
     let user_id = null;
     ProjectDashService.patchVacancy(vacancy_id, user_id)
@@ -151,11 +148,9 @@ class ProjectDash extends Component {
       });
   };
 
-  handleApprove = e => {
-    e.preventDefault();
-    let request_id = e.target.value;
+  handleApprove = (request_id) => {
     let status = 'approved';
-    let { project_id } = this.state;
+    let project_id = this.state.project.id;
     ProjectDashService.patchRequest(status, request_id)
       .then(() => {
         ProjectDashService.getVacancies(project_id).then(vacancies => {
@@ -176,11 +171,9 @@ class ProjectDash extends Component {
       });
   };
 
-  handleDecline = e => {
-    e.preventDefault();
-    let request_id = e.target.value;
+  handleDecline = (request_id) => {
     let status = 'denied';
-    let { project_id } = this.state;
+    let project_id = this.state.project.id;
 
     ProjectDashService.patchRequest(status, request_id)
       .then(() => {
@@ -197,7 +190,8 @@ class ProjectDash extends Component {
 
   handleNewMessage = e => {
     e.preventDefault();
-    let { recipient_id, project_id } = this.state;
+    let { recipient_id } = this.state;
+    let project_id = this.state.project.id;
     let body = e.target['chat-message'].value;
     ProjectDashService.postChat(project_id, recipient_id, body)
       .then(() => this.handleCloseChatModal())
@@ -206,105 +200,129 @@ class ProjectDash extends Component {
       });
   };
 
-  handleOpenChatModal = e => {
+  handleOpenChatModal = (recipient_id) => {
     this.setState({
       showChatModal: true,
-      recipient_id: e.target.value
+      recipient_id: recipient_id
     });
   };
 
-  handleCloseChatModal = e => {
+  handleCloseChatModal = () => {
     this.setState({
       showChatModal: false,
       recipient_id: null
     });
   };
 
+  dismissErrorMsg = () => {
+    this.setState({
+      error: null
+    })
+  }
+
   render() {
     let {
       project,
       project: { userRole },
-      error
+      error,
     } = this.state;
     if (!project) {
       return <p>Could not find this project</p>;
     }
     return (
-      <section className="ProjectDash">
-        <div role="alert">{error && <p>{error}</p>}</div>
-        <h1>Project Dashboard</h1>
-      <h2>{project.name}
-</h2>
-        {userRole === 'member' || userRole === 'owner' ? (
-          /*  Passing the whole project so that the ProjectLinks can render.
-              TODO: Find out if these are going to move into this component.
-              Looks like it was done for the current layout where it's between
-              Posts and Project Links.
-          */
-          <Posts project_id={this.state.project_id} project={project} />
-        ) : (
-          ''
-        )}
-        
+      <section className=" page project-dash">
+        <Helmet>
+          <title>{`${project.name || 'Project Dashboard'}`} - Dev LFT</title>
+        </Helmet>
 
-        {userRole === 'member' ? (
-          <button onClick={this.handleLeaveTeam} type="button">
-            Leave Team
-          </button>
-        ) : (
-          ''
-        )}
+        <header>
+          <div className="wrapper">
+            <h2>{project.name}</h2>
+            <Button className="clear"><DotsIcon /></Button>
+          </div>
+        </header>
 
-        {userRole === 'owner' ? (
-          <Requests
-            requests={this.state.requests}
-            handleDecline={this.handleDecline}
-            handleApprove={this.handleApprove}
-            handleOpenChatModal={this.handleOpenChatModal}
-            handleShowVacancyModal={this.handleShowVacancyModal}
-            handleDeleteProject={this.handleDeleteProject}
-          />
-        ) : (
-          ''
-        )}
-        {userRole === 'owner' && this.state.showChatModal ? (
-          <ChatModal
-            handleNewMessage={this.handleNewMessage}
-            handleCloseChatModal={this.handleCloseChatModal}
-          />
-        ) : (
-          ''
-        )}
-        {this.state.showVacancyModal ? (
-          <VacancyModal
-            handleSubmitVacancy={this.handleSubmitVacancy}
-            handleCloseVacancyModal={this.handleCloseVacancyModal}
-          />
-        ) : (
-          ''
-        )}
-        {this.state.project_id && (
-            <Vacancies
-              project_id={this.state.project_id}
-              userRole={userRole}
+        <div className="page-content">
+          <div className="wrapper">
+            {error
+              ? (
+                <div role="alert" className="info card error">
+                  <p>{error}</p>
+                  <Button className="clear" onClick={this.dismissErrorMsg}><CloseIcon /></Button>
+                </div>
+              )
+              : ''}
+
+            {userRole === 'member' || userRole === 'owner'
+              ? <Posts project_id={this.state.project.id} />
+              : ''}
+
+            <div className="grid">
+              <div className="column column-1-2">
+                {userRole === 'owner'
+                  ? (
+                    <Requests
+                      requests={this.state.requests}
+                      handleDecline={this.handleDecline}
+                      handleApprove={this.handleApprove}
+                      handleOpenChatModal={this.handleOpenChatModal}
+                      handleShowVacancyModal={this.handleShowVacancyModal}
+                      handleDeleteProject={this.handleDeleteProject}
+                    />
+                  ) : ''}
+
+                <Info
+                  description={project.description}
+                  tags={project.tags}
+                />
+              </div>
+
+              <div className="column column-1-2">
+                {userRole !== 'user' && (
+                  <ProjectLinks
+                    github={project.github_url}
+                    live={project.live_url}
+                    trello={project.trello_url}
+                  />
+                )}
+
+                {this.state.project.id && (
+                  <Vacancies
+                    project_id={this.state.project.id}
+                    userRole={userRole}
+                    vacancies={this.state.vacancies}
+                    setVacancies={this.setVacancies}
+                    leavePosition={this.handleLeavePosition}
+                  />
+                )}
+              </div>
+            </div>
+
+            <OpenVacancies
+              setRequests={this.setRequests}
+              setVacancies={this.setVacancies}
+              handleApprove={this.handleApprove}
               vacancies={this.state.vacancies}
               requests={this.state.requests}
-              setVacancies={this.setVacancies}
-              setRequests={this.setRequests}
+              project_id={this.state.project_id}
+              onAddVacancy={this.handleShowVacancyModal}
+              addingVacancy={this.state.showVacancyModal}
+              onSubmitVacancy={this.handleSubmitVacancy}
+              onCancelVacancy={this.handleCloseVacancyModal}
+              userRole={userRole}
             />
-          )}
-        <OpenVacancies
-          handleRequest={this.handleRequest}
-          project_id={this.state.project_id}
-          userRole={userRole}
-          vacancies={this.state.vacancies}
-        />
-        <article className="project">
-          <Info
-            description={project.description}
-            tags={project.tags}
-          />
-        </article>
+          </div>
+        </div>
+
+        {userRole === 'owner' && this.state.showChatModal
+          ? (
+            <ChatModal
+              handleNewMessage={this.handleNewMessage}
+              handleCloseChatModal={this.handleCloseChatModal}
+            />
+          )
+          : ''}
+
       </section>
     );
   }

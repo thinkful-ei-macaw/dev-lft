@@ -15,7 +15,7 @@
   overflow: hidden;
   z-index: 5;
   box-shadow: 0 0.5rem 1rem transparent;
-  transition: all 0.2s ease 0.1s;
+  transition: all 0.2s ease 0.1s, opacity 0.2s ease 0s;
 }
 
 .btn::after {
@@ -45,6 +45,12 @@
 .btn:active {
   transition: all 0.2s ease;
   transform: none;
+}
+
+/* icons */
+.btn svg {
+  display: block;
+  height: 1em;
 }
 
 /* clear buttons */

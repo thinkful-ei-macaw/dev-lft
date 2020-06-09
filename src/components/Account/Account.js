@@ -96,94 +96,94 @@ export default class Account extends Component {
         </header>
 
         <div className="page-content">
-          {this.state.updateSuccess || this.error
-            ? (
-              <div className="wrapper">
-                <div className={`info card ${error ? 'error' : ''}`}>
+          <div className="wrapper">
+            {this.state.updateSuccess || this.error
+              ? (
+                <div role="alert" className={`info card ${error ? 'error' : ''}`}>
                   <p>{error ? error : 'Your profile has been updated'}</p>
                   <Button className="clear" onClick={this.dismissSuccessMsg}><CloseIcon /></Button>
                 </div>
+              )
+              : ''}
+
+            <div className="grid">
+              <div className="column column-1-2">
+                <article className="card" spellCheck={false}>
+                  <h3 className="title">Profile</h3>
+                  <div className="input-group">
+                    <div className="input">
+                      <label htmlFor="first_name">First name *</label>
+                      <input id="first_name" type="text" name="first_name" required placeholder="John" defaultValue={first_name} />
+                    </div>
+                    <div className="input">
+                      <label htmlFor="last_name">Last name *</label>
+                      <input id="last_name" type="text" name="last_name" required placeholder="Doe" defaultValue={last_name} />
+                    </div>
+                  </div>
+                  <div className="input-group">
+                    <div className="input">
+                      <label htmlFor="github_url">GitHub URL</label>
+                      <input id="github_url" type="url" name="github_url" placeholder="https://github.com/johndoe" defaultValue={github_url} />
+                    </div>
+                  </div>
+                  <div className="input-group">
+                    <div className="input">
+                      <label htmlFor="linkedin_url">Linkedin URL</label>
+                      <input id="linkedin_url" type="url" name="linkedin_url" placeholder="https://linkedin.com/in/johndoe" defaultValue={linkedin_url} />
+                    </div>
+                  </div>
+                  <div className="input-group">
+                    <div className="input">
+                      <label htmlFor="twitter_url">Twitter URL</label>
+                      <input id="twitter_url" type="url" name="twitter_url" placeholder="https://twitter.com/johndoe" defaultValue={twitter_url} />
+                    </div>
+                  </div>
+                  <hr />
+                  <div className="input-group">
+                    <div className="input">
+                      <label htmlFor="username">Username</label>
+                      <input title="Changing username is not currently supported" id="username" type="text" name="username" placeholder="johndoe" defaultValue={username} readOnly={true} />
+                    </div>
+                  </div>
+                </article>
+
+                <article className="card">
+                  <h3 className="title">Notifications</h3>
+                  <div className="input-group">
+                    <div className="input">
+                      You'll receive notifications about:
+                  </div>
+                  </div>
+                  <div className="input-group">
+                    <div className="input">
+                      <label className="check"><input name="notifications" defaultChecked={!!notifications.chat} value="chat" type="checkbox" />
+                        <span>New chat messages</span>
+                      </label>
+                      <label className="check"><input name="notifications" defaultChecked={!!notifications.join} value="join" type="checkbox" />
+                        <span>People joining your teams</span>
+                      </label>
+                      <label className="check"><input name="notifications" defaultChecked={!!notifications.leave} value="leave" type="checkbox" />
+                        <span>People leaving your teams</span>
+                      </label>
+                      <label className="check"><input name="notifications" defaultChecked={!!notifications.post} value="post" type="checkbox" />
+                        <span>New posts to your teams' discussion boards</span>
+                      </label>
+                    </div>
+                  </div>
+                </article>
               </div>
-            )
-            : ''}
 
-          <div className="wrapper grid">
-            <div className="column column-1-2">
-              <article className="card" spellCheck={false}>
-                <h3 className="title">Profile</h3>
-                <div className="input-group">
-                  <div className="input">
-                    <label htmlFor="first_name">First name *</label>
-                    <input id="first_name" type="text" name="first_name" required placeholder="John" defaultValue={first_name} />
-                  </div>
-                  <div className="input">
-                    <label htmlFor="last_name">Last name *</label>
-                    <input id="last_name" type="text" name="last_name" required placeholder="Doe" defaultValue={last_name} />
-                  </div>
-                </div>
-                <div className="input-group">
-                  <div className="input">
-                    <label htmlFor="github_url">GitHub URL</label>
-                    <input id="github_url" type="url" name="github_url" placeholder="https://github.com/johndoe" defaultValue={github_url} />
-                  </div>
-                </div>
-                <div className="input-group">
-                  <div className="input">
-                    <label htmlFor="linkedin_url">Linkedin URL</label>
-                    <input id="linkedin_url" type="url" name="linkedin_url" placeholder="https://linkedin.com/in/johndoe" defaultValue={linkedin_url} />
-                  </div>
-                </div>
-                <div className="input-group">
-                  <div className="input">
-                    <label htmlFor="twitter_url">Twitter URL</label>
-                    <input id="twitter_url" type="url" name="twitter_url" placeholder="https://twitter.com/johndoe" defaultValue={twitter_url} />
-                  </div>
-                </div>
-                <hr />
-                <div className="input-group">
-                  <div className="input">
-                    <label htmlFor="username">Username</label>
-                    <input title="Changing username is not currently supported" id="username" type="text" name="username" placeholder="johndoe" defaultValue={username} readOnly={true} />
-                  </div>
-                </div>
-              </article>
+              <div className="column column-1-2">
+                <article className="card">
+                  <h3 className="title">Bio</h3>
+                  <textarea rows="6" name="bio" id="bio" defaultValue={bio} placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."></textarea>
+                </article>
 
-              <article className="card">
-                <h3 className="title">Notifications</h3>
-                <div className="input-group">
-                  <div className="input">
-                    You'll receive notifications about:
-                  </div>
-                </div>
-                <div className="input-group">
-                  <div className="input">
-                    <label className="check"><input name="notifications" defaultChecked={!!notifications.chat} value="chat" type="checkbox" />
-                      <span>New chat messages</span>
-                    </label>
-                    <label className="check"><input name="notifications" defaultChecked={!!notifications.join} value="join" type="checkbox" />
-                      <span>People joining your teams</span>
-                    </label>
-                    <label className="check"><input name="notifications" defaultChecked={!!notifications.leave} value="leave" type="checkbox" />
-                      <span>People leaving your teams</span>
-                    </label>
-                    <label className="check"><input name="notifications" defaultChecked={!!notifications.post} value="post" type="checkbox" />
-                      <span>New posts to your teams' discussion boards</span>
-                    </label>
-                  </div>
-                </div>
-              </article>
-            </div>
-
-            <div className="column column-1-2">
-              <article className="card">
-                <h3 className="title">Bio</h3>
-                <textarea rows="6" name="bio" id="bio" defaultValue={bio} placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."></textarea>
-              </article>
-
-              <article className="card">
-                <h3 className="title">Skills</h3>
-                <textarea rows="3" name="skills" id="skills" defaultValue={skills.join(', ')} placeholder="React, Gatsby, Node, Express, PostgreSQL, MongoDB"></textarea>
-              </article>
+                <article className="card">
+                  <h3 className="title">Skills</h3>
+                  <textarea rows="3" name="skills" id="skills" defaultValue={skills.join(', ')} placeholder="React, Gatsby, Node, Express, PostgreSQL, MongoDB"></textarea>
+                </article>
+              </div>
             </div>
           </div>
 

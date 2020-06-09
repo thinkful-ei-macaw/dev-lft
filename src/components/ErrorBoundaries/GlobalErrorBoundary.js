@@ -10,21 +10,11 @@ class ErrorBoundary extends Component {
     return { hasError: true };
   }
 
-  componentDidUpdate() {
-    if (this.state.hasError) {
-      setTimeout(() => this.refresh(), 5000);
-    }
-  }
-
-  refresh = () => {
-    window.location.reload(true);
-  };
-
   render() {
     if (this.state.hasError) {
       return (
         <h1>
-          Oops! An error occurred. Sorry about that. Wait 5 seconds or{' '}
+          Oops! An error occurred. Sorry about that.
           <button onClick={this.refresh}>Click Here</button>
           to refresh.
         </h1>

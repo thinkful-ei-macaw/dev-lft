@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ProjectDashService from './project-dash-service';
+import Avatar from '../Avatar/Avatar';
+import Button from '../Button/Button';
+import UserContext from '../../contexts/UserContext';
+
+// images
+import { CloseIcon } from '../../images';
 
 class Vacancies extends Component {
   static defaultProps = {
-    vacancies: [],
-    requests: []
+    vacancies: []
   };
+  static contextType = UserContext;
 
-  handleRemoveMember = e => {
-    e.preventDefault();
+  handleRemoveMember = (vacancy_id) => {
     if (
       prompt(
         'Are you sure you want to remove this member? Type "remove" to confirm '
@@ -17,7 +22,7 @@ class Vacancies extends Component {
     ) {
       return;
     }
-    let vacancy_id = e.target.value;
+
     let user_id = null;
     let { project_id } = this.props;
     ProjectDashService.patchVacancy(vacancy_id, user_id)
@@ -28,26 +33,6 @@ class Vacancies extends Component {
       })
       .catch(res => {
         this.setState({ error: res.error });
-      });
-  };
-
-  handleRequest = e => {
-    e.preventDefault();
-    let vacancy_id = e.target.value;
-    let { requests, project_id } = this.props;
-
-    ProjectDashService.postRequest(vacancy_id)
-      .then(res => {
-        requests.push(res);
-        ProjectDashService.getVacancies(project_id).then(vacancies => {
-          this.props.setVacancies(vacancies);
-          this.props.setRequests(requests);
-        });
-      })
-      .catch(res => {
-        this.setState({
-          error: res.error
-        });
       });
   };
 
@@ -73,72 +58,78 @@ class Vacancies extends Component {
   };
 
   renderVacancies = () => {
-    let { userRole, vacancies } = this.props;
-    if (!vacancies) {
-      return <p>No vacancies at this time</p>;
-    }
-    let userRequests = vacancies.filter(item => item.request_status !== null);
+    let { userRole, vacancies, leavePosition = () => null } = this.props;
+    let { user: { username } } = this.context;
 
-    let vacancyList = vacancies.map(item => {
-      let userRequest = userRequests.find(req => req.id === item.id) || null;
-      return (
-        <li key={item.id}>
-          <h3>
-            {item.username !== null ? (
-              <Link to={`/users/${item.username}`}>
-                <span>
-                  {item.first_name} {item.last_name}
-                </span>
-              </Link>
-            ) : (
-                <span>?</span>
-              )}
-          </h3>
-          <p>{item.title}</p>
-          {userRole === 'owner' && item.username !== null ? (
-            <button
-              value={item.id}
-              onClick={this.handleRemoveMember}
-              type="button"
-            >
-              Remove member
-            </button>
-          ) : (
-              ''
-            )}
-          {userRole === 'owner' && item.username === null ? (
-            <button
-              value={item.id}
-              onClick={this.handleDeleteVacancy}
-              type="button"
-            >
-              Delete Vacancy
-            </button>
-          ) : (
-              ''
-            )}
+    return (vacancies
+      ? (
+        <ul className="vacancies">
+          {vacancies.map(item => {
+            return (
+              <li key={item.id} className="user">
+                <Avatar
+                  first_name={item.first_name}
+                  last_name={item.last_name}
+                />
+                <div className="content">
+                  <h4>
+                    {item.username !== null
+                      ? (
+                        <Link to={`/users/${item.username}`}>
+                          <span>
+                            {item.username !== username
+                              ? <>{item.first_name} {item.last_name}</>
+                              : 'You'}
+                          </span>
+                        </Link>
+                      )
+                      : item.title}
+                  </h4>
+                  <p>{item.username ? item.title : 'This position is open'}</p>
+                </div>
 
-          {userRole === 'user' && userRequest ? (
-            <p>Request {userRequest.request_status}</p>
-          ) : (
-              ''
-            )}
+                {userRole === 'owner'
+                  ? (
+                    <Button
+                      className="clear"
+                      onClick={() => item.username
+                        ? item.username === username
+                          ? leavePosition(item.id)
+                          : this.handleRemoveMember(item.id)
+                        : this.handleDeleteVacancy(item.id)}
+                    >
+                      <CloseIcon title={item.username
+                        ? item.username === username
+                          ? "Leave this position"
+                          : "Remove this member"
+                        : "Delete this position"} />
+                    </Button>
+                  ) : ''}
 
-          {userRole === 'user' && item.username === null && !userRequest ? (
-            <button type="button" value={item.id} onClick={this.handleRequest}>
-              Request to join
-            </button>
-          ) : (
-              ''
-            )}
-        </li>
-      );
-    });
-    return vacancyList;
+                {userRole === 'member' && item.username === username
+                  ? (
+                    <Button
+                      className="clear"
+                      onClick={() => leavePosition(item.id)}
+                    >
+                      <CloseIcon title="Leave this position" />
+                    </Button>
+                  ) : ''}
+              </li>
+            );
+          })}
+        </ul>
+      )
+      : <p className="project">No vacancies at this time</p>);
   };
 
   render() {
-    return <ul className="vacancies">{this.renderVacancies()}</ul>;
+    return (
+      <article className="card">
+        <h3 className="title">Team</h3>
+        {this.renderVacancies()}
+      </article>
+    );
   }
 }
 export default Vacancies;

@@ -2,7 +2,7 @@ import config from '../../config';
 import TokenService from '../../services/token-service';
 
 const ProjectDashService = {
-  getProjects(project_id) {
+  getProject(project_id) {
     return fetch(`${config.API_ENDPOINT}/projects/${project_id}`, {
       method: 'GET',
       headers: {
