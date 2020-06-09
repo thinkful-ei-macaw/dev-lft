@@ -15,3 +15,4 @@ export { ReactComponent as SaveIcon } from './svg/save.svg';
 export { ReactComponent as DotsIcon } from './svg/dots.svg';
 export { ReactComponent as ChatIcon } from './svg/chat.svg';
 export { ReactComponent as CheckIcon } from './svg/check.svg';
+export { ReactComponent as EditIcon } from './svg/edit.svg';

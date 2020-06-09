@@ -28,7 +28,6 @@ class ProjectDash extends Component {
     vacancies: [],
     requests: [],
     showChatModal: false,
-    showVacancyModal: false,
     error: null
   };
 
@@ -79,43 +78,8 @@ class ProjectDash extends Component {
         this.setState({
           project: []
         });
-        this.props.history.push('/my-projects');
+        this.props.history.push('/projects');
       })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
-  };
-
-  handleShowVacancyModal = e => {
-    this.setState({
-      showVacancyModal: true
-    });
-  };
-
-  handleCloseVacancyModal = () => {
-    let project_id = this.state.project.id;
-
-    ProjectDashService.getVacancies(project_id)
-      .then(response => {
-        this.setState({
-          vacancies: response,
-          showVacancyModal: false
-        });
-      })
-      .catch(res => {
-        this.setState({ error: res.error });
-      });
-  };
-
-  handleSubmitVacancy = e => {
-    e.preventDefault();
-    let project_id = this.state.project.id;
-
-    let title = e.target['vacancy-title'].value;
-    let description = e.target['vacancy-description'].value;
-    let skills = e.target['vacancy-skills'].value.split(',');
-    ProjectDashService.postVacancies(title, description, skills, project_id)
-      .then(res => (res ? this.handleCloseVacancyModal() : ''))
       .catch(res => {
         this.setState({ error: res.error });
       });
@@ -304,11 +268,7 @@ class ProjectDash extends Component {
               handleApprove={this.handleApprove}
               vacancies={this.state.vacancies}
               requests={this.state.requests}
-              project_id={this.state.project_id}
-              onAddVacancy={this.handleShowVacancyModal}
-              addingVacancy={this.state.showVacancyModal}
-              onSubmitVacancy={this.handleSubmitVacancy}
-              onCancelVacancy={this.handleCloseVacancyModal}
+              project_id={this.state.project.id}
               userRole={userRole}
             />
           </div>

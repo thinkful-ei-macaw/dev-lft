@@ -13,6 +13,23 @@ class OpenVacancies extends Component {
     project_id: null
   };
 
+  state = {
+    addingVacancy: false
+  }
+
+  onAddVacancy = () => {
+    this.setState({
+      addingVacancy: true
+    })
+  }
+
+  onCancelVacancy = () => {
+    console.log('here')
+    this.setState({
+      addingVacancy: false
+    })
+  }
+
   handleRequest = (vacancy_id, callback = () => null) => {
     let { requests, project_id } = this.props;
 
@@ -29,6 +46,25 @@ class OpenVacancies extends Component {
         this.setState({
           error: res.error
         });
+      });
+  };
+
+  handleSubmitVacancy = e => {
+    e.preventDefault();
+    let { project_id } = this.props;
+
+    let title = e.target['vacancy-title'].value;
+    let description = e.target['vacancy-description'].value;
+    let skills = e.target['vacancy-skills'].value.split(',');
+    ProjectDashService.postVacancies(title, description, skills, project_id)
+      .then(() => {
+        this.setState({ addingVacancy: false });
+        ProjectDashService.getVacancies(project_id).then(vacancies => {
+          this.props.setVacancies(vacancies);
+        });
+      })
+      .catch(res => {
+        this.setState({ error: res.error });
       });
   };
 
@@ -81,13 +117,14 @@ class OpenVacancies extends Component {
   };
 
   renderSkills = skills => {
-    return skills.map(element => {
-      return <li className="tag tag-grey" key={element}>{element}</li>;
+    return skills.map((element, i) => {
+      return <li className="tag tag-grey" key={i}>{element}</li>;
     });
   };
 
   render() {
-    const { userRole, onAddVacancy, onCancelVacancy, onSubmitVacancy, addingVacancy } = this.props;
+    const { userRole } = this.props;
+    const { addingVacancy } = this.state;
     return (
       <article className="card">
         <header className="title">
@@ -97,7 +134,7 @@ class OpenVacancies extends Component {
               title="Add new position"
               className="clear"
               disabled={addingVacancy}
-              onClick={onAddVacancy}
+              onClick={this.onAddVacancy}
             >
               <PlusIcon />
             </Button>
@@ -106,8 +143,8 @@ class OpenVacancies extends Component {
 
         {addingVacancy
           ? <VacancyModal
-            handleSubmitVacancy={onSubmitVacancy}
-            handleCloseVacancyModal={onCancelVacancy}
+            onSubmitVacancy={this.handleSubmitVacancy}
+            onCloseVacancyModal={this.onCancelVacancy}
           />
           : ''}
 

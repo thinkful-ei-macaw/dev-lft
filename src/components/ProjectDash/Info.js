@@ -5,8 +5,8 @@ const Info = ({ description = '', tags = [] }) => {
     if (!tags.length) {
       return;
     } else if (tags) {
-      let tagsList = tags.map(tag => {
-        return <li key={tag} className="tag">{tag}</li>;
+      let tagsList = tags.map((tag, i) => {
+        return <li key={i} className="tag">{tag}</li>;
       });
       return tagsList;
     }

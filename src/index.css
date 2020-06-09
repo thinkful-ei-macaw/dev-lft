@@ -31,6 +31,12 @@ h4,
   font-weight: 700;
 }
 
+h5,
+.h5 {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
 em {
   font-style: italic;
 }
@@ -159,6 +165,7 @@ form label.check span::before {
   content: '';
   height: 0.8rem;
   width: 0.8rem;
+  min-width: 0.8rem;
   background: none;
   border: 2px solid var(--colorAccent);
   margin-right: 0.7rem;
@@ -278,6 +285,10 @@ form hr {
   flex: 1;
   position: relative;
   margin-bottom: 2rem;
+}
+
+.page .page-content header {
+  padding: 0;
 }
 
 .page .page-content::before,
@@ -518,4 +529,15 @@ a[href*='//']::after
     margin-right: 0.5rem;
     margin-left: 0;
   }
+}
+
+/* visually hidden elements */
+.hidden {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0;
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
 }

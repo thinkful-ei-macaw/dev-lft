@@ -36,8 +36,7 @@ class Vacancies extends Component {
       });
   };
 
-  handleDeleteVacancy = e => {
-    e.preventDefault();
+  handleDeleteVacancy = (vacancy_id) => {
     if (
       prompt(
         'Are you sure you want to delete this vacancy? Type "delete" to confirm '
@@ -45,7 +44,7 @@ class Vacancies extends Component {
     ) {
       return;
     }
-    let vacancy_id = +e.target.value;
+
     let { vacancies } = this.props;
     const filtered = vacancies.filter(item => item.id !== vacancy_id);
     ProjectDashService.deleteVacancy(vacancy_id)

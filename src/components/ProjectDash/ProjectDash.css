@@ -42,9 +42,25 @@
   color: var(--colorAccent);
 }
 
-.project-dash .project {
+.project-dash .project,
+.project-dash .open-position {
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--colorDarkFG);
+}
+
+.project-dash .open-position {
+  margin-bottom: 2rem;
+}
+
+.project-dash .open-position .btn {
+  margin-right: 1rem;
+  transform: none;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+.project-dash .open-position .input-group {
+  width: 100%;
 }
 
 .project-dash .project.links {
@@ -67,4 +83,10 @@
 
 .project-dash .btn-clear {
   opacity: 1;
+}
+
+.project-dash .chats {
+  min-height: 10rem;
+  max-height: 50rem;
+  overflow-y: auto;
 }
