@@ -37,7 +37,7 @@ class ChatMessageForm extends Component {
         this.setState({ error: null, body: '' });
         this.props.onNewMessage();
       })
-      .catch(error => this.setState({ error }));
+      .catch(res => this.setState({ error: res.error || 'Something went wrong. Please try again later' }));
   };
 
   render() {
@@ -46,7 +46,7 @@ class ChatMessageForm extends Component {
     return (
       <form className="chat-form" onSubmit={e => this.onSend(e)} autoComplete="off">
         {error
-          ? <p role="alert">{error.error}</p>
+          ? <p role="alert" className="error">{error}</p>
           : ''}
 
         <div className="input-group pinned">

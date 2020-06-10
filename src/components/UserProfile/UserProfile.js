@@ -19,7 +19,7 @@ export default class UserProfile extends Component {
         this.setState({ user: { ...userInfo } });
       })
       .catch(res => {
-        this.setState({ error: res.error || res.message });
+        this.setState({ error: res.error || 'Something went wrong. Please try again' });
       });
   }
 

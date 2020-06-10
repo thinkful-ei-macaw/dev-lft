@@ -8,9 +8,10 @@
   font-weight: 700;
 }
 
-.chat-page .grid {
+.chat-page .grid.card {
   padding: 0;
   margin-bottom: 0;
+  box-shadow: 0 0.5em 1em var(--colorMidBG);
 }
 
 .chat-page .grid .column {

@@ -39,7 +39,7 @@ class Chat extends Component {
           activeChat: chats.length ? chats[0] : null
         })
       })
-      .catch(res => this.setState({ error: res.error || res.message }));
+      .catch(res => this.setState({ error: res.error || 'Something went wrong. Please try again later' }));
   };
 
   setActiveChat = chat => {
