@@ -85,7 +85,7 @@ export default class FeedPage extends Component {
                     value={activeFilter}
                     onChange={this.setActiveFilter}
                   >
-                    <option value="">All</option>
+                    <option value="">ALL</option>
                     {filters.map((filter, i) => (
                       <option key={i} value={filter}>
                         {filter}
@@ -106,8 +106,8 @@ export default class FeedPage extends Component {
                 })}
               </div>
             ) : (
-              <p className="project">No projects available!</p>
-            )}
+                <p className="project">No projects available!</p>
+              )}
           </div>
         </div>
       </section>

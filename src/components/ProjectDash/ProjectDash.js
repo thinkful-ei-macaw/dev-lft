@@ -238,14 +238,16 @@ class ProjectDash extends Component {
             />
 
             {userRole === 'owner'
-              ? <div className="centered">
-                <Button
-                  onClick={this.handleDeleteProject}
-                  className="clear centered"
-                >
-                  Delete Project
-              </Button>
-              </div>
+              ? (
+                <div className="centered">
+                  <Button
+                    onClick={this.handleDeleteProject}
+                    className="clear"
+                  >
+                    Delete Project
+                  </Button>
+                </div>
+              )
               : ''}
           </div>
         </div>

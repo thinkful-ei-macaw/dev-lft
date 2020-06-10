@@ -1,11 +1,3 @@
-.project-dash .centered {
-  text-align: center;
-}
-
-.project-dash .centered .btn:hover {
-  color: var(--colorError);
-}
-
 .project-dash .project-info > p {
   font-size: 1.2rem;
   margin-bottom: 2rem;

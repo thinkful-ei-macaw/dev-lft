@@ -137,7 +137,7 @@ class Chat extends Component {
                         <div className="content">
                           <h4>{chat.first_name} {chat.last_name[0]}</h4>
                           <p className="last-message">
-                            {(chat.isOwner && chat.request_status !== 'pending') || chat.isReply
+                            {(chat.isOwner && chat.request_status !== 'pending') || !chat.isReply
                               ? <ReplyIcon />
                               : ''}
                             {chat.request_status === 'pending'

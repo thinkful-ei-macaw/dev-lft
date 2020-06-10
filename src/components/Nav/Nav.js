@@ -6,6 +6,7 @@ import './Nav.css';
 
 // images
 import { Logo, MenuIcon } from '../../images/';
+import Avatar from '../Avatar/Avatar';
 
 export default class Nav extends Component {
   static contextType = UserContext;
@@ -76,16 +77,11 @@ export default class Nav extends Component {
     );
   }
 
-  renderPrivateLinks() {
+  renderPrivateLinks(user) {
     const privateLinks = [
       { text: 'Feed', path: '/feed' },
       { text: 'Projects', path: '/projects' },
       { text: 'Chats', path: '/chats' }
-    ]
-
-    const rightLinks = [
-      { text: 'Account', path: '/account' },
-      { text: 'Log Out', path: '/login', onClick: this.context.onLogOut }
     ]
 
     return (
@@ -95,14 +91,18 @@ export default class Nav extends Component {
         </ul>
 
         <ul className="links links-right">
-          {this.renderLinks(rightLinks)}
+          <li>
+            <Link to="/account" title="Your Account" onClick={() => this.toggleMenu(false)}>
+              <Avatar first_name={user.first_name} last_name={user.last_name} />
+            </Link>
+          </li>
         </ul>
       </React.Fragment>
     );
   }
 
   render() {
-    const { user: { isAuth } } = this.context;
+    const { user, user: { isAuth } } = this.context;
     const { fixed, menuOpen } = this.state;
     const { pathname } = this.props.location
 
@@ -127,7 +127,7 @@ export default class Nav extends Component {
             <div aria-hidden={!menuOpen} role={menuOpen ? 'alert' : ''} className={`link-container ${menuOpen ? 'active' : ''}`}>
               {
                 isAuth
-                  ? this.renderPrivateLinks()
+                  ? this.renderPrivateLinks(user)
                   : this.renderPublicLinks()
               }
             </div>
