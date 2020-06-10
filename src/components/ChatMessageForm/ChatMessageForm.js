@@ -59,6 +59,7 @@ class ChatMessageForm extends Component {
               required
               autoFocus
               placeholder="Say something"
+              maxLength="280"
               disabled={disabled}
               value={this.state.body}
               onChange={e => this.setBody(e.target.value)}

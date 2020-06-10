@@ -60,13 +60,13 @@ class Login extends React.Component {
           <div className="input-group">
             <div className="input">
               <label htmlFor="username">Username</label>
-              <input type="text" id="username" placeholder="johndoe" name="user_name" required />
+              <input type="text" id="username" placeholder="johndoe" name="user_name" maxLength="30" required />
             </div>
           </div>
           <div className="input-group">
             <div className="input">
               <label htmlFor="pwd">Password</label>
-              <input type="password" id="pwd" name="password" required />
+              <input type="password" id="pwd" name="password" maxLength="72" required />
             </div>
           </div>
 
