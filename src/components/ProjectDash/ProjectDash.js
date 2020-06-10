@@ -100,7 +100,7 @@ class ProjectDash extends Component {
     // set user_id to null to update server
     let user_id = null;
     ProjectDashService.patchVacancy(vacancy_id, user_id)
-      .then(() => this.getData)
+      .then(() => { this.getData() })
       .catch(res => {
         this.setState({ error: res.error || 'Something went wrong. Please try again later' });
       });
