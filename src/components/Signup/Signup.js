@@ -11,7 +11,7 @@ import './Signup.css';
 class Signup extends React.Component {
   static defaultProps = {
     history: {
-      push: () => { }
+      goBack: () => { }
     }
   };
 
@@ -35,7 +35,14 @@ class Signup extends React.Component {
       .then(user => {
         TokenService.saveAuthToken(user.authToken);
         this.context.onAuth();
-        this.props.history.push('/feed');
+        let lastLocation = this.props.history.location.state.from.pathname;
+        if (lastLocation) {
+          this.props.history.push(lastLocation)
+        } else {
+          this.props.history.goBack();
+        }
+
+
       })
       .catch(res => {
         this.setState({ error: res.error || res.message });
@@ -91,7 +98,7 @@ class Signup extends React.Component {
 
 Signup.propTypes = {
   history: PropTypes.shape({
-    push: PropTypes.func
+    goBack: PropTypes.func
   })
 };
 

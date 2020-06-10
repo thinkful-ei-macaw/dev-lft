@@ -11,7 +11,7 @@ import './Login.css';
 class Login extends React.Component {
   static defaultProps = {
     history: {
-      push: () => { }
+      goBack: () => { }
     }
   };
 
@@ -32,7 +32,12 @@ class Login extends React.Component {
         password.value = '';
         TokenService.saveAuthToken(user.authToken);
         this.context.onAuth();
-        this.props.history.push('/feed');
+        let lastLocation = this.props.history.location.state.from.pathname;
+        if (lastLocation) {
+          this.props.history.push(lastLocation)
+        } else {
+          this.props.history.goBack();
+        }
       })
       .catch(res => {
         this.setState({ error: res.error || res.message });
@@ -78,7 +83,7 @@ class Login extends React.Component {
 
 Login.propTypes = {
   history: PropTypes.shape({
-    push: PropTypes.func
+    goBack: PropTypes.func
   })
 };
 export default Login;

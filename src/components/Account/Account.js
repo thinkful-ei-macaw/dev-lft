@@ -67,18 +67,51 @@ export default class Account extends Component {
     this.setState({ formDirty: true });
   }
 
+  handleNotificationChange = e => {
+    const { value, checked } = e.target;
+    let notifications = [...this.context.user.notifications];
+    const newNotificationSettings = !checked
+      ? notifications.filter(n => n !== value)
+      : [...notifications, value];
+
+    this.context.setNotifications(newNotificationSettings);
+  }
+
+  renderNotifications = () => {
+    const { user: { notifications = [] } } = this.context;
+    const notificationTypes = [
+      { type: 'chat', description: 'New chat messages' },
+      { type: 'join', description: 'People joining your teams' },
+      { type: 'leave', description: 'People leaving your teams' },
+      { type: 'post', description: 'New posts to your teams\' discussion boards' }
+    ]
+
+    return notificationTypes.map(({ type, description }, i) => (
+      <label className="check" key={i}>
+        <input
+          name="notifications"
+          checked={notifications.includes(type)}
+          onChange={this.handleNotificationChange}
+          value={type}
+          type="checkbox" />
+        <span>{description}</span>
+      </label>
+    ));
+  }
+
   render() {
     const {
-      first_name,
-      last_name,
-      github_url,
-      linkedin_url,
-      twitter_url,
-      username,
-      notifications = {},
-      bio,
-      skills = []
-    } = this.context.user;
+      user: {
+        first_name,
+        last_name,
+        github_url,
+        linkedin_url,
+        twitter_url,
+        username,
+        bio,
+        skills = []
+      }
+    } = this.context;
 
     const { formDirty, error } = this.state;
 
@@ -156,18 +189,7 @@ export default class Account extends Component {
                   </div>
                   <div className="input-group">
                     <div className="input">
-                      <label className="check"><input name="notifications" defaultChecked={!!notifications.chat} value="chat" type="checkbox" />
-                        <span>New chat messages</span>
-                      </label>
-                      <label className="check"><input name="notifications" defaultChecked={!!notifications.join} value="join" type="checkbox" />
-                        <span>People joining your teams</span>
-                      </label>
-                      <label className="check"><input name="notifications" defaultChecked={!!notifications.leave} value="leave" type="checkbox" />
-                        <span>People leaving your teams</span>
-                      </label>
-                      <label className="check"><input name="notifications" defaultChecked={!!notifications.post} value="post" type="checkbox" />
-                        <span>New posts to your teams' discussion boards</span>
-                      </label>
+                      {this.renderNotifications()}
                     </div>
                   </div>
                 </article>

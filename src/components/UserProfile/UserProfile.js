@@ -18,7 +18,9 @@ export default class UserProfile extends Component {
       .then(userInfo => {
         this.setState({ user: { ...userInfo } });
       })
-      .catch(res => this.setState({ error: res.error || res.message }));
+      .catch(res => {
+        this.setState({ error: res.error || res.message });
+      });
   }
 
   getDate = date => {
@@ -68,7 +70,7 @@ export default class UserProfile extends Component {
 
             <div className="grid">
               <div className="column column-1-2">
-                <article className="card">
+                <article className="card bio">
                   <h3 className="title">Bio</h3>
                   <p className="project">{bio || 'An awesome DevLFT user.'}</p>
                   <p>

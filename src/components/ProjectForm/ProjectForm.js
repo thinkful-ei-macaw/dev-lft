@@ -5,6 +5,10 @@ import ProjectApiService from '../../services/project-api-service';
 import './ProjectForm.css';
 
 export default class ProjectForm extends Component {
+  state = {
+    error: null
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     const { project_name, description, live_url, trello_url, github_url } = e.target;
@@ -20,8 +24,8 @@ export default class ProjectForm extends Component {
       .then(() => {
         this.props.onCreate();
       })
-      .catch(error => {
-        console.log(error);
+      .catch(res => {
+        this.setState({ error: res.error || res.message })
       });
   };
 
@@ -70,6 +74,11 @@ export default class ProjectForm extends Component {
             </div>
           </div>
         </div>
+
+        {this.state.error
+          ? <p role="alert" className="project error">{this.state.error}</p>
+          : ''}
+
         <Button type="submit">Create Project</Button>
         <Button className="clear" onClick={this.props.onCancel}>Cancel</Button>
       </form>
