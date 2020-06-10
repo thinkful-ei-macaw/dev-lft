@@ -35,7 +35,7 @@ class Login extends React.Component {
         this.props.history.push('/feed');
       })
       .catch(res => {
-        this.setState({ error: res.error });
+        this.setState({ error: res.error || res.message });
       });
   };
 

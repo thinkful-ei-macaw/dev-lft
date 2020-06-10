@@ -18,7 +18,7 @@ export default class UserProfile extends Component {
       .then(userInfo => {
         this.setState({ user: { ...userInfo } });
       })
-      .catch(res => this.setState({ error: res.error }));
+      .catch(res => this.setState({ error: res.error || res.message }));
   }
 
   getDate = date => {

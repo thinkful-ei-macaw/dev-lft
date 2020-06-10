@@ -6,13 +6,18 @@ import './FeedPage.css';
 
 export default class FeedPage extends Component {
   state = {
-    vacantProjects: []
+    vacantProjects: [],
+    error: null
   };
 
   componentDidMount() {
-    ProjectApiService.getAllProjects().then(projects => {
-      this.setState({ vacantProjects: projects });
-    });
+    ProjectApiService.getAllProjects()
+      .then(projects => {
+        this.setState({ vacantProjects: projects });
+      })
+      .catch(res => {
+        this.setState({ error: res.error || res.message })
+      });
   }
 
   render() {
@@ -37,7 +42,7 @@ export default class FeedPage extends Component {
                 })}
               </div>
             ) : (
-                <p>No projects available!</p>
+                <p className="project">No projects available!</p>
               )}
           </div>
         </div>

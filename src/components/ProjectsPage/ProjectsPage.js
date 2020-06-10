@@ -12,7 +12,8 @@ import { PlusIcon } from '../../images';
 export default class ProjectsPage extends Component {
   state = {
     projects: [],
-    creating: false
+    creating: false,
+    error: null
   };
 
   componentDidMount() {
@@ -20,9 +21,11 @@ export default class ProjectsPage extends Component {
   }
 
   getUserProjects() {
-    ProjectApiService.getAllUserProjects().then(res => {
-      this.setState({ projects: res });
-    });
+    ProjectApiService.getAllUserProjects()
+      .then(res => {
+        this.setState({ projects: res });
+      })
+      .catch(res => this.setState({ error: res.error || res.message }));
   }
 
   createNewProject = () => {

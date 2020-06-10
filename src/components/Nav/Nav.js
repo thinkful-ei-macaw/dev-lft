@@ -104,12 +104,14 @@ export default class Nav extends Component {
   render() {
     const { user: { isAuth } } = this.context;
     const { fixed, menuOpen } = this.state;
+    const { pathname } = this.props.location
 
     // the nav bar is absolutely positioned
     // this variable being `true` will render
     // a div to push the rest of the content down
     // if user is on any private page (as per design)
-    const push = isAuth;
+    const noPushPages = ['/', '/login', '/signup'];
+    const push = !noPushPages.includes(pathname);
 
     return (
       <React.Fragment>
