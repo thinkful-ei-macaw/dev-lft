@@ -71,6 +71,16 @@ svg {
   .column-1-2 {
     width: calc((100% - 2rem) / 2);
   }
+
+  .column-1-3 {
+    width: calc(100% / 3);
+    margin-right: 0;
+  }
+
+  .column-2-3 {
+    width: calc(2 * (100% / 3));
+    margin-right: 0;
+  }
 }
 
 /* colors */
@@ -114,6 +124,7 @@ form textarea {
   background: var(--colorDarkBG);
   border: none;
   border-bottom: 1px solid transparent;
+  border-radius: 0;
   outline: none;
   resize: none;
 }
@@ -174,7 +185,7 @@ form label.check span::before {
 }
 
 form label.check input:focus + span::before {
-  outline: 2px solid var(--colorMidFG);
+  outline: 2px solid var(--colorFG);
 }
 
 form label.check input:checked + span::before {
@@ -540,4 +551,25 @@ a[href*='//']::after
   width: 0;
   opacity: 0;
   pointer-events: none;
+}
+
+/* 404 */
+.fourohfour {
+  text-align: center;
+  font-size: 3vw;
+}
+
+.fourohfour h1 {
+  font-size: 8em;
+}
+
+.fourohfour h2 {
+  font-size: 2em;
+}
+
+.fourohfour p {
+  max-width: 70vw;
+  margin: 2rem auto 4rem;
+  line-height: 1.3;
+  color: var(--colorMidFG);
 }

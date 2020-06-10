@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Button from '../Button/Button';
 import ChatService from '../../services/chat-service';
 import './ChatMessageForm.css';
-import PropTypes from 'prop-types';
 
 class ChatMessageForm extends Component {
   static defaultProps = {
     recipient_id: null,
     project_id: null,
-    setNewMessage: () => {}
+    disabled: false,
+    onNewMessage: () => null
   };
 
   state = {
@@ -31,31 +33,39 @@ class ChatMessageForm extends Component {
       request_id
     };
     ChatService.postChatMessage(newMessage)
-      .then(res => {
+      .then(() => {
         this.setState({ error: null, body: '' });
-        return this.props.setNewMessage({
-          ...res.resultingMessage,
-          isAuthor: true
-        });
+        this.props.onNewMessage();
       })
       .catch(error => this.setState({ error }));
   };
 
   render() {
     const { error } = this.state;
+    const { disabled } = this.props;
     return (
-      <form className="ChatMessageForm" onSubmit={e => this.onSend(e)}>
-        <div role="alert">{error && <p>{error.error}</p>}</div>
-        <label htmlFor="body">Reply:</label>
-        <input
-          type="text"
-          id="body"
-          name="body"
-          required
-          value={this.state.body}
-          onChange={e => this.setBody(e.target.value)}
-        ></input>
-        <button type="submit">Send</button>
+      <form className="chat-form" onSubmit={e => this.onSend(e)} autoComplete="off">
+        {error
+          ? <p role="alert">{error.error}</p>
+          : ''}
+
+        <div className="input-group pinned">
+          <div className="input">
+            <label className="hidden" htmlFor="body">Reply:</label>
+            <input
+              type="text"
+              id="body"
+              name="body"
+              required
+              autoFocus
+              placeholder="Say something"
+              disabled={disabled}
+              value={this.state.body}
+              onChange={e => this.setBody(e.target.value)}
+            ></input>
+          </div>
+          <Button disabled={disabled} type="submit">Send</Button>
+        </div>
       </form>
     );
   }

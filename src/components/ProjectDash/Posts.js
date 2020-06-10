@@ -103,12 +103,13 @@ class Posts extends Component {
     }
 
     let allPosts = [...posts].reverse().map(post => {
+      const isAuthor = post.username === username;
       return (
-        <li key={post.id} className="message">
+        <li key={post.id} className={`message ${isAuthor ? 'author' : ''}`}>
           <header className="user-info">
             <Avatar first_name={post.first_name} last_name={post.last_name} />
             <h4 className="h5">
-              {post.username === username
+              {isAuthor
                 ? 'You'
                 : <Link to={`/users/${post.username}`}>{post.first_name} {post.last_name}</Link>}
             </h4>
@@ -156,7 +157,7 @@ class Posts extends Component {
       <article className="card">
         <div className="team-posts">
           <h3 className="title">Discussion</h3>
-          <ul ref={this.postList} className="chats">{this.renderPosts()}</ul>
+          <ul ref={this.postList} className="chats discussion">{this.renderPosts()}</ul>
         </div>
 
         <form onSubmit={this.handleSubmitPost} ref={this.postForm} autoComplete="off">
@@ -171,7 +172,7 @@ class Posts extends Component {
                 required
               />
             </div>
-            <Button type="submit">Send Message</Button>
+            <Button type="submit">Post</Button>
           </div>
         </form>
 

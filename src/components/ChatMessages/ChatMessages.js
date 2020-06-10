@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { Redirect, Link } from 'react-router-dom';
-import ChatService from '../../services/chat-service';
-import Avatar from '../Avatar/Avatar';
-import ChatMessageForm from '../ChatMessageForm/ChatMessageForm';
-import './ChatMessages.css';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import ChatService from '../../services/chat-service';
+import ProjectDashService from '../ProjectDash/project-dash-service';
+import Avatar from '../Avatar/Avatar';
+import UserContext from '../../contexts/UserContext';
+import ChatMessageForm from '../ChatMessageForm/ChatMessageForm';
+import Button from '../Button/Button';
+import './ChatMessages.css';
+
+// images
+import { CloseIcon, CheckIcon } from '../../images';
 
 class ChatMessages extends Component {
   constructor(props) {
@@ -18,95 +24,159 @@ class ChatMessages extends Component {
       error: null,
       interval_id: null
     };
+    this.chatList = React.createRef();
   }
 
-  componentDidMount() {
-    /* If user arrives at this route with a chat_id, send them back
-     to the chats list */
-    if (this.props.history.location.state === undefined) {
-      this.setState({ redirect: true });
-    } else {
-      this.setState({ ...this.props.history.location.state });
-      this.setAllMessages();
+  static defaultProps = {
+    chat: {
+      closed: false,
+      first_name: 'John',
+      last_name: 'Doe',
+      project_name: 'Project Name',
+      request_id: null,
+      recipient_username: 'username',
+      vacancy_name: 'Vacancy Name',
+      isOwner: false,
+      request_status: false
+    },
+    open: false,
+    onClose: () => null
+  }
 
-      const checkMessages = setInterval(() => {
-        this.setAllMessages();
-      }, 30000);
-      this.setState({ interval_id: checkMessages });
+  static contextType = UserContext;
+
+  componentDidMount() {
+    this.setAllMessages();
+  }
+
+  componentDidUpdate(oldProps) {
+    if (this.props.chat.body !== oldProps.chat.body) {
+      this.setAllMessages();
+    } else {
+      this.chatList.current.scrollTop = this.chatList.current.scrollHeight;
     }
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.interval_id);
-  }
-
   setAllMessages = () => {
-    const { chat_id } = this.props.history.location.state;
+    const { chat: { chat_id } } = this.props;
     ChatService.getAllChatMessages(chat_id)
-      .then(allMessages => this.setState({ ...allMessages }))
+      .then(allMessages => {
+        this.setState({ ...allMessages });
+        this.chatList.current.scrollTop = this.chatList.current.scrollHeight;
+      })
       .catch(error => this.setState({ error }));
   };
 
-  setNewMessage = message => {
-    return this.setState({
-      allMessages: [message, ...this.state.allMessages]
-    });
+  handleRequest = (request_id, status) => {
+    ProjectDashService.patchRequest(status, request_id)
+      .then(this.props.onRequest)
+      .catch(res => {
+        this.setState({ error: res.error || res.message });
+      });
   };
 
   render() {
     const {
-      closed,
-      redirect,
-      allMessages,
-      first_name,
-      last_name,
-      project_name,
-      request_id,
-      recipient_username,
-      error
-    } = this.state;
+      chat: {
+        closed,
+        first_name,
+        last_name,
+        project_name,
+        request_id,
+        recipient_username,
+        vacancy_name,
+        isOwner = false,
+        request_status
+      },
+      open,
+      onClose = () => null
+    } = this.props;
+
+    const { allMessages, error } = this.state;
+    const { user } = this.context;
 
     return (
-      <section className="Messages">
-        {redirect ? <Redirect to="/chats" /> : null}
-        <div role="alert">{error && <p>{error.error}</p>}</div>
-        <Link to="/chats" className="Messages__header">
-          &larr;
-          <Avatar
-            first_name={first_name}
-            last_name={last_name}
-            className={'Messages__logo'}
-          />
-          <p>
-            <span className="Messages__name">{first_name}</span>
-            <span className="Messages__project">({project_name})</span>
-          </p>
-        </Link>
-        <ul className="Messages__list">
-          {allMessages.map(message => (
+      <section className={`chat-view ${open ? 'open' : ''}`}>
+        {error
+          ? <div role="alert" className="card info error">{error}</div>
+          : ''}
+
+        <header>
+          <div className="user">
+            <Avatar
+              role="button"
+              onClick={onClose}
+              first_name={first_name}
+              last_name={last_name}
+            />
+            <div className="content">
+              <h4>
+                <Link to={`/users/${recipient_username}`}>{first_name} {last_name[0]}</Link>
+                <span className="highlight">({project_name})</span>
+              </h4>
+              <p>
+                {isOwner
+                  ? request_status === 'pending'
+                    ? <>wants to fill your {vacancy_name} position</>
+                    : request_status === 'denied'
+                      ? <>wanted to fill your {vacancy_name} position</>
+                      : vacancy_name
+                  : <>You requested to fill their {vacancy_name} position</>}
+              </p>
+            </div>
+            {isOwner && request_status === 'pending'
+              ? (
+                <>
+                  <Button className="clear" onClick={() => this.handleRequest(request_id, 'approved')}>
+                    <CheckIcon title="Approve this request" />
+                  </Button>
+                  <Button className="clear" onClick={() => this.handleRequest(request_id, 'denied')} >
+                    <CloseIcon title="Deny this request" />
+                  </Button>
+                </>
+              )
+              : ''}
+
+          </div>
+        </header>
+        <ul className="chats" ref={this.chatList}>
+          {[...allMessages].reverse().map(message => (
             <li
               key={message.author_username + message.date_created}
-              className={`Messages__item ${message.isAuthor ? 'author' : ''}`}
+              className={`message ${message.isAuthor ? 'author' : ''}`}
             >
-              <span className="Messages__body">{message.body}</span>
-              <span className="Messages__time">
-                {ChatService.getFormattedDate(message.date_created)}
-              </span>
+              <header>
+                {message.isAuthor
+                  ? (
+                    <>
+                      <Avatar first_name={user.first_name} last_name={user.last_name} />
+                      <h4 className="h5">You</h4>
+                    </>
+                  )
+                  : (
+                    <>
+                      <Avatar first_name={first_name} last_name={last_name} />
+                      <h4 className="h5">{first_name} {last_name}</h4>
+                    </>
+                  )}
+                <span className="date">{ChatService.getFormattedDate(message.date_created)}</span>
+              </header>
+              <p className="body">{message.body}</p>
             </li>
           ))}
+          {request_status !== 'pending'
+            ? <li className="info">Request {request_status}.</li>
+            : closed
+              ? <li className="info">This chat has been closed.</li>
+              : ''}
         </ul>
-        {closed ? (
-          <p className="Messages__closed">
-            This chat has been closed by the project owner.
-          </p>
-        ) : (
-          <ChatMessageForm
-            request_id={request_id}
-            recipient_username={recipient_username}
-            setNewMessage={this.setNewMessage}
-          />
-        )}
-      </section>
+        <ChatMessageForm
+          request_id={request_id}
+          recipient_username={recipient_username}
+          onNewMessage={this.setAllMessages}
+          disabled={request_status !== 'pending' || closed}
+        />
+      </section >
     );
   }
 }

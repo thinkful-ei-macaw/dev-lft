@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import Avatar from '../Avatar/Avatar';
 import ChatService from '../../services/chat-service';
+import ChatMessages from '../ChatMessages/ChatMessages';
 import './Chat.css';
+
+// images
+import { ReplyIcon } from '../../images';
 
 class Chat extends Component {
   state = {
     chats: [],
+    activeChat: null,
+    activeFilter: '',
     error: null,
-    interval_id: null
+    interval_id: null,
+    chatViewOpen: false
   };
 
   componentDidMount() {
@@ -26,52 +33,128 @@ class Chat extends Component {
   setChats = () => {
     this.setState({ error: null });
     ChatService.getChats()
-      .then(chats => this.setState({ ...chats }))
-      .catch(error => this.setState({ error }));
+      .then(chats => {
+        this.setState({
+          chats,
+          activeChat: chats.length ? chats[0] : null
+        })
+      })
+      .catch(res => this.setState({ error: res.error || res.message }));
   };
 
+  setActiveChat = chat => {
+    this.setState({ activeChat: chat, chatViewOpen: true });
+  }
+
+  handleCloseChatView = () => {
+    this.setState({
+      chatViewOpen: false
+    })
+  }
+
+  getFilters(chats) {
+    let projectNames = {};
+    chats.forEach(chat => {
+      let project = chat.project_name.toLowerCase();
+      projectNames[project] = true;
+    })
+
+    return Object.keys(projectNames);
+  }
+
+  setActiveFilter = e => {
+    const { value } = e.target;
+    this.setState({
+      activeFilter: value
+    })
+  }
+
+  projectFilter = chat => {
+    const { activeFilter } = this.state;
+    if (activeFilter !== '') {
+      return chat.project_name.toLowerCase() === activeFilter.toLowerCase();
+    } else {
+      return true;
+    }
+  }
+
   render() {
-    const { chats, error } = this.state;
+    const { chats, error, activeChat, activeFilter, chatViewOpen } = this.state;
+    const filters = this.getFilters(chats);
     return (
-      <section className="Chat">
-        <h2>Chats</h2>
-        <div role="alert">{error && <p>{error.error}</p>}</div>
-        <ul className="Chat__list">
-          {chats.map(chat => (
-            <li
-              key={chat.recipient_username + chat.date_created}
-              className="Chat__item"
-            >
-              <Link
-                className="Chat__link"
-                to={{
-                  pathname: '/chats/messages',
-                  state: {
-                    chat_id: chat.chat_id,
-                    closed: chat.closed,
-                    first_name: chat.first_name,
-                    last_name: chat.last_name,
-                    project_name: chat.project_name,
-                    request_id: chat.request_id,
-                    recipient_username: chat.recipient_username
-                  }
-                }}
-              >
-                <Avatar
-                  first_name={chat.first_name}
-                  last_name={chat.last_name}
-                  className={'Chat__logo'}
-                />
-                <span className="Chat__name">{chat.first_name}</span>
-                <span className="Chat__project">({chat.project_name})</span>
-                <span className="Chat__preview">{chat.body}</span>
-                <span className="Chat__date">
-                  {ChatService.getFormattedDate(chat.date_created)}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+      <section className="page chat-page">
+        <Helmet>
+          <title>Chats - Dev LFT</title>
+        </Helmet>
+        <header>
+          <div className="wrapper">
+            <h2>Chats</h2>
+          </div>
+        </header>
+
+        <div className="page-content">
+          <div className="wrapper">
+            {error
+              ? <div role="alert" className="card info error">{error}</div>
+              : ''}
+
+            <div className="grid card">
+              <div className="column column-1-3 list-container">
+                <form className="chat-options">
+                  <div className="input-group">
+                    <div className="input">
+                      <label className="hidden" htmlFor="filter">Filter By Project:</label>
+                      <select id="filter" name="filter" disabled={!chats.length} value={activeFilter} onChange={this.setActiveFilter}>
+                        <option value="">All</option>
+                        {filters.map((filter, i) => (
+                          <option key={i} value={filter}>{filter}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </form>
+                <ul className="chat-list">
+                  {chats.length
+                    ? chats.filter(this.projectFilter).map((chat, i) => (
+                      <li
+                        key={i}
+                        className={`user ${activeChat.chat_id === chat.chat_id ? 'active' : ''}`} role="button"
+                        onClick={() => this.setActiveChat(chat)}
+                      >
+                        <Avatar
+                          first_name={chat.first_name}
+                          last_name={chat.last_name}
+                        />
+                        <div className="content">
+                          <h4>{chat.first_name} {chat.last_name[0]}</h4>
+                          <p className="last-message">
+                            {(chat.isOwner && chat.request_status !== 'pending') || chat.isReply
+                              ? <ReplyIcon />
+                              : ''}
+                            {chat.request_status === 'pending'
+                              ? chat.body
+                              : `Request ${chat.request_status}.`}
+                          </p>
+                        </div>
+
+                        <span className="date">
+                          {ChatService.getFormattedDate(chat.date_created)}
+                        </span>
+                      </li>
+                    ))
+                    : <li className="empty">No chats, yet!</li>}
+                </ul>
+              </div>
+              <div className="column column-2-3">
+                {activeChat
+                  ? <ChatMessages chat={activeChat} open={chatViewOpen} onClose={this.handleCloseChatView} onRequest={this.setChats} />
+                  : ''}
+              </div>
+            </div>
+
+          </div>
+
+        </div>
       </section>
     );
   }

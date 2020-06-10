@@ -16,6 +16,10 @@
   width: 100%;
 }
 
+.project-form .error {
+  margin-bottom: 0.5rem;
+}
+
 .project-form .btn {
   margin-right: 1rem;
   margin-bottom: 0;
