@@ -1,14 +1,25 @@
-.project-dash .project-info {
-  font-size: 1.2rem;
+.project-dash .centered {
+  text-align: center;
 }
 
-.project-dash .project-info p {
-  margin-bottom: 3rem;
+.project-dash .centered .btn:hover {
+  color: var(--colorError);
+}
+
+.project-dash .project-info > p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  font-weight: 500;
 }
 
 .project-dash .project-info .user {
-  margin: 2rem 0;
+  margin-bottom: 2rem;
 }
+
+.project-dash .project-info .user p {
+  margin: 0.2rem 0 0;
+}
+
 .project-dash .column {
   margin-bottom: 0;
 }
@@ -24,6 +35,13 @@
 .user .content {
   margin: 0 0.6rem;
   flex: 1;
+}
+
+.user .content h4 {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .user p {
