@@ -11,3 +11,9 @@
 .account .btn {
   margin: 0;
 }
+
+.account .profile-link {
+  display: block;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}

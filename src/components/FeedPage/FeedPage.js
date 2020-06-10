@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 import ProjectApiService from '../../services/project-api-service';
 import ProjectItem from '../ProjectItem/ProjectItem';
+import UserContext from '../../contexts/UserContext';
 import './FeedPage.css';
 
 export default class FeedPage extends Component {
@@ -10,13 +11,18 @@ export default class FeedPage extends Component {
     error: null
   };
 
+  static contextType = UserContext;
+
   componentDidMount() {
+    this.context.startLoading();
     ProjectApiService.getAllProjects()
       .then(projects => {
         this.setState({ vacantProjects: projects });
+        this.context.stopLoading();
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' })
+        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.context.stopLoading();
       });
   }
 

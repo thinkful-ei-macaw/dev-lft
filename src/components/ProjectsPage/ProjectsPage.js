@@ -5,6 +5,7 @@ import Button from '../Button/Button';
 import ProjectForm from '../ProjectForm/ProjectForm';
 import ProjectApiService from '../../services/project-api-service';
 import ProjectItem from '../ProjectItem/ProjectItem';
+import UserContext from '../../contexts/UserContext';
 
 // images
 import { PlusIcon } from '../../images';
@@ -16,16 +17,23 @@ export default class ProjectsPage extends Component {
     error: null
   };
 
+  static contextType = UserContext;
+
   componentDidMount() {
     this.getUserProjects();
   }
 
   getUserProjects() {
+    this.context.startLoading();
     ProjectApiService.getAllUserProjects()
       .then(res => {
         this.setState({ projects: res });
+        this.context.stopLoading();
       })
-      .catch(res => this.setState({ error: res.error || 'Something went wrong. Please try again later' }));
+      .catch(res => {
+        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.context.stopLoading();
+      });
   }
 
   createNewProject = () => {

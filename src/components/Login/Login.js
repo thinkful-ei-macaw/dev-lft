@@ -23,6 +23,7 @@ class Login extends React.Component {
     e.preventDefault();
     const { user_name, password } = e.target;
     this.setState({ error: null });
+    this.context.startLoading();
     ApiAuthService.postLogin({
       username: user_name.value,
       password: password.value
@@ -32,6 +33,7 @@ class Login extends React.Component {
         password.value = '';
         TokenService.saveAuthToken(user.authToken);
         this.context.onAuth();
+        this.context.stopLoading();
         let lastLocation = this.props.history.location.state.from.pathname;
         if (lastLocation) {
           this.props.history.push(lastLocation)
@@ -41,6 +43,7 @@ class Login extends React.Component {
       })
       .catch(res => {
         this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.context.stopLoading();
       });
   };
 

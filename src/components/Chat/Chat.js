@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import Avatar from '../Avatar/Avatar';
 import ChatService from '../../services/chat-service';
 import ChatMessages from '../ChatMessages/ChatMessages';
+import UserContext from '../../contexts/UserContext';
 import './Chat.css';
 
 // images
@@ -18,6 +19,8 @@ class Chat extends Component {
     chatViewOpen: false
   };
 
+  static contextType = UserContext;
+
   componentDidMount() {
     this.setChats();
     const checkChats = setInterval(() => {
@@ -32,14 +35,20 @@ class Chat extends Component {
 
   setChats = () => {
     this.setState({ error: null });
+
+    this.context.startLoading();
     ChatService.getChats()
       .then(chats => {
         this.setState({
           chats,
           activeChat: chats.length ? chats[0] : null
-        })
+        });
+        this.context.stopLoading();
       })
-      .catch(res => this.setState({ error: res.error || 'Something went wrong. Please try again later' }));
+      .catch(res => {
+        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.context.stopLoading();
+      });
   };
 
   setActiveChat = chat => {

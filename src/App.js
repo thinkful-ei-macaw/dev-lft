@@ -34,6 +34,7 @@ export default class App extends Component {
       date_created: '',
       isAuth: false
     },
+    isLoading: false,
     error: null
   };
 
@@ -44,7 +45,9 @@ export default class App extends Component {
   handleAuth = () => {
     if (TokenService.hasAuthToken()) {
       AuthApiService.getUserProfile()
-        .then(user => this.setState({ user: { ...user, isAuth: true } }))
+        .then(user => {
+          this.setState({ user: { ...user, isAuth: true } })
+        })
         .catch(res => {
           this.setState({ error: res.error || 'Something went wrong. Please try again later', user: { isAuth: false } }, () => {
             throw new Error(this.state.error);
@@ -55,6 +58,12 @@ export default class App extends Component {
       this.setState({ user: { isAuth: false } });
     }
   };
+
+  handleSetLoading = (loadingState = false) => {
+    this.setState({
+      isLoading: loadingState
+    });
+  }
 
   handleLogOut = () => {
     TokenService.clearAuthToken();
@@ -71,13 +80,15 @@ export default class App extends Component {
   }
 
   render() {
-    const { user } = this.state;
+    const { user, isLoading } = this.state;
     const contextValues = {
       user,
       onAuth: this.handleAuth,
       onLogOut: this.handleLogOut,
       onProfileUpdate: this.handleUserUpdate,
-      setNotifications: this.handleSetNotificaions
+      setNotifications: this.handleSetNotificaions,
+      startLoading: () => this.handleSetLoading(true),
+      stopLoading: () => this.handleSetLoading(false)
     };
 
     return (
@@ -99,6 +110,7 @@ export default class App extends Component {
           </Switch>
         </GlobalErrorBoundary>
         <Route path="*" component={Footer} />
+        <div className={`loader ${isLoading ? 'active' : ''}`}></div>
       </UserContext.Provider>
     );
   }

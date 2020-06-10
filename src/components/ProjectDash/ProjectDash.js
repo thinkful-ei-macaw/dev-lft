@@ -9,6 +9,7 @@ import Vacancies from './Vacancies';
 import OpenVacancies from './OpenVacancies';
 import Requests from './Requests';
 import Button from '../Button/Button';
+import UserContext from '../../contexts/UserContext';
 import './ProjectDash.css';
 
 // images
@@ -20,6 +21,8 @@ class ProjectDash extends Component {
       push: () => { }
     }
   };
+
+  static contextType = UserContext;
 
   state = {
     project: {},
@@ -34,6 +37,7 @@ class ProjectDash extends Component {
 
   async getData() {
     const project_handle = this.props.match.params.project_handle;
+    this.context.startLoading();
 
     try {
       const project = await ProjectDashService.getProject(project_handle);
@@ -50,6 +54,7 @@ class ProjectDash extends Component {
     } catch (res) {
       this.setState({ error: res.error || 'Something went wrong. Please try again later' });
     }
+    this.context.stopLoading();
   }
 
   // Here be props, we must call back
