@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Button from '../Button/Button';
+import { Helmet } from 'react-helmet';
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -13,11 +15,15 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <h1>
-          Oops! An error occurred. Sorry about that.
-          <button onClick={this.refresh}>Click Here</button>
-          to refresh.
-        </h1>
+        <section className="wrapper fourohfour">
+          <Helmet>
+            <title>:/</title>
+          </Helmet>
+          <h1>Oops!</h1>
+          <h2>An error occurred.</h2>
+          <p>Sorry about that.</p>
+          <Button onClick={this.refresh}>Click here to refresh</Button>
+        </section>
       );
     }
     return this.props.children;
