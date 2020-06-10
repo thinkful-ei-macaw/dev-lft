@@ -33,6 +33,7 @@
 }
 
 .btn:hover {
+  text-decoration: none;
   transform: translateY(-0.2em);
   box-shadow: 0 0.5rem 1rem var(--colorMidBG);
 }

@@ -13,6 +13,14 @@
   overflow-y: auto;
 }
 
+.profile .card.info a {
+  text-decoration: none;
+}
+
+.profile .card.info .btn:hover {
+  color: var(--colorAccent);
+}
+
 /* global */
 .highlight {
   color: var(--colorAccent);

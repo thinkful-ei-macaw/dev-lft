@@ -13,7 +13,9 @@ const UserContext = React.createContext({
   },
   onAuth: () => null,
   onLogOut: () => null,
-  onProfileChange: () => null
+  onProfileChange: () => null,
+  startLoading: () => null,
+  stopLoading: () => null
 });
 
 export default UserContext;

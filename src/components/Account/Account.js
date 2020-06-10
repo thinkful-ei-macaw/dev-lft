@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 import Button from '../Button/Button';
 import AuthApiService from '../../services/auth-api-service';
 import UserContext from '../../contexts/UserContext';
@@ -51,13 +52,16 @@ export default class Account extends Component {
       skills: skills.value.split(', ').filter(Boolean)
     };
 
+    this.context.startLoading();
     AuthApiService.updateUserInfo(updatedInfo)
       .then(() => {
         this.setState({ updateSuccess: true, formDirty: false });
         this.context.onProfileUpdate(updatedInfo);
+        this.context.stopLoading();
       })
       .catch(res => {
         this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.context.stopLoading();
       });
   };
 
@@ -174,12 +178,7 @@ export default class Account extends Component {
                     </div>
                   </div>
                   <hr />
-                  <div className="input-group">
-                    <div className="input">
-                      <label htmlFor="username">Username</label>
-                      <input title="Changing username is not currently supported" id="username" type="text" name="username" placeholder="johndoe" minLength="2" maxLength="30" defaultValue={username} readOnly={true} />
-                    </div>
-                  </div>
+                  <Link to={`/users/${username}`} className="profile-link">View profile</Link>
                 </article>
 
                 <article className="card">

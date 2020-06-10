@@ -26,6 +26,7 @@ class Signup extends React.Component {
     const firstname = e.target.first_name.value;
     const lastname = e.target.last_name.value;
 
+    this.context.startLoading();
     ApiAuthService.postUser({
       username: username,
       password: password,
@@ -35,17 +36,17 @@ class Signup extends React.Component {
       .then(user => {
         TokenService.saveAuthToken(user.authToken);
         this.context.onAuth();
+        this.context.stopLoading();
         let lastLocation = this.props.history.location.state.from.pathname;
         if (lastLocation) {
           this.props.history.push(lastLocation)
         } else {
           this.props.history.goBack();
         }
-
-
       })
       .catch(res => {
         this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.context.stopLoading();
       });
   };
 

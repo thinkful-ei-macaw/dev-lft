@@ -39,7 +39,8 @@ class Posts extends Component {
       .then(posts => {
         this.setState({
           posts,
-          postToEdit: null
+          postToEdit: null,
+          error: null
         });
         this.postList.current.scrollTop = this.postList.current.scrollHeight;
       })
