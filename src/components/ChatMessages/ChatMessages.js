@@ -71,7 +71,7 @@ class ChatMessages extends Component {
     ProjectDashService.patchRequest(status, request_id)
       .then(this.props.onRequest)
       .catch(res => {
-        this.setState({ error: res.error || res.message });
+        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
       });
   };
 

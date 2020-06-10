@@ -210,10 +210,15 @@ form .subtitle {
   color: var(--colorMidFG);
 }
 
+.error {
+  color: var(--colorError);
+  margin: 0.5rem 0;
+}
+
 form .error {
   font-size: 1rem;
   margin-bottom: 1rem;
-  color: var(--colorError);
+  word-break: break-all;
 }
 
 form .input-group {
@@ -288,6 +293,9 @@ form hr {
 }
 
 .page header h2 {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-size: 2.3rem;
   flex: 1;
 }

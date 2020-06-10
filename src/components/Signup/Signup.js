@@ -45,7 +45,7 @@ class Signup extends React.Component {
 
       })
       .catch(res => {
-        this.setState({ error: res.error || res.message });
+        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
       });
   };
 
@@ -65,23 +65,23 @@ class Signup extends React.Component {
           <div className="input-group">
             <div className="input">
               <label htmlFor="firstname">First Name</label>
-              <input type="text" id="firstname" placeholder="John" name="first_name" required />
+              <input type="text" id="firstname" placeholder="John" name="first_name" minLength="2" maxLength="30" required />
             </div>
             <div className="input">
               <label htmlFor="lastname">Last Name</label>
-              <input type="text" id="lastname" placeholder="Doe" name="last_name" required />
+              <input type="text" id="lastname" placeholder="Doe" name="last_name" minLength="2" maxLength="30" required />
             </div>
           </div>
           <div className="input-group">
             <div className="input">
               <label htmlFor="username">Username</label>
-              <input type="text" id="username" placeholder="johndoe" name="user_name" required />
+              <input type="text" id="username" placeholder="johndoe" name="user_name" minLength="2" maxLength="30" required />
             </div>
           </div>
           <div className="input-group">
             <div className="input">
               <label htmlFor="pwd">Password</label>
-              <input type="password" id="pwd" name="password" required />
+              <input type="password" id="pwd" name="password" minLength="8" maxLength="72" required />
             </div>
           </div>
 

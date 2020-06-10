@@ -11,7 +11,8 @@ import { ChatIcon, CloseIcon, CheckIcon } from '../../images';
 export default class Requests extends React.Component {
   state = {
     showChatModal: false,
-    request: {}
+    request: {},
+    error: null
   }
 
   static defaultProps = {
@@ -41,13 +42,13 @@ export default class Requests extends React.Component {
     ProjectDashService.postChat(username, id, body)
       .then(this.handleCloseChatModal)
       .catch(res => {
-        this.setState({ error: res.error || res.message });
+        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
       });
   };
 
   render() {
     const { requests, handleDecline, handleApprove } = this.props;
-    const { request } = this.state;
+    const { request, error } = this.state;
     const pendingRequests = requests.filter(item => item.status === 'pending');
 
     return (
@@ -60,6 +61,7 @@ export default class Requests extends React.Component {
               handleNewMessage={this.handleNewMessage}
               handleCloseChatModal={this.handleCloseChatModal}
               request={request}
+              error={error}
             />
           )
           : ''}

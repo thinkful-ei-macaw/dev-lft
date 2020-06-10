@@ -25,7 +25,7 @@ export default class ProjectsPage extends Component {
       .then(res => {
         this.setState({ projects: res });
       })
-      .catch(res => this.setState({ error: res.error || res.message }));
+      .catch(res => this.setState({ error: res.error || 'Something went wrong. Please try again later' }));
   }
 
   createNewProject = () => {

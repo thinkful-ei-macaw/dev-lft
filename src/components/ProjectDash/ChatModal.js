@@ -4,10 +4,14 @@ import Button from '../Button/Button';
 const ChatModal = ({
   handleNewMessage = () => { },
   handleCloseChatModal = () => { },
+  error = null,
   request = {}
 }) => {
   return (
     <form onSubmit={handleNewMessage} className="modal" autoComplete="off">
+      {error
+        ? <p role="alert" className="error">{error}</p>
+        : ''}
       <div className="input-group">
         <div className="input">
           <label htmlFor="chat-message">Message {request.first_name} {request.last_name}:</label>
