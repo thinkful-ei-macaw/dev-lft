@@ -300,6 +300,16 @@ form hr {
   flex: 1;
 }
 
+.page header form {
+  width: 12rem;
+  max-width: 30vw;
+}
+
+.page header select {
+  margin-bottom: 0;
+  background: var(--colorBG);
+}
+
 .page .page-content {
   flex: 1;
   position: relative;
@@ -467,6 +477,14 @@ a[href*='//']::after
   }
 }
 
+.centered {
+  text-align: center;
+}
+
+.centered .btn:hover {
+  color: var(--colorError);
+}
+
 /* card styles */
 .card {
   background: var(--colorLightBG);
@@ -593,6 +611,7 @@ a[href*='//']::after
   z-index: 999;
   opacity: 0;
   pointer-events: none;
+  transition: all 0.2s ease;
 }
 
 .loader::after {

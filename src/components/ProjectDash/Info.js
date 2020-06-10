@@ -33,9 +33,9 @@ class Info extends React.Component {
       number = 0;
 
     if (diffInDays === 0) {
-      output = 'Today';
+      output = 'today';
     } else if (diffInDays === 1) {
-      output = 'Yesterday';
+      output = 'yesterday';
     } else if (diffInDays < 7) {
       interval = 'day';
       number = diffInDays;
@@ -70,7 +70,7 @@ class Info extends React.Component {
     return (
       <article className="card project-info">
         <h3 className="title">Project Info</h3>
-        <p className="project">{description}</p>
+        <p>{description}</p>
         <div className="user">
           <Avatar
             first_name={project_creator.first_name}
@@ -81,12 +81,12 @@ class Info extends React.Component {
               <Link to={`/users/${project_creator.username}`}>
                 {project_creator
                   ? `${project_creator.first_name} ${
-                      project_creator.last_name && project_creator.last_name[0]
-                    }`
+                  project_creator.last_name && project_creator.last_name[0]
+                  }`
                   : 'DevLFT User'}
               </Link>
             </h4>
-            <span>Created {this.formatProjectDate(date_created)}</span>
+            <p>Created {this.formatProjectDate(date_created)}</p>
           </div>
         </div>
         <ul className="tags">{this.renderTags(tags)}</ul>

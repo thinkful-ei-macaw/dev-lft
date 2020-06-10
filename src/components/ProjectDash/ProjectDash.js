@@ -18,7 +18,7 @@ import { CloseIcon } from '../../images';
 class ProjectDash extends Component {
   static defaultProps = {
     history: {
-      push: () => {}
+      push: () => { }
     }
   };
 
@@ -100,7 +100,7 @@ class ProjectDash extends Component {
     // set user_id to null to update server
     let user_id = null;
     ProjectDashService.patchVacancy(vacancy_id, user_id)
-      .then(() => this.getData)
+      .then(() => { this.getData() })
       .catch(res => {
         this.setState({ error: res.error || 'Something went wrong. Please try again later' });
       });
@@ -170,17 +170,6 @@ class ProjectDash extends Component {
         <header>
           <div className="wrapper">
             <h2>{project.name}</h2>
-            {userRole === 'owner' ? (
-              <Button
-                onClick={this.handleDeleteProject}
-                className="clear"
-                title="Delete project"
-              >
-                <CloseIcon />
-              </Button>
-            ) : (
-              ''
-            )}
           </div>
         </header>
 
@@ -194,27 +183,25 @@ class ProjectDash extends Component {
                 </Button>
               </div>
             ) : (
-              ''
-            )}
+                ''
+              )}
 
             {userRole === 'member' || userRole === 'owner' ? (
               <Posts project_id={project.id} />
             ) : (
-              ''
-            )}
+                ''
+              )}
 
             <div className="grid">
               <div className="column column-1-2">
-                {userRole === 'owner' ? (
-                  <Requests
+                {userRole === 'owner'
+                  ? <Requests
                     requests={this.state.requests}
                     handleDecline={this.handleDecline}
                     handleApprove={this.handleApprove}
                     project_id={project.id}
                   />
-                ) : (
-                  ''
-                )}
+                  : ''}
 
                 <Info project={project} />
               </div>
@@ -249,6 +236,19 @@ class ProjectDash extends Component {
               project_id={project.id}
               userRole={userRole}
             />
+
+            {userRole === 'owner'
+              ? (
+                <div className="centered">
+                  <Button
+                    onClick={this.handleDeleteProject}
+                    className="clear"
+                  >
+                    Delete Project
+                  </Button>
+                </div>
+              )
+              : ''}
           </div>
         </div>
       </section>

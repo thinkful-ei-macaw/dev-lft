@@ -116,7 +116,8 @@ export default class Account extends Component {
         username,
         bio,
         skills = []
-      }
+      },
+      onLogOut = () => null
     } = this.context;
 
     const { formDirty, error } = this.state;
@@ -208,8 +209,16 @@ export default class Account extends Component {
                 </article>
               </div>
             </div>
-          </div>
 
+            <div className="centered">
+              <Button
+                onClick={onLogOut}
+                className="clear"
+              >
+                Log Out
+              </Button>
+            </div>
+          </div>
         </div>
       </form>
     );

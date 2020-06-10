@@ -12,6 +12,7 @@
   padding: 0;
   margin-bottom: 0;
   box-shadow: 0 0.5em 1em var(--colorMidBG);
+  min-height: 32rem;
 }
 
 .chat-page .grid .column {
