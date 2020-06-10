@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { differenceInDays, differenceInWeeks, differenceInMonths, differenceInYears } from 'date-fns';
+import {
+  differenceInDays,
+  differenceInWeeks,
+  differenceInMonths,
+  differenceInYears
+} from 'date-fns';
 import PropTypes from 'prop-types';
 import './ProjectItem.css';
 
@@ -12,7 +17,9 @@ export default class ProjectItem extends Component {
     const projectDate = new Date(date);
     const currentDate = new Date();
     const diffInDays = differenceInDays(currentDate, projectDate);
-    let output = null, interval = 'day', number = 0;
+    let output = null,
+      interval = 'day',
+      number = 0;
 
     if (diffInDays === 0) {
       output = 'Today';
@@ -37,12 +44,18 @@ export default class ProjectItem extends Component {
     } else {
       return output;
     }
-
   };
 
   render() {
     const {
-      project: { handle, name, description, tags = [], date_created, openVacancies = 0 }
+      project: {
+        handle,
+        name,
+        description,
+        tags = [],
+        date_created,
+        openVacancies = 0
+      }
     } = this.props;
     return (
       <article className="project card">
@@ -69,7 +82,9 @@ export default class ProjectItem extends Component {
             </div>
             <div className="info-item">
               <VacanciesIcon />
-              <p>{openVacancies} open position{+openVacancies !== 1 ? 's' : ''}</p>
+              <p>
+                {openVacancies} open position{+openVacancies !== 1 ? 's' : ''}
+              </p>
             </div>
           </div>
         </div>

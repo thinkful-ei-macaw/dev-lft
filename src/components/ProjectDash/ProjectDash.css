@@ -6,6 +6,9 @@
   margin-bottom: 3rem;
 }
 
+.project-dash .project-info .user {
+  margin: 2rem 0;
+}
 .project-dash .column {
   margin-bottom: 0;
 }
