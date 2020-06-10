@@ -117,6 +117,9 @@ class Vacancies extends Component {
               </li>
             );
           })}
+          {!vacancies.length
+            ? <li className="project">No team members, yet!</li>
+            : ''}
         </ul>
       )
       : <p className="project">No vacancies at this time</p>);
