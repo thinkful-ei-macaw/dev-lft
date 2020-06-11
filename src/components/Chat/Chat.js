@@ -23,6 +23,10 @@ class Chat extends Component {
     };
   }
 
+  static defaultProps = {
+    location: {}
+  }
+
 
   static contextType = UserContext;
 
