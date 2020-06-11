@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ChatService from '../../services/chat-api-service';
-import ProjectDashService from '../ProjectDash/project-dash-service';
+import ProjectDashService from '../../services/project-dash-service';
 import Avatar from '../Avatar/Avatar';
 import UserContext from '../../contexts/UserContext';
 import ChatMessageForm from '../ChatMessageForm/ChatMessageForm';

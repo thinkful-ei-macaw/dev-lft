@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Button from '../Button/Button';
-import ProjectDashService from './project-dash-service';
+import ProjectDashService from '../../services/project-dash-service';
 import VacancyModal from './VacancyModal';
 
 // images
@@ -15,22 +15,22 @@ class OpenVacancies extends Component {
 
   state = {
     addingVacancy: false
-  }
+  };
 
   onAddVacancy = () => {
     this.setState({
       addingVacancy: true,
       error: null
-    })
-  }
+    });
+  };
 
   onCancelVacancy = () => {
-    console.log('here')
+    console.log('here');
     this.setState({
       addingVacancy: false,
       error: null
-    })
-  }
+    });
+  };
 
   handleRequest = (vacancy_id, callback = () => null) => {
     let { requests, project_id } = this.props;
@@ -65,7 +65,9 @@ class OpenVacancies extends Component {
         });
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
       });
   };
 
@@ -76,50 +78,55 @@ class OpenVacancies extends Component {
 
     return (
       <>
-        {
-          openVacancies.length
-            ? <ul className="open-vacancies-list">
-              {openVacancies.map(item => {
-                let userRequest = userRequests.find(req => req.id === item.id) || null;
-                return (
-                  <li className="project" key={item.id}>
-                    <div className="project-left">
-                      <h4 className="h3">{item.title}</h4>
-                      <p className="description">{item.description}</p>
-                    </div>
-                    <div className="project-right">
-                      <ul className="tags">{this.renderSkills(item.skills)}</ul>
-                      <div>
-                        <Button
-                          className={userRequest ? 'clear' : ''}
-                          disabled={!!userRequest}
-                          onClick={() => !userRequest && userRole === 'owner'
+        {openVacancies.length ? (
+          <ul className="open-vacancies-list">
+            {openVacancies.map(item => {
+              let userRequest =
+                userRequests.find(req => req.id === item.id) || null;
+              return (
+                <li className="project" key={item.id}>
+                  <div className="project-left">
+                    <h4 className="h3">{item.title}</h4>
+                    <p className="description">{item.description}</p>
+                  </div>
+                  <div className="project-right">
+                    <ul className="tags">{this.renderSkills(item.skills)}</ul>
+                    <div>
+                      <Button
+                        className={userRequest ? 'clear' : ''}
+                        disabled={!!userRequest}
+                        onClick={() =>
+                          !userRequest && userRole === 'owner'
                             ? this.handleRequest(item.id, handleApprove)
                             : this.handleRequest(item.id)
-                          }
-                        >
-                          {userRequest
-                            ? `Request ${userRequest.request_status}`
-                            : userRole === 'owner'
-                              ? 'Fill this position'
-                              : 'Request to join'}
-                        </Button>
-                      </div>
-
+                        }
+                      >
+                        {userRequest
+                          ? `Request ${userRequest.request_status}`
+                          : userRole === 'owner'
+                          ? 'Fill this position'
+                          : 'Request to join'}
+                      </Button>
                     </div>
-                  </li>
-                );
-              })}
-            </ul>
-            : <p className="project">No open positions at this time.</p>
-        }
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="project">No open positions at this time.</p>
+        )}
       </>
     );
   };
 
   renderSkills = skills => {
     return skills.map((element, i) => {
-      return <li className="tag tag-grey" key={i}><span title={element}>{element}</span></li>;
+      return (
+        <li className="tag tag-grey" key={i}>
+          <span title={element}>{element}</span>
+        </li>
+      );
     });
   };
 
@@ -130,8 +137,8 @@ class OpenVacancies extends Component {
       <article className="card">
         <header className="title">
           <h3>Open Positions</h3>
-          {userRole === 'owner'
-            ? <Button
+          {userRole === 'owner' ? (
+            <Button
               title="Add new position"
               className="clear"
               disabled={addingVacancy}
@@ -139,16 +146,20 @@ class OpenVacancies extends Component {
             >
               <PlusIcon />
             </Button>
-            : ''}
+          ) : (
+            ''
+          )}
         </header>
 
-        {addingVacancy
-          ? <VacancyModal
+        {addingVacancy ? (
+          <VacancyModal
             error={error}
             onSubmitVacancy={this.handleSubmitVacancy}
             onCloseVacancyModal={this.onCancelVacancy}
           />
-          : ''}
+        ) : (
+          ''
+        )}
 
         {this.renderOpenVacancies()}
       </article>
