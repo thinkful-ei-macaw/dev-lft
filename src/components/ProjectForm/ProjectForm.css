@@ -26,3 +26,7 @@
   transform: none;
   box-shadow: none;
 }
+
+.skill:hover {
+  cursor: pointer;
+}
