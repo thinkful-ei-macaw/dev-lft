@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import ChatService from '../../services/chat-service';
+import ChatService from '../../services/chat-api-service';
 import ProjectDashService from '../../services/project-dash-service';
 import Avatar from '../Avatar/Avatar';
 import UserContext from '../../contexts/UserContext';
@@ -107,8 +107,8 @@ class ChatMessages extends Component {
             {error}
           </div>
         ) : (
-          ''
-        )}
+            ''
+          )}
 
         <header>
           <div className="user">
@@ -123,20 +123,20 @@ class ChatMessages extends Component {
                 <Link to={`/users/${recipient_username}`}>
                   {first_name} {last_name[0]}
                 </Link>
-                <span className="highlight">({project_name})</span>
               </h4>
               <p>
+                <span className="highlight">({project_name})</span>
                 {isOwner ? (
                   request_status === 'pending' ? (
                     <>wants to fill your {vacancy_name} position</>
                   ) : request_status === 'denied' ? (
                     <>wanted to fill your {vacancy_name} position</>
                   ) : (
-                    vacancy_name
-                  )
+                        vacancy_name
+                      )
                 ) : (
-                  <>You requested to fill their {vacancy_name} position</>
-                )}
+                    <>You requested to fill their {vacancy_name} position</>
+                  )}
               </p>
             </div>
             {isOwner && request_status === 'pending' ? (
@@ -155,8 +155,8 @@ class ChatMessages extends Component {
                 </Button>
               </>
             ) : (
-              ''
-            )}
+                ''
+              )}
           </div>
         </header>
         <ul className="chats" ref={this.chatList}>
@@ -175,13 +175,13 @@ class ChatMessages extends Component {
                     <h4 className="h5">You</h4>
                   </>
                 ) : (
-                  <>
-                    <Avatar first_name={first_name} last_name={last_name} />
-                    <h4 className="h5">
-                      {first_name} {last_name}
-                    </h4>
-                  </>
-                )}
+                    <>
+                      <Avatar first_name={first_name} last_name={last_name} />
+                      <h4 className="h5">
+                        {first_name} {last_name}
+                      </h4>
+                    </>
+                  )}
                 <span className="date">
                   {ChatService.getFormattedDate(message.date_created)}
                 </span>
@@ -194,8 +194,8 @@ class ChatMessages extends Component {
           ) : closed ? (
             <li className="info">This chat has been closed.</li>
           ) : (
-            ''
-          )}
+                ''
+              )}
         </ul>
         <ChatMessageForm
           request_id={request_id}

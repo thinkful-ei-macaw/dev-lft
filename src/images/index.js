@@ -17,3 +17,4 @@ export { ReactComponent as ChatIcon } from './svg/chat.svg';
 export { ReactComponent as CheckIcon } from './svg/check.svg';
 export { ReactComponent as EditIcon } from './svg/edit.svg';
 export { ReactComponent as ReplyIcon } from './svg/back.svg';
+export { ReactComponent as BellIcon } from './svg/bell.svg';

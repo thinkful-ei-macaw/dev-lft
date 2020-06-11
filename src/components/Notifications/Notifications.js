@@ -1,28 +1,83 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import TokenService from '../../services/token-service';
 import config from '../../config';
-import { format } from 'date-fns';
+import ChatService from '../../services/chat-api-service';
+import './Notifications.css';
+
+// images
+import { BellIcon } from '../../images';
+import NotificationsApiService from '../../services/notification-api-service';
 
 class Notifications extends Component {
   state = {
-    notifications: []
+    notifications: [],
+    isOpen: false,
+    interval_id: null
   };
 
   componentDidMount() {
-    return fetch(`${config.API_ENDPOINT}/notifications`, {
-      method: 'GET',
-      headers: {
-        authorization: `Bearer ${TokenService.getAuthToken()}`
-      }
-    })
-      .then(res =>
-        !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
-      )
+    this.getNotifications();
+    const checkNotifications = setInterval(() => {
+      this.getNotifications();
+    }, 30000);
+    this.setState({ interval_id: checkNotifications });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.interval_id);
+  }
+
+  toggleNotificationsPopup = () => {
+    const { isOpen } = this.state;
+
+    this.setState({ isOpen: !isOpen });
+
+    if (isOpen) {
+      // send patch request on close
+      this.markAsSeen();
+    }
+  }
+
+  getNotifications = () => {
+    NotificationsApiService.getNotifications()
       .then(res => {
         this.setState({
           notifications: res
         });
       });
+  }
+
+  markAsSeen() {
+    NotificationsApiService.patchNotifications()
+      .then(this.getNotifications)
+  }
+
+  formatNotification = notification => {
+    let notificationText = `Somebody ${notification.type}ed ${notification.name}`;
+    let notificationTime = ChatService.getFormattedDate(notification.date_created);
+    let notificationLink = `/projects/${notification.handle}`;
+
+    if (notification.type === 'chat') {
+      notificationText = `New chat message from ${notification.name}`;
+      notificationLink = {
+        pathname: `/chats`,
+        state: {
+          filter: notification.name
+        }
+      };
+    } else if (notification.type === 'leave') {
+      notificationText = `Someone left ${notification.name}`;
+    } else if (notification.type === 'post') {
+      notificationText = `Someone posted in ${notification.name}`;
+    }
+
+    return (
+      <Link to={notificationLink} onClick={this.toggleNotificationsPopup}>
+        {notificationText}!
+        <span className="time">{notificationTime}</span>
+      </Link>
+    );
   }
 
   renderNotifications = () => {
@@ -31,20 +86,31 @@ class Notifications extends Component {
       return <p>Couldn't find any notifications</p>;
     }
 
-    return notifications.map(item => {
-      return (
-        <li key={item.id}>
-          <p>{item.project_id}</p>
-          <p>{item.type}</p>
-          <p>{item.seen}</p>
-          <p>{format(item.date_created)}</p>
-        </li>
-      );
-    });
+    return notifications.length
+      ? notifications.map((item, i) => {
+        return (
+          <li key={i}>
+            {this.formatNotification(item)}
+          </li>
+        );
+      })
+      : <li>Nothing to see here!</li>
   };
 
   render() {
-    return <ul className="notifications-list">{this.renderNotifications()}</ul>;
+    const { isOpen, notifications } = this.state;
+    return (
+      <div className={`notifications ${!isOpen && notifications.length ? 'new' : ''}`}>
+        <BellIcon
+          className={`bell ${isOpen ? 'open' : ''}`}
+          title={`${notifications.length} notification${notifications.length !== 1 ? 's' : ''}`}
+          onClick={this.toggleNotificationsPopup}
+        />
+        <ul className={`notifications-list card ${isOpen ? 'active' : ''}`}>
+          {this.renderNotifications()}
+        </ul>
+      </div>
+    );
   }
 }
 

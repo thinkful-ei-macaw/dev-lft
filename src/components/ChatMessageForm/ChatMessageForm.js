@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../Button/Button';
-import ChatService from '../../services/chat-service';
+import ChatService from '../../services/chat-api-service';
 import './ChatMessageForm.css';
 
 class ChatMessageForm extends Component {
@@ -57,7 +57,6 @@ class ChatMessageForm extends Component {
               id="body"
               name="body"
               required
-              autoFocus
               placeholder="Say something"
               maxLength="280"
               disabled={disabled}

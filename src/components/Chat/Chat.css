@@ -9,6 +9,7 @@
 }
 
 .chat-page .grid.card {
+  background: var(--colorMidBG);
   padding: 0;
   margin-bottom: 0;
   box-shadow: 0 0.5em 1em var(--colorMidBG);
@@ -56,7 +57,7 @@
 }
 
 .chat-page .chat-list .user:hover {
-  background: var(--colorDarkBG);
+  background: var(--colorBG);
 }
 
 .chat-page .user .avatar {
@@ -93,10 +94,6 @@
   margin-top: 0.2rem;
 }
 
-.chat-page .chat-list .user.active {
-  background: var(--colorLightBG);
-}
-
 .chat-page .chat-list .user.active .content p {
   color: var(--colorFG);
 }
@@ -115,6 +112,12 @@
 .chat-page .chat-view > header {
   height: var(--headerSize);
   background: var(--colorMidBG);
+}
+
+.chat-page .chat-view > header .highlight {
+  margin-left: 0;
+  margin-right: 0.4rem;
+  font-size: 1em;
 }
 
 .chat-page .chat-view .user {
@@ -180,7 +183,7 @@
   pointer-events: all;
 }
 
-@media screen and (min-width: 680px) {
+@media screen and (min-width: 960px) {
   .chat-page .page-content {
     margin-top: initial;
   }
@@ -191,6 +194,10 @@
 
   .chat-page .page-content .wrapper {
     padding: 0 3rem;
+  }
+
+  .chat-page .chat-list .user.active {
+    background: var(--colorLightBG);
   }
 
   .chat-page .chat-view {
