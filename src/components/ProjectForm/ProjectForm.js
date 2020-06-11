@@ -4,6 +4,9 @@ import Button from '../Button/Button';
 import ProjectApiService from '../../services/project-api-service';
 import './ProjectForm.css';
 
+// images
+import { CloseIcon } from '../../images';
+
 export default class ProjectForm extends Component {
   constructor(props) {
     super(props);
@@ -25,6 +28,8 @@ export default class ProjectForm extends Component {
     if (event.key === ',') {
       event.preventDefault();
       this.validateNewTag();
+    } else if (event.key === 'Enter') {
+      this.validateNewTag('blur');
     }
   }
 
@@ -68,9 +73,8 @@ export default class ProjectForm extends Component {
         className="tag"
         key={index}
         onClick={() => this.handleRemoveTag(tag)}
-        title="Remove this tag"
       >
-        {tag} x
+        <span title={tag}>{tag}</span> <CloseIcon title="Remove this tag" />
       </li>
     ));
     return elements.length
@@ -87,7 +91,7 @@ export default class ProjectForm extends Component {
       trello_url,
       github_url
     } = e.target;
-    const tags = this.state.tags.map(tag => tag.content);
+    const tags = Object.keys(this.state.tags);
     ProjectApiService.postProject(
       project_name.value,
       description.value,

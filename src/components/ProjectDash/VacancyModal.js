@@ -1,6 +1,9 @@
 import React from 'react';
 import Button from '../Button/Button';
 
+// images
+import { CloseIcon } from '../../images';
+
 export default class VacancyModal extends React.Component {
   constructor(props) {
     super(props);
@@ -63,9 +66,8 @@ export default class VacancyModal extends React.Component {
         className="tag tag-grey"
         key={index}
         onClick={() => this.handleRemoveSkill(skill)}
-        title="Remove this skill"
       >
-        {skill} x
+        <span title={skill}>{skill}</span> <CloseIcon title="Remove this skill" />
       </li>
     ));
     return elements.length

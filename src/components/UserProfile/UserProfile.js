@@ -135,7 +135,7 @@ export default class UserProfile extends Component {
                 </article>
               </div>
 
-              <div className="column column-1-2">
+              <div className="column column-1-2 skills">
                 <article className="card">
                   <h3 className="title">Skills</h3>
                   <ul>

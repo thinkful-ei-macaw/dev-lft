@@ -70,7 +70,7 @@ export default class ProjectItem extends Component {
             {tags.map((tag, i) => {
               return (
                 <li key={i} className="tag">
-                  {tag}
+                  <span title={tag}>{tag}</span>
                 </li>
               );
             })}

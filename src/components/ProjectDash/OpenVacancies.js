@@ -19,14 +19,16 @@ class OpenVacancies extends Component {
 
   onAddVacancy = () => {
     this.setState({
-      addingVacancy: true
+      addingVacancy: true,
+      error: null
     })
   }
 
   onCancelVacancy = () => {
     console.log('here')
     this.setState({
-      addingVacancy: false
+      addingVacancy: false,
+      error: null
     })
   }
 
@@ -50,7 +52,6 @@ class OpenVacancies extends Component {
   };
 
   handleSubmitVacancy = e => {
-    e.preventDefault();
     let { project_id } = this.props;
 
     let title = e.target['vacancy-title'].value;
@@ -118,7 +119,7 @@ class OpenVacancies extends Component {
 
   renderSkills = skills => {
     return skills.map((element, i) => {
-      return <li className="tag tag-grey" key={i}>{element}</li>;
+      return <li className="tag tag-grey" key={i}><span title={element}>{element}</span></li>;
     });
   };
 

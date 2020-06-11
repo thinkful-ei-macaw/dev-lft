@@ -97,9 +97,8 @@ export default class Account extends Component {
         className="tag tag-grey"
         key={index}
         onClick={() => this.handleRemoveSkill(skill)}
-        title="Remove this skill"
       >
-        {skill} x
+        <span title={skill}>{skill}</span> <CloseIcon title="Remove this skill" />
       </li>
     ));
     return elements && elements.length

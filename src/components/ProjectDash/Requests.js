@@ -71,7 +71,7 @@ export default class Requests extends React.Component {
         ) : (
             <ul>
               {pendingRequests.map(request => (
-                <li key={request.id} className="user">
+                <li key={request.id} className="user request">
                   <Avatar
                     first_name={request.first_name}
                     last_name={request.last_name}
@@ -83,15 +83,18 @@ export default class Requests extends React.Component {
                     <p>wants to fill your {request.vacancy_title} position</p>
                   </div>
 
-                  <Button className="clear" onClick={() => this.handleOpenChatModal(request)}>
-                    <ChatIcon title="Message this user" />
-                  </Button>
-                  <Button className="clear" onClick={() => handleApprove(request.id)}>
-                    <CheckIcon title="Approve this request" />
-                  </Button>
-                  <Button className="clear" onClick={() => handleDecline(request.id)} >
-                    <CloseIcon title="Deny this request" />
-                  </Button>
+                  <div className="buttons">
+                    <Button className="clear" onClick={() => this.handleOpenChatModal(request)}>
+                      <ChatIcon title="Message this user" />
+                    </Button>
+                    <Button className="clear" onClick={() => handleApprove(request.id)}>
+                      <CheckIcon title="Approve this request" />
+                    </Button>
+                    <Button className="clear" onClick={() => handleDecline(request.id)} >
+                      <CloseIcon title="Deny this request" />
+                    </Button>
+                  </div>
+
                 </li>
               ))}
             </ul>
