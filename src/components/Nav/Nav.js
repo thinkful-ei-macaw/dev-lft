@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext';
 import Button from '../Button/Button';
+import Notifications from '../Notifications/Notifications';
 import './Nav.css';
 
 // images
@@ -48,15 +49,12 @@ export default class Nav extends Component {
 
   renderLinks(links) {
     const currentPath = this.props.location.pathname;
-    return links.map(({ text, path, onClick = () => { } }) => (
+    return links.map(({ text, path, className = '' }) => (
       <li key={path}>
         <Link
           to={path}
-          className={currentPath.includes(path) ? 'active' : ''}
-          onClick={() => {
-            this.toggleMenu(false);
-            onClick();
-          }}
+          className={`${className} ${currentPath.includes(path) ? 'active' : ''}`}
+          onClick={() => this.toggleMenu(false)}
         >
           {text}
         </Link>
@@ -68,12 +66,16 @@ export default class Nav extends Component {
     const publicLinks = [
       { text: 'Sign Up', path: '/signup' },
       { text: 'Login', path: '/login' }
-    ]
+    ];
+
+    const { menuOpen } = this.state;
 
     return (
-      <ul className="links links-right">
-        {this.renderLinks(publicLinks)}
-      </ul>
+      <div aria-hidden={!menuOpen} role={menuOpen ? 'alert' : ''} className={`link-container ${menuOpen ? 'active' : ''}`}>
+        <ul className="links links-right">
+          {this.renderLinks(publicLinks)}
+        </ul>
+      </div>
     );
   }
 
@@ -81,23 +83,18 @@ export default class Nav extends Component {
     const privateLinks = [
       { text: 'Feed', path: '/feed' },
       { text: 'Projects', path: '/projects' },
-      { text: 'Chats', path: '/chats' }
-    ]
+      { text: 'Chats', path: '/chats' },
+      { text: 'Account', path: '/account', className: 'mobile' }
+    ];
+
+    const { menuOpen } = this.state;
 
     return (
-      <React.Fragment>
+      <div aria-hidden={!menuOpen} role={menuOpen ? 'alert' : ''} className={`link-container ${menuOpen ? 'active' : ''}`}>
         <ul className="links links-left">
           {this.renderLinks(privateLinks)}
         </ul>
-
-        <ul className="links links-right">
-          <li>
-            <Link to="/account" title="Your Account" onClick={() => this.toggleMenu(false)}>
-              <Avatar first_name={user.first_name} last_name={user.last_name} />
-            </Link>
-          </li>
-        </ul>
-      </React.Fragment>
+      </div>
     );
   }
 
@@ -124,20 +121,32 @@ export default class Nav extends Component {
               onClick={() => this.toggleMenu(false)}
             >
             </div>
-            <div aria-hidden={!menuOpen} role={menuOpen ? 'alert' : ''} className={`link-container ${menuOpen ? 'active' : ''}`}>
-              {
-                isAuth
-                  ? this.renderPrivateLinks(user)
-                  : this.renderPublicLinks()
-              }
-            </div>
+            {
+              isAuth
+                ? (
+                  <React.Fragment>
+                    {this.renderPrivateLinks(user)}
+                    <ul className="links links-right">
+                      <li className="pull-right">
+                        <Notifications />
+                      </li>
+                      <li className="desktop">
+                        <Link to="/account" title="Your Account" onClick={() => this.toggleMenu(false)}>
+                          <Avatar first_name={user.first_name} last_name={user.last_name} />
+                        </Link>
+                      </li>
+                    </ul>
+                  </React.Fragment>
+                )
+                : this.renderPublicLinks()
+            }
             <Button className="clear menu-btn" onClick={this.toggleMenu}>
               <MenuIcon className="menu" />
             </Button>
           </div>
         </nav>
         {push ? <div className="nav-push"></div> : ''}
-      </React.Fragment>
+      </React.Fragment >
     );
   }
 }

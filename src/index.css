@@ -64,14 +64,18 @@ svg {
     margin-right: 2rem;
   }
 
-  .column:nth-child(2n) {
+  .column:nth-child(2n),
+  .column-1-3,
+  .column-2-3 {
     margin-right: 0;
   }
 
   .column-1-2 {
     width: calc((100% - 2rem) / 2);
   }
+}
 
+@media screen and (min-width: 960px) {
   .column-1-3 {
     width: calc(100% / 3);
     margin-right: 0;
@@ -470,9 +474,21 @@ a[href*='//']::after
   padding: 0 2rem;
 }
 
+.desktop {
+  display: none;
+}
+
 @media screen and (min-width: 680px) {
   .wrapper {
     padding: 0 3rem;
+  }
+
+  .desktop {
+    display: initial;
+  }
+
+  .mobile {
+    display: none;
   }
 }
 

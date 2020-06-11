@@ -1,0 +1,79 @@
+.notifications {
+  position: relative;
+}
+
+.notifications .bell {
+  margin-top: 0.2rem;
+  opacity: 0.5;
+  height: 1.2rem;
+  width: 1.2rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.notifications .bell:hover {
+  opacity: 1;
+}
+
+.notifications.new .bell,
+.notifications .bell.open {
+  opacity: 1;
+}
+
+.notifications.new::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 0.4rem;
+  width: 0.4rem;
+  border: 0.15rem solid var(--colorBG);
+  border-radius: 50%;
+  background: var(--colorAccent);
+}
+
+.notifications a {
+  text-transform: initial !important;
+}
+
+.notifications .notifications-list {
+  position: absolute;
+  z-index: 5;
+  right: -1.5rem;
+  width: 20rem;
+  max-width: 50vw;
+  padding: 0 0.8rem;
+  background: var(--colorLightBG);
+  top: calc(100% + 1rem);
+  transform: translateY(-30%);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.notifications .notifications-list.active {
+  transform: none;
+  pointer-events: all;
+  opacity: 1;
+}
+
+.notifications .notifications-list li {
+  margin-left: 0;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--colorDarkFG);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.notifications .notifications-list li:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.notifications .notifications-list li span {
+  display: block;
+  color: var(--colorMidFG);
+  font-weight: normal;
+  font-size: 0.9em;
+  margin-top: 0.3em;
+}

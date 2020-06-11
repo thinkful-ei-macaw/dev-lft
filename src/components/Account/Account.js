@@ -44,7 +44,7 @@ export default class Account extends Component {
     const { user: { skills } } = this.context;
     const newSkill = this.state.currentSkill.trim();
 
-    if (context === 'blur' && (!newSkill)) return;
+    if (context === 'blur' && (!newSkill)) return this.setState({ currentSkill: newSkill });
 
     // validation (won't add a skills unless it meets length requirements)
     // also won't add a skills if we've hit the maximum
@@ -298,7 +298,7 @@ export default class Account extends Component {
                     name="skill"
                     autoComplete="off"
                     placeholder="Comma separated list"
-                    minLength="3"
+                    minLength="2"
                     maxLength="30"
                     onChange={this.handleChange}
                     onBlur={() => this.validateNewSkill('blur')}
