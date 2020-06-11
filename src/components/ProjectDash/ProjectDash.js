@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import ProjectDashService from './project-dash-service';
+import ProjectDashService from '../../services/project-dash-service';
 import Info from './Info';
 import Posts from './Posts';
 import ProjectLinks from './ProjectLinks';
@@ -18,7 +18,7 @@ import { CloseIcon } from '../../images';
 class ProjectDash extends Component {
   static defaultProps = {
     history: {
-      push: () => { }
+      push: () => {}
     }
   };
 
@@ -51,7 +51,9 @@ class ProjectDash extends Component {
         this.setState({ requests });
       }
     } catch (res) {
-      this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+      this.setState({
+        error: res.error || 'Something went wrong. Please try again later'
+      });
     }
     this.context.stopLoading();
   }
@@ -84,7 +86,9 @@ class ProjectDash extends Component {
         this.props.history.push('/projects');
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
       });
   };
 
@@ -100,9 +104,13 @@ class ProjectDash extends Component {
     // set user_id to null to update server
     let user_id = null;
     ProjectDashService.patchVacancy(vacancy_id, user_id)
-      .then(() => { this.getData() })
+      .then(() => {
+        this.getData();
+      })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
       });
   };
 
@@ -125,7 +133,9 @@ class ProjectDash extends Component {
         });
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
       });
   };
 
@@ -142,7 +152,9 @@ class ProjectDash extends Component {
         });
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
       });
   };
 
@@ -183,25 +195,27 @@ class ProjectDash extends Component {
                 </Button>
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             {userRole === 'member' || userRole === 'owner' ? (
               <Posts project_id={project.id} />
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             <div className="grid">
               <div className="column column-1-2">
-                {userRole === 'owner'
-                  ? <Requests
+                {userRole === 'owner' ? (
+                  <Requests
                     requests={this.state.requests}
                     handleDecline={this.handleDecline}
                     handleApprove={this.handleApprove}
                     project_id={project.id}
                   />
-                  : ''}
+                ) : (
+                  ''
+                )}
 
                 <Info project={project} />
               </div>
@@ -237,18 +251,15 @@ class ProjectDash extends Component {
               userRole={userRole}
             />
 
-            {userRole === 'owner'
-              ? (
-                <div className="centered">
-                  <Button
-                    onClick={this.handleDeleteProject}
-                    className="clear"
-                  >
-                    Delete Project
-                  </Button>
-                </div>
-              )
-              : ''}
+            {userRole === 'owner' ? (
+              <div className="centered">
+                <Button onClick={this.handleDeleteProject} className="clear">
+                  Delete Project
+                </Button>
+              </div>
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </section>

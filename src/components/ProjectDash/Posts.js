@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { format, differenceInHours, differenceInMinutes } from 'date-fns';
 import UserContext from '../../contexts/UserContext';
-import ProjectDashService from './project-dash-service';
+import ProjectDashService from '../../services/project-dash-service';
 import Button from '../Button/Button';
 import Avatar from '../Avatar/Avatar';
 
@@ -17,17 +17,16 @@ class Posts extends Component {
     this.state = {
       posts: [],
       postToEdit: null
-    }
+    };
     this.postForm = React.createRef();
     this.postList = React.createRef();
   }
-
 
   componentDidMount() {
     this.getPosts();
   }
 
-  handleEditPost = (post_id) => {
+  handleEditPost = post_id => {
     this.setState({
       postToEdit: post_id
     });
@@ -45,9 +44,11 @@ class Posts extends Component {
         this.postList.current.scrollTop = this.postList.current.scrollHeight;
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
       });
-  }
+  };
 
   handlePatchPost = e => {
     e.preventDefault();
@@ -56,7 +57,9 @@ class Posts extends Component {
     ProjectDashService.patchPost(post_id, message)
       .then(this.getPosts)
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
       });
   };
 
@@ -69,7 +72,9 @@ class Posts extends Component {
     ProjectDashService.postPost(project_id, message)
       .then(this.getPosts)
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
       });
   };
 
@@ -86,7 +91,7 @@ class Posts extends Component {
     let diffInMins = differenceInMinutes(currentTime, postDate);
     switch (true) {
       case diffInHrs < 1:
-        return `${diffInMins}m ago`
+        return `${diffInMins}m ago`;
       case diffInHrs < 24:
         return `${diffInHrs}h ago`;
       case diffInHrs < 48:
@@ -98,7 +103,9 @@ class Posts extends Component {
 
   renderPosts = () => {
     const { posts, postToEdit } = this.state;
-    const { user: { username } } = this.context;
+    const {
+      user: { username }
+    } = this.context;
     if (!posts.length) {
       return <li className="project">No posts, yet!</li>;
     }
@@ -110,43 +117,58 @@ class Posts extends Component {
           <header className="user-info">
             <Avatar first_name={post.first_name} last_name={post.last_name} />
             <h4 className="h5">
-              {isAuthor
-                ? 'You'
-                : <Link to={`/users/${post.username}`}>{post.first_name} {post.last_name}</Link>}
+              {isAuthor ? (
+                'You'
+              ) : (
+                <Link to={`/users/${post.username}`}>
+                  {post.first_name} {post.last_name}
+                </Link>
+              )}
             </h4>
             <span className="date">{this.renderDate(post.date_created)}</span>
-            {post.canEdit
-              ? (
-                <Button
-                  onClick={() => this.handleEditPost(post.id)}
-                  disabled={postToEdit === post.id}
-                  className="clear"
-                  title="Edit post"
-                >
-                  <EditIcon />
-                </Button>
-              )
-              : ''}
+            {post.canEdit ? (
+              <Button
+                onClick={() => this.handleEditPost(post.id)}
+                disabled={postToEdit === post.id}
+                className="clear"
+                title="Edit post"
+              >
+                <EditIcon />
+              </Button>
+            ) : (
+              ''
+            )}
           </header>
 
-          {postToEdit === post.id
-            ? (
-              <form
-                name="edit-post-form"
-                className="body"
-                onSubmit={this.handlePatchPost}
-              >
-                <label className="hidden" htmlFor="edit-post">Change to:</label>
-                <input autoFocus type="text" maxLength="280" name="edit-post" id="edit-post" defaultValue={post.message} placeholder="Say something" />
-                <Button type="submit">Update</Button>
-                <Button onClick={this.handleCancelEdit} className="clear">Cancel</Button>
-              </form>
-            )
-            : (
-              <p className="body">
-                {post.message.substr(0, 279) + (post.message.length > 280 ? '...' : '')}
-              </p>
-            )}
+          {postToEdit === post.id ? (
+            <form
+              name="edit-post-form"
+              className="body"
+              onSubmit={this.handlePatchPost}
+            >
+              <label className="hidden" htmlFor="edit-post">
+                Change to:
+              </label>
+              <input
+                autoFocus
+                type="text"
+                maxLength="280"
+                name="edit-post"
+                id="edit-post"
+                defaultValue={post.message}
+                placeholder="Say something"
+              />
+              <Button type="submit">Update</Button>
+              <Button onClick={this.handleCancelEdit} className="clear">
+                Cancel
+              </Button>
+            </form>
+          ) : (
+            <p className="body">
+              {post.message.substr(0, 279) +
+                (post.message.length > 280 ? '...' : '')}
+            </p>
+          )}
         </li>
       );
     });
@@ -159,14 +181,24 @@ class Posts extends Component {
       <article className="card">
         <div className="team-posts">
           <h3 className="title">Discussion</h3>
-          <ul ref={this.postList} className="chats discussion">{this.renderPosts()}</ul>
+          <ul ref={this.postList} className="chats discussion">
+            {this.renderPosts()}
+          </ul>
         </div>
 
-        {error
-          ? <p role="alert" className="error">{error}</p>
-          : ''}
+        {error ? (
+          <p role="alert" className="error">
+            {error}
+          </p>
+        ) : (
+          ''
+        )}
 
-        <form onSubmit={this.handleSubmitPost} ref={this.postForm} autoComplete="off">
+        <form
+          onSubmit={this.handleSubmitPost}
+          ref={this.postForm}
+          autoComplete="off"
+        >
           <div className="input-group pinned">
             <div className="input">
               <label htmlFor="create-post">What do you want to post?</label>
@@ -183,7 +215,6 @@ class Posts extends Component {
             <Button type="submit">Post</Button>
           </div>
         </form>
-
       </article>
     );
   }
