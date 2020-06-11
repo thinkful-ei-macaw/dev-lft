@@ -75,8 +75,11 @@ export default class App extends Component {
   };
 
   handleSetNotificaions = notificationSettings => {
-    console.log(notificationSettings);
     this.setState({ user: { ...this.state.user, notifications: notificationSettings } });
+  }
+
+  handleSetSkills = skills => {
+    this.setState({ user: { ...this.state.user, skills } });
   }
 
   render() {
@@ -87,8 +90,9 @@ export default class App extends Component {
       onLogOut: this.handleLogOut,
       onProfileUpdate: this.handleUserUpdate,
       setNotifications: this.handleSetNotificaions,
+      setSkills: this.handleSetSkills,
       startLoading: () => this.handleSetLoading(true),
-      stopLoading: () => this.handleSetLoading(false)
+      stopLoading: () => this.handleSetLoading(false),
     };
 
     return (

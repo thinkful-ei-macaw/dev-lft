@@ -16,12 +16,96 @@ export default class Account extends Component {
       updateSuccess: false,
       formDirty: false,
       user: {},
-      error: null
+      error: null,
+      skills: {},
+      skillError: null,
+      currentSkill: ''
     }
 
     this.accountForm = React.createRef();
   }
   static contextType = UserContext;
+
+  handleChange = event => {
+    const input = event.target.value.toUpperCase();
+    this.setState({ currentSkill: input, skillError: null });
+  }
+
+  handleKeypress = event => {
+    if (event.key === ',') {
+      event.preventDefault();
+      this.validateNewSkill();
+    } else if (event.key === 'Enter') {
+      this.validateNewSkill('blur');
+    }
+  }
+
+  validateNewSkill = (context = 'input') => {
+    const { user: { skills } } = this.context;
+    const newSkill = this.state.currentSkill.trim();
+
+    if (context === 'blur' && (!newSkill)) return;
+
+    // validation (won't add a skills unless it meets length requirements)
+    // also won't add a skills if we've hit the maximum
+    let skillError = false;
+    if (newSkill.length < 2) {
+      skillError = 'Each skill must have at least 2 characters';
+    } else if (newSkill.length > 30) {
+      skillError = 'Each skill must be less than 30 characters';
+    } else if (Object.keys(skills).length >= 10) {
+      skillError = 'You can add a maximum of 10 tags';
+    };
+
+    if (skillError) return this.setState({ skillError, currentSkill: newSkill.trim() });
+    const updatedSkills = {}
+    if (skills) {
+      skills.forEach(skill => {
+        updatedSkills[skill] = true
+      })
+    }
+    updatedSkills[newSkill] = true;
+
+    this.setState({
+      currentSkill: ''
+    });
+
+    const newSkills = Object.keys(updatedSkills);
+    this.context.setSkills(newSkills);
+  }
+
+  handleRemoveSkill = (skill) => {
+    let { user: { skills } } = this.context;
+
+    const currentSkills = {};
+    if (skills) {
+      skills.forEach(skill => {
+        currentSkills[skill] = true
+      })
+    }
+    delete currentSkills[skill];
+
+    const newSkills = Object.keys(currentSkills);
+    this.context.setSkills(newSkills);
+    this.handleFormEntry();
+  }
+
+  makeAddedList() {
+    const { user: { skills } } = this.context;
+    const elements = skills && skills.map((skill, index) => (
+      <li
+        className="tag tag-grey"
+        key={index}
+        onClick={() => this.handleRemoveSkill(skill)}
+        title="Remove this skill"
+      >
+        {skill} x
+      </li>
+    ));
+    return elements && elements.length
+      ? <ul className="tags">{elements}</ul>
+      : '';
+  }
 
   handleUpdate = event => {
     event.preventDefault();
@@ -34,8 +118,9 @@ export default class Account extends Component {
       twitter_url,
       notifications,
       bio,
-      skills
     } = event.target;
+
+    const { user: { skills } } = this.context;
 
     const notificationPrefs = Array.prototype.slice.call(notifications)
       .filter(input => input.checked)
@@ -48,9 +133,11 @@ export default class Account extends Component {
       linkedin_url: linkedin_url.value,
       twitter_url: twitter_url.value,
       notifications: notificationPrefs,
-      bio: bio.value,
-      skills: skills.value.split(', ').filter(Boolean)
+      bio: bio.value.trim(),
+      skills
     };
+
+    bio.value = bio.value.trim();
 
     this.context.startLoading();
     AuthApiService.updateUserInfo(updatedInfo)
@@ -114,13 +201,12 @@ export default class Account extends Component {
         linkedin_url,
         twitter_url,
         username,
-        bio,
-        skills = []
+        bio
       },
       onLogOut = () => null
     } = this.context;
 
-    const { formDirty, error } = this.state;
+    const { formDirty, error, currentSkill, skillError } = this.state;
 
     return (
       <form className="page account" onSubmit={this.handleUpdate} onInput={this.handleFormEntry} ref={this.accountForm}>
@@ -179,7 +265,9 @@ export default class Account extends Component {
                     </div>
                   </div>
                   <hr />
-                  <Link to={`/users/${username}`} className="profile-link">View profile</Link>
+                  <Link to={`/users/${username}`} className="profile-link">
+                    <Button className="clear" isLink={true}>View profile</Button>
+                  </Link>
                 </article>
 
                 <article className="card">
@@ -200,12 +288,28 @@ export default class Account extends Component {
               <div className="column column-1-2">
                 <article className="card">
                   <h3 className="title">Bio</h3>
-                  <textarea rows="6" name="bio" id="bio" defaultValue={bio} placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." minLength="30" maxLength="500" ></textarea>
+                  <textarea rows="6" name="bio" id="bio" defaultValue={bio && bio.trim()} placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." minLength="30" maxLength="500" ></textarea>
                 </article>
 
                 <article className="card">
                   <h3 className="title">Skills</h3>
-                  <textarea rows="3" name="skills" id="skills" maxLength="255" defaultValue={skills.join(', ')} placeholder="React, Gatsby, Node, Express, PostgreSQL, MongoDB"></textarea>
+                  <input
+                    id="skill"
+                    type="text"
+                    name="skill"
+                    autoComplete="off"
+                    placeholder="Comma separated list"
+                    minLength="3"
+                    maxLength="30"
+                    onChange={this.handleChange}
+                    onBlur={() => this.validateNewSkill('blur')}
+                    onKeyPress={this.handleKeypress}
+                    value={currentSkill}
+                  />
+                  {skillError
+                    ? <p role="alert" className="error skill-error">{skillError}</p>
+                    : ''}
+                  {this.makeAddedList()}
                 </article>
               </div>
             </div>

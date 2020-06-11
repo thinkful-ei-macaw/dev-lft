@@ -5,68 +5,77 @@ import ProjectApiService from '../../services/project-api-service';
 import './ProjectForm.css';
 
 export default class ProjectForm extends Component {
-  constructor() {
-    super();
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKeypress = this.handleKeypress.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-
-    this.helperspan = null; // is set via ref
+  constructor(props) {
+    super(props);
 
     this.state = {
-      tags: [],
+      tags: {}, // using an object to easily prevent duplicates
+      currentTag: '',
+      tagError: null,
       error: null
     };
-    this.id = -1;
   }
 
-  handleChange(event) {
-    event.preventDefault();
-    const input = event.target.value;
-    this.setState({ skill: input });
+  handleChange = event => {
+    const input = event.target.value.toUpperCase();
+    this.setState({ currentTag: input, tagError: null });
   }
 
-  handleKeypress(event) {
-    if (event.key == 'Enter') {
+  handleKeypress = event => {
+    if (event.key === ',') {
       event.preventDefault();
-      var newArray = this.state.tags;
-      var currentcontent = this.state.skill;
-      if (!currentcontent) {
-        return;
-      }
-
-      newArray.push({
-        content: currentcontent,
-        id: ++this.id
-      });
-      this.setState({
-        tags: newArray,
-        skill: ''
-      });
+      this.validateNewTag();
     }
   }
 
-  handleClick(event) {
-    event.preventDefault();
-    const idToRemove = Number(event.target.dataset['item']);
-    const newArray = this.state.tags.filter(listitem => {
-      return listitem.id !== idToRemove;
+  validateNewTag = (context = 'input') => {
+    const { tags } = this.state;
+    const newTag = this.state.currentTag.trim();
+
+    if (context === 'blur' && (!newTag)) return;
+
+    // validation (won't add a tag unless it meets length requirements)
+    // also won't add a tag if we've hit the maximum
+    let tagError = false;
+    if (newTag.length < 2) {
+      tagError = 'Each tag must have at least 2 characters';
+    } else if (newTag.length > 30) {
+      tagError = 'Each tag must be less than 30 characters';
+    } else if (Object.keys(tags).length >= 10) {
+      tagError = 'You can add a maximum of 10 tags';
+    };
+
+    if (tagError) return this.setState({ tagError, currentTag: newTag.trim() });
+
+    tags[newTag] = true;
+
+    this.setState({
+      tags,
+      currentTag: ''
     });
-    this.setState({ tags: newArray });
+  }
+
+  handleRemoveTag = (tag) => {
+    let { tags } = this.state;
+    delete tags[tag];
+    this.setState({ tags });
   }
 
   makeAddedList() {
-    const elements = this.state.tags.map((listitem, index) => (
+    const tags = Object.keys(this.state.tags)
+    const elements = tags.map((tag, index) => (
       <li
-        className="tag skill"
-        key={listitem.id}
-        onClick={this.handleClick}
-        data-item={listitem.id}
+        className="tag"
+        key={index}
+        onClick={() => this.handleRemoveTag(tag)}
+        title="Remove this tag"
       >
-        {listitem.content} x
+        {tag} x
       </li>
     ));
-    return elements;
+    return elements.length
+      ? <ul className="tags">{elements}</ul>
+      : '';
   }
 
   handleSubmit = e => {
@@ -98,6 +107,7 @@ export default class ProjectForm extends Component {
   };
 
   render() {
+    const { tagError, currentTag } = this.state;
     return (
       <form
         role="alert"
@@ -111,7 +121,7 @@ export default class ProjectForm extends Component {
               <div className="input">
                 <label htmlFor="project_name">Project Name *</label>
                 <input
-                  autoFocus={true}
+                  autoFocus
                   placeholder="New Project"
                   minLength="2"
                   maxLength="30"
@@ -141,23 +151,25 @@ export default class ProjectForm extends Component {
             <div className="input-group">
               <div className="input">
                 <label htmlFor="add">
-                  Hit "Enter" to confirm, Click x to remove
+                  Tags
                 </label>
-                <br />
                 <input
                   id="add"
                   type="text"
                   name="tagvalue"
                   autoComplete="off"
-                  placeholder="HTML"
-                  maxLength="70"
-                  required
+                  placeholder="Comma separated list"
+                  minLength="3"
+                  maxLength="30"
                   onChange={this.handleChange}
+                  onBlur={() => this.validateNewTag('blur')}
                   onKeyPress={this.handleKeypress}
-                  value={this.state.skill}
+                  value={currentTag}
                 />
-                <ul className="tags">{this.makeAddedList()}</ul>
-                <span id="helperspan" ref={el => (this.helperspan = el)}></span>
+                {tagError
+                  ? <p role="alert" className="error tag-error">{tagError}</p>
+                  : ''}
+                {this.makeAddedList()}
               </div>
             </div>
             <div className="input-group">
@@ -198,8 +210,8 @@ export default class ProjectForm extends Component {
             {this.state.error}
           </p>
         ) : (
-          ''
-        )}
+            ''
+          )}
 
         <Button type="submit">Create Project</Button>
         <Button className="clear" onClick={this.props.onCancel}>
