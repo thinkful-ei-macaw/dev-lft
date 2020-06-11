@@ -1,8 +1,8 @@
 # Dev LFT
 
-#### Why
+## Why
 
-There are so many web developers, software engineers and web designers that have some ideas to build side projects and this app is the solution to bring them together.
+There are so many web developers, software engineers and web designers and coding bootcamp graduates that have some ideas to build side projects or to improve their skills. This app is the solution to bring them together to work on a project.
 
 [Client](https://github.com/thinkful-ei-macaw/dev-lft)
 
@@ -10,15 +10,16 @@ There are so many web developers, software engineers and web designers that have
 
 [Live](https://www.devlft.com)
 
-#### Features
+## Features
 
-[x] Projects with vacancies  
-[x] Project Dashboard  
-[x] Create New Project  
-[x] Chats  
-[x] Settings
+- [x] Feed
+- [x] Projects
+- [x] Project Dashboard
+- [x] Create New Project
+- [x] Chats
+- [x] User Profile
 
-#### Team
+## Team
 
 - Project Manager - [Malcolm Kiano](https://github.com/malcolmkiano)
 - Product Manager - [Sara Mills](https://github.com/Saraquail)
@@ -26,25 +27,17 @@ There are so many web developers, software engineers and web designers that have
 - Design Lead - [Andrew Burchett](https://github.com/atwb21786)
 - Documentation Manager - [Muhiddin Kurbonov](https://github.com/muhiddinsgithub)
 
-### Tech Stack
+## Tech Stack
 
-##### Front-end technologies
+- [React](https://reactjs.org/) - A JavaScript library for building user interfaces
+- [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) - Hypertext Markup Language
+- [CSS](https://www.w3.org/Style/CSS/Overview.en.html) - Cascading Style Sheets
+- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) - A lightweight, interpreted, or just-in-time compiled programming language
+- [Mocha](https://mochajs.org/) - A feature-rich JavaScript test framework
+- [date-fns](https://date-fns.org/) - Modern JavaScript date utility library
+- [jwt-decode](https://www.npmjs.com/package/jwt-decode) - A small browser library that helps decoding JWTs token which are Base64Url encoded
+- [prop-types](https://www.npmjs.com/package/prop-types) - Runtime type checking for React props and similar objects
 
-React, HTML, CSS, JavaScript
+### Hosting
 
-##### Server technologies
-
-Node, Express, Knex
-
-##### Data persistence
-
-PostgreSQL
-
-##### Testing environments
-
-Mocha
-
-##### Hosting
-
-Client: now(zeit/vercel)
-Server/Database: heroku
+vercel.com
