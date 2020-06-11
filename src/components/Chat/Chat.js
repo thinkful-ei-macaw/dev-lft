@@ -35,38 +35,45 @@ class Chat extends Component {
 
   setChats = () => {
     this.setState({ error: null });
-
-    this.context.startLoading();
+    if (!this.state.activeChat) {
+      this.context.startLoading();
+    }
     ChatService.getChats()
       .then(chats => {
         this.setState({
           chats,
-          activeChat: chats.length ? chats[0] : null
+          activeChat: this.state.activeChat
+            ? chats.find(c => c.chat_id === this.state.activeChat.chat_id)
+            : chats.length
+            ? chats[0]
+            : null
         });
         this.context.stopLoading();
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
         this.context.stopLoading();
       });
   };
 
   setActiveChat = chat => {
     this.setState({ activeChat: chat, chatViewOpen: true });
-  }
+  };
 
   handleCloseChatView = () => {
     this.setState({
       chatViewOpen: false
-    })
-  }
+    });
+  };
 
   getFilters(chats) {
     let projectNames = {};
     chats.forEach(chat => {
       let project = chat.project_name.toLowerCase();
       projectNames[project] = true;
-    })
+    });
 
     return Object.keys(projectNames);
   }
@@ -75,8 +82,8 @@ class Chat extends Component {
     const { value } = e.target;
     this.setState({
       activeFilter: value
-    })
-  }
+    });
+  };
 
   projectFilter = chat => {
     const { activeFilter } = this.state;
@@ -85,7 +92,7 @@ class Chat extends Component {
     } else {
       return true;
     }
-  }
+  };
 
   render() {
     const { chats, error, activeChat, activeFilter, chatViewOpen } = this.state;
@@ -103,31 +110,48 @@ class Chat extends Component {
 
         <div className="page-content">
           <div className="wrapper">
-            {error
-              ? <div role="alert" className="card info error">{error}</div>
-              : ''}
+            {error ? (
+              <div role="alert" className="card info error">
+                {error}
+              </div>
+            ) : (
+              ''
+            )}
 
             <div className="grid card">
               <div className="column column-1-3 list-container">
                 <form className="chat-options">
                   <div className="input-group">
                     <div className="input">
-                      <label className="hidden" htmlFor="filter">Filter By Project:</label>
-                      <select id="filter" name="filter" disabled={!chats.length} value={activeFilter} onChange={this.setActiveFilter}>
+                      <label className="hidden" htmlFor="filter">
+                        Filter By Project:
+                      </label>
+                      <select
+                        id="filter"
+                        name="filter"
+                        disabled={!chats.length}
+                        value={activeFilter}
+                        onChange={this.setActiveFilter}
+                      >
                         <option value="">All</option>
                         {filters.map((filter, i) => (
-                          <option key={i} value={filter}>{filter}</option>
+                          <option key={i} value={filter}>
+                            {filter}
+                          </option>
                         ))}
                       </select>
                     </div>
                   </div>
                 </form>
                 <ul className="chat-list">
-                  {chats.length
-                    ? chats.filter(this.projectFilter).map((chat, i) => (
+                  {chats.length ? (
+                    chats.filter(this.projectFilter).map((chat, i) => (
                       <li
                         key={i}
-                        className={`user ${activeChat.chat_id === chat.chat_id ? 'active' : ''}`} role="button"
+                        className={`user ${
+                          activeChat.chat_id === chat.chat_id ? 'active' : ''
+                        }`}
+                        role="button"
                         onClick={() => this.setActiveChat(chat)}
                       >
                         <Avatar
@@ -135,11 +159,17 @@ class Chat extends Component {
                           last_name={chat.last_name}
                         />
                         <div className="content">
-                          <h4>{chat.first_name} {chat.last_name[0]}</h4>
+                          <h4>
+                            {chat.first_name} {chat.last_name[0]}
+                          </h4>
                           <p className="last-message">
-                            {(chat.isOwner && chat.request_status !== 'pending') || !chat.isReply
-                              ? <ReplyIcon />
-                              : ''}
+                            {(chat.isOwner &&
+                              chat.request_status !== 'pending') ||
+                            !chat.isReply ? (
+                              <ReplyIcon />
+                            ) : (
+                              ''
+                            )}
                             {chat.request_status === 'pending'
                               ? chat.body
                               : `Request ${chat.request_status}.`}
@@ -151,18 +181,25 @@ class Chat extends Component {
                         </span>
                       </li>
                     ))
-                    : <li className="empty">No chats, yet!</li>}
+                  ) : (
+                    <li className="empty">No chats, yet!</li>
+                  )}
                 </ul>
               </div>
               <div className="column column-2-3">
-                {activeChat
-                  ? <ChatMessages chat={activeChat} open={chatViewOpen} onClose={this.handleCloseChatView} onRequest={this.setChats} />
-                  : ''}
+                {activeChat ? (
+                  <ChatMessages
+                    chat={activeChat}
+                    open={chatViewOpen}
+                    onClose={this.handleCloseChatView}
+                    onUpdate={this.setChats}
+                  />
+                ) : (
+                  ''
+                )}
               </div>
             </div>
-
           </div>
-
         </div>
       </section>
     );
