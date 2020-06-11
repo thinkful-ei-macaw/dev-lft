@@ -16,7 +16,7 @@ class Info extends React.Component {
       let tagsList = tags.map((tag, i) => {
         return (
           <li key={i} className="tag">
-            {tag}
+            <span title={tag}>{tag}</span>
           </li>
         );
       });
@@ -70,7 +70,7 @@ class Info extends React.Component {
     return (
       <article className="card project-info">
         <h3 className="title">Project Info</h3>
-        <p>{description}</p>
+        <p className="description">{description}</p>
         <div className="user">
           <Avatar
             first_name={project_creator.first_name}

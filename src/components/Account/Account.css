@@ -12,6 +12,14 @@
   margin: 0;
 }
 
+.account .tag {
+  cursor: pointer;
+}
+
+.account .tag.tag-grey:hover {
+  background: var(--colorFG);
+}
+
 .account .profile-link .btn {
   font-size: 1rem;
   padding: 0;

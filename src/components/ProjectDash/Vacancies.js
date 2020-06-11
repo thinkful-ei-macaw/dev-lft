@@ -75,14 +75,12 @@ class Vacancies extends Component {
                     {item.username !== null
                       ? (
                         <Link to={`/users/${item.username}`}>
-                          <span>
-                            {item.username !== username
-                              ? <>{item.first_name} {item.last_name}</>
-                              : 'You'}
-                          </span>
+                          {item.username !== username
+                            ? <>{item.first_name} {item.last_name}</>
+                            : 'You'}
                         </Link>
                       )
-                      : item.title}
+                      : <span>{item.title}</span>}
                   </h4>
                   <p>{item.username ? item.title : 'This position is open'}</p>
                 </div>

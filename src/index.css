@@ -218,7 +218,7 @@ form .subtitle {
 form .error {
   font-size: 1rem;
   margin-bottom: 1rem;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 form .input-group {
@@ -293,9 +293,8 @@ form hr {
 }
 
 .page header h2 {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  max-width: 80%;
+  word-break: break-word;
   font-size: 2.3rem;
   flex: 1;
 }
@@ -538,22 +537,39 @@ a[href*='//']::after
   flex-wrap: wrap;
   align-items: flex-start;
   user-select: none;
+  overflow: hidden;
 }
 
 .tags .tag {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  height: 1.5rem;
+  justify-content: space-between;
+  max-width: 12rem;
   text-transform: uppercase;
   font-size: 1rem;
   font-weight: 700;
   background: var(--colorAccent);
   color: var(--colorBG);
   opacity: 0.5;
-  white-space: nowrap;
-  padding: 0 0.3rem;
+  overflow: hidden;
+  padding: 0.3rem;
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.tags .tag span {
+  display: inline-block;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tags .tag svg {
+  height: 0.8em;
+  width: 0.8em;
+  margin-left: 0.2em;
 }
 
 .tags .tag.tag-grey {
