@@ -33,7 +33,7 @@ export default class FeedPage extends Component {
     let projectTags = {};
 
     projects.forEach(project => {
-      project.tags.map(tag => {
+      project.tags.forEach(tag => {
         let tags = tag.toUpperCase();
         projectTags[tags] = true;
       });

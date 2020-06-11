@@ -12,8 +12,13 @@
   margin: 0;
 }
 
-.account .profile-link {
-  display: block;
-  margin-top: -0.5rem;
+.account .profile-link .btn {
+  font-size: 1rem;
+  padding: 0;
+  background: none;
   margin-bottom: 0.5rem;
+}
+
+.account .profile-link .btn:hover {
+  color: var(--colorAccent);
 }
