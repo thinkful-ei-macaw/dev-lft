@@ -27,16 +27,14 @@ export default class Account extends Component {
   static contextType = UserContext;
 
   handleChange = event => {
-    const input = event.target.value.toUpperCase();
+    const input = event.target.value;
     this.setState({ currentSkill: input, skillError: null });
   }
 
   handleKeypress = event => {
-    if (event.key === ',') {
+    if (event.key === ',' || event.key === 'Enter') {
       event.preventDefault();
       this.validateNewSkill();
-    } else if (event.key === 'Enter') {
-      this.validateNewSkill('blur');
     }
   }
 
@@ -44,7 +42,7 @@ export default class Account extends Component {
     const { user: { skills } } = this.context;
     const newSkill = this.state.currentSkill.trim();
 
-    if (context === 'blur' && (!newSkill)) return this.setState({ currentSkill: newSkill });
+    if (context === 'blur' && !newSkill) return;
 
     // validation (won't add a skills unless it meets length requirements)
     // also won't add a skills if we've hit the maximum
@@ -64,7 +62,7 @@ export default class Account extends Component {
         updatedSkills[skill] = true
       })
     }
-    updatedSkills[newSkill] = true;
+    updatedSkills[newSkill.toUpperCase()] = true;
 
     this.setState({
       currentSkill: ''
@@ -94,6 +92,7 @@ export default class Account extends Component {
     const { user: { skills } } = this.context;
     const elements = skills && skills.map((skill, index) => (
       <li
+        role="button"
         className="tag tag-grey"
         key={index}
         onClick={() => this.handleRemoveSkill(skill)}

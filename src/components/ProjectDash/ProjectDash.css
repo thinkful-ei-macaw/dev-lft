@@ -36,8 +36,8 @@
 
 .user .content h4 span,
 .user .content h4 a {
+  display: inline-block;
   overflow: hidden;
-  width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -122,8 +122,8 @@
 }
 
 .project-dash .chats {
-  min-height: 10rem;
-  max-height: 32rem;
+  height: 24rem;
+  max-width: 80vh;
   overflow-y: auto;
 }
 

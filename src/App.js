@@ -46,10 +46,10 @@ export default class App extends Component {
     if (TokenService.hasAuthToken()) {
       AuthApiService.getUserProfile()
         .then(user => {
-          this.setState({ user: { ...user, isAuth: true } })
+          this.setState({ user: { ...user, isAuth: true }, isLoading: false })
         })
         .catch(res => {
-          this.setState({ error: res.error || 'Something went wrong. Please try again later', user: { isAuth: false } }, () => {
+          this.setState({ error: res.error || 'Something went wrong. Please try again later', user: { isAuth: false }, isLoading: false }, () => {
             throw new Error(this.state.error);
           });
 

@@ -292,7 +292,7 @@ form hr {
 
 .page header .wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
@@ -492,6 +492,12 @@ a[href*='//']::after
   }
 }
 
+@media screen and (min-width: 960px) {
+  .tablet {
+    display: none !important;
+  }
+}
+
 .centered {
   text-align: center;
 }
@@ -635,7 +641,7 @@ a[href*='//']::after
 /* loader styles */
 .loader {
   position: fixed;
-  background: #00000044;
+  background: #00000088;
   top: 0;
   left: 0;
   right: 0;

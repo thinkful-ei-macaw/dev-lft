@@ -114,7 +114,7 @@ export default class Nav extends Component {
       <React.Fragment>
         <nav className={fixed ? 'fixed' : ''}>
           <div className="wrapper">
-            <Link to='/'><Logo className="logo" /></Link>
+            <Link to='/' className="home-link"><Logo className="logo" /></Link>
             <div
               role="button"
               className={`link-container-shadow ${menuOpen ? 'active' : ''}`}

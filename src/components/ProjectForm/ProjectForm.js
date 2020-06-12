@@ -20,16 +20,14 @@ export default class ProjectForm extends Component {
   }
 
   handleChange = event => {
-    const input = event.target.value.toUpperCase();
+    const input = event.target.value;
     this.setState({ currentTag: input, tagError: null });
   }
 
   handleKeypress = event => {
-    if (event.key === ',') {
+    if (event.key === ',' || event.key === 'Enter') {
       event.preventDefault();
       this.validateNewTag();
-    } else if (event.key === 'Enter') {
-      this.validateNewTag('blur');
     }
   }
 
@@ -37,7 +35,7 @@ export default class ProjectForm extends Component {
     const { tags } = this.state;
     const newTag = this.state.currentTag.trim();
 
-    if (context === 'blur' && (!newTag)) return;
+    if (context === 'blur' && !newTag) return;
 
     // validation (won't add a tag unless it meets length requirements)
     // also won't add a tag if we've hit the maximum
@@ -52,7 +50,7 @@ export default class ProjectForm extends Component {
 
     if (tagError) return this.setState({ tagError, currentTag: newTag.trim() });
 
-    tags[newTag] = true;
+    tags[newTag.toUpperCase()] = true;
 
     this.setState({
       tags,
@@ -70,6 +68,7 @@ export default class ProjectForm extends Component {
     const tags = Object.keys(this.state.tags)
     const elements = tags.map((tag, index) => (
       <li
+        role="button"
         className="tag"
         key={index}
         onClick={() => this.handleRemoveTag(tag)}

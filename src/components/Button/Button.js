@@ -18,6 +18,7 @@ class Button extends Component {
       className,
       disabled,
       onClick,
+      onBlur,
       type,
       isLink,
       swap,
@@ -32,6 +33,7 @@ class Button extends Component {
         className={`btn btn-${className} ${swap ? 'has-swap' : ''}`}
         disabled={disabled}
         onClick={onClick}
+        onBlur={onBlur}
         type={type}
         title={title}
       >
@@ -47,6 +49,7 @@ Button.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
+  onBlur: PropTypes.func,
   type: PropTypes.oneOf(['button', 'submit', 'reset']),
   isLink: PropTypes.bool,
   swap: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),

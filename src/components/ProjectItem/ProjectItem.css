@@ -20,6 +20,10 @@
   text-overflow: ellipsis;
 }
 
+.project h3:focus-within {
+  text-decoration: underline;
+}
+
 .project .description {
   line-height: 1.2;
   word-break: break-word;

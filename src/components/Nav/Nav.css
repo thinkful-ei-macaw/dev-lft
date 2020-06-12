@@ -13,6 +13,10 @@ nav,
   transition: all 0.3s ease;
 }
 
+nav .home-link {
+  margin-right: auto;
+}
+
 nav .logo {
   transform-origin: left center;
   transition: all 0.2s ease;
@@ -50,7 +54,6 @@ nav .wrapper {
 }
 
 nav .menu-btn {
-  margin-left: 1rem;
   margin-right: -1em;
 }
 
@@ -110,12 +113,6 @@ nav .links li.pull-right {
   display: inline-block;
 }
 
-nav .links.links-right {
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-}
-
 nav .links .avatar {
   height: 1.8rem;
   width: 1.8rem;
@@ -158,16 +155,13 @@ nav .links .avatar {
   }
 
   nav .links-right {
+    display: flex;
     justify-content: flex-end;
   }
 
   nav .links li {
     margin-left: 1rem;
     margin-bottom: 0;
-  }
-
-  nav .links li.pull-right {
-    margin-right: 1rem;
   }
 }
 

@@ -2,34 +2,32 @@
   position: relative;
 }
 
-.notifications .bell {
-  margin-top: 0.2rem;
+.notifications .btn {
   opacity: 0.5;
-  height: 1.2rem;
-  width: 1.2rem;
-  cursor: pointer;
-  position: relative;
+  margin-right: 0;
 }
 
-.notifications .bell:hover {
+.notifications .btn:hover,
+.notifications .btn.open {
+  background: var(--colorLightBG);
   opacity: 1;
 }
 
-.notifications.new .bell,
-.notifications .bell.open {
+.notifications.new .btn {
   opacity: 1;
 }
 
 .notifications.new::after {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 0.2rem;
+  right: 0.8rem;
   height: 0.4rem;
   width: 0.4rem;
   border: 0.15rem solid var(--colorBG);
   border-radius: 50%;
   background: var(--colorAccent);
+  z-index: 10;
 }
 
 .notifications a {

@@ -54,7 +54,7 @@ export default class ProjectsPage extends Component {
   }
 
   render() {
-    const { creating } = this.state;
+    const { creating, error, projects } = this.state;
 
     return (
       <section className="page projects">
@@ -75,15 +75,17 @@ export default class ProjectsPage extends Component {
               ? <ProjectForm onCreate={this.handleCreation} onCancel={this.handleCreateCancelled} />
               : ''}
 
-            {this.state.projects.length !== 0
-              ? (
-                <div>
-                  {this.state.projects.map((project, i) => {
-                    return <ProjectItem key={i} project={project} />;
-                  })}
-                </div>
-              )
-              : 'No projects available!'}
+            {error || projects.length === 0 ? (
+              <div role="alert" className={`info card project ${error ? 'error' : ''}`}>
+                <p>{error || 'No projects, yet!'}</p>
+              </div>
+            ) : (
+                ''
+              )}
+
+            {projects.map((project, i) => {
+              return <ProjectItem key={i} project={project} />;
+            })}
           </div>
         </div>
 
