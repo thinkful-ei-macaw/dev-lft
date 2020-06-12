@@ -36,7 +36,6 @@ class Signup extends React.Component {
       .then(user => {
         TokenService.saveAuthToken(user.authToken);
         this.context.onAuth();
-        this.context.stopLoading();
         let lastLocation = this.props.history.location.state.from.pathname;
         if (lastLocation) {
           this.props.history.push(lastLocation)

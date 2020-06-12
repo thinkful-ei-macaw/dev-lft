@@ -15,12 +15,12 @@ export default class VacancyModal extends React.Component {
   }
 
   handleChange = event => {
-    const input = event.target.value.toUpperCase();
+    const input = event.target.value;
     this.setState({ currentSkill: input, skillError: null });
   }
 
   handleKeypress = event => {
-    if (event.key === ',') {
+    if (event.key === ',' || event.key === 'Enter') {
       event.preventDefault();
       this.validateNewSkill();
     }
@@ -30,7 +30,7 @@ export default class VacancyModal extends React.Component {
     const { skills } = this.state;
     const newSkill = this.state.currentSkill.trim();
 
-    if (context === 'blur' && (!newSkill)) return;
+    if (context === 'blur' && !newSkill) return;
 
     // validation (won't add a skills unless it meets length requirements)
     // also won't add a skills if we've hit the maximum
@@ -45,7 +45,7 @@ export default class VacancyModal extends React.Component {
 
     if (skillError) return this.setState({ skillError, currentSkill: newSkill.trim() });
 
-    skills[newSkill] = true;
+    skills[newSkill.toUpperCase()] = true;
 
     this.setState({
       skills,
@@ -63,6 +63,7 @@ export default class VacancyModal extends React.Component {
     const skills = Object.keys(this.state.skills)
     const elements = skills.map((skill, index) => (
       <li
+        role="button"
         className="tag tag-grey"
         key={index}
         onClick={() => this.handleRemoveSkill(skill)}

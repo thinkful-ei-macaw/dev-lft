@@ -79,6 +79,8 @@ class Chat extends Component {
 
   getFilters(chats) {
     let projectNames = {};
+    if (!chats || chats.length === 0) return [];
+
     chats.forEach(chat => {
       let project = chat.project_name.toLowerCase();
       projectNames[project] = true;

@@ -17,8 +17,9 @@ class ErrorBoundary extends Component {
       return (
         <section className="wrapper fourohfour">
           <Helmet>
-            <title>:/</title>
+            <title>Dev LFT | Side Projects Conquered</title>
           </Helmet>
+
           <h1>Oops!</h1>
           <h2>An error occurred.</h2>
           <p>Sorry about that.</p>

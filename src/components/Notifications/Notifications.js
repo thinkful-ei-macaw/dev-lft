@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import TokenService from '../../services/token-service';
-import config from '../../config';
 import ChatService from '../../services/chat-api-service';
+import NotificationsApiService from '../../services/notification-api-service';
+import Button from '../Button/Button';
 import './Notifications.css';
 
 // images
 import { BellIcon } from '../../images';
-import NotificationsApiService from '../../services/notification-api-service';
 
 class Notifications extends Component {
   state = {
@@ -17,7 +16,7 @@ class Notifications extends Component {
   };
 
   componentDidMount() {
-    this.getNotifications();
+    this.getNotifications(true);
     const checkNotifications = setInterval(() => {
       this.getNotifications();
     }, 30000);
@@ -28,23 +27,30 @@ class Notifications extends Component {
     clearInterval(this.state.interval_id);
   }
 
+  componentDidUpdate() {
+    // update favicon
+    const { notifications } = this.state;
+    const favicon = document.getElementById('favicon');
+    const newIcon = notifications.length ? 'favicon-alert.png' : 'favicon.png';
+    favicon.href = newIcon;
+  }
+
   toggleNotificationsPopup = () => {
-    const { isOpen } = this.state;
+    let { notifications, isOpen } = this.state;
 
     this.setState({ isOpen: !isOpen });
 
-    if (isOpen) {
-      // send patch request on close
-      this.markAsSeen();
-    }
+    // send patch request on close
+    if (isOpen && notifications.length) this.markAsSeen();
   }
 
   getNotifications = () => {
     NotificationsApiService.getNotifications()
-      .then(res => {
-        this.setState({
-          notifications: res
-        });
+      .then(notifications => {
+        this.setState({ notifications });
+      })
+      .catch(res => {
+        this.setState({ notifications: [res.error || res.message] });
       });
   }
 
@@ -101,12 +107,18 @@ class Notifications extends Component {
     const { isOpen, notifications } = this.state;
     return (
       <div className={`notifications ${!isOpen && notifications.length ? 'new' : ''}`}>
-        <BellIcon
-          className={`bell ${isOpen ? 'open' : ''}`}
-          title={`${notifications.length} notification${notifications.length !== 1 ? 's' : ''}`}
+        <Button
+          className={`clear ${isOpen ? 'open' : ''}`}
           onClick={this.toggleNotificationsPopup}
-        />
-        <ul className={`notifications-list card ${isOpen ? 'active' : ''}`}>
+          title={`${notifications.length} notification${notifications.length !== 1 ? 's' : ''}`}
+        >
+          <BellIcon />
+        </Button>
+        <ul
+          aria-hidden={!isOpen}
+          role={isOpen ? 'alert' : ''}
+          className={`notifications-list card ${isOpen ? 'active' : ''}`}
+        >
           {this.renderNotifications()}
         </ul>
       </div>

@@ -10,7 +10,7 @@ import Button from '../Button/Button';
 import './ChatMessages.css';
 
 // images
-import { CloseIcon, CheckIcon } from '../../images';
+import { CloseIcon, CheckIcon, BackIcon } from '../../images';
 
 class ChatMessages extends Component {
   constructor(props) {
@@ -100,6 +100,14 @@ class ChatMessages extends Component {
     const { allMessages, error } = this.state;
     const { user } = this.context;
 
+    const headerMessage = isOwner
+      ? request_status === 'pending'
+        ? `wants to fill your ${vacancy_name} position`
+        : request_status === 'denied'
+          ? `wanted to fill your ${vacancy_name} position`
+          : vacancy_name
+      : `You requested to fill their ${vacancy_name} position`
+
     return (
       <section className={`chat-view ${open ? 'open' : ''}`}>
         {error ? (
@@ -112,9 +120,10 @@ class ChatMessages extends Component {
 
         <header>
           <div className="user">
+            <Button className="clear tablet" onClick={onClose}>
+              <BackIcon />
+            </Button>
             <Avatar
-              role="button"
-              onClick={onClose}
               first_name={first_name}
               last_name={last_name}
             />
@@ -124,19 +133,9 @@ class ChatMessages extends Component {
                   {first_name} {last_name[0]}
                 </Link>
               </h4>
-              <p>
+              <p title={headerMessage}>
                 <span className="highlight">({project_name})</span>
-                {isOwner ? (
-                  request_status === 'pending' ? (
-                    <>wants to fill your {vacancy_name} position</>
-                  ) : request_status === 'denied' ? (
-                    <>wanted to fill your {vacancy_name} position</>
-                  ) : (
-                        vacancy_name
-                      )
-                ) : (
-                    <>You requested to fill their {vacancy_name} position</>
-                  )}
+                {headerMessage}
               </p>
             </div>
             {isOwner && request_status === 'pending' ? (
