@@ -46,13 +46,20 @@ export default class App extends Component {
     if (TokenService.hasAuthToken()) {
       AuthApiService.getUserProfile()
         .then(user => {
-          this.setState({ user: { ...user, isAuth: true }, isLoading: false })
+          this.setState({ user: { ...user, isAuth: true }, isLoading: false });
         })
         .catch(res => {
-          this.setState({ error: res.error || 'Something went wrong. Please try again later', user: { isAuth: false }, isLoading: false }, () => {
-            throw new Error(this.state.error);
-          });
-
+          this.setState(
+            {
+              error:
+                res.error || 'Something went wrong. Please try again later',
+              user: { isAuth: false },
+              isLoading: false
+            },
+            () => {
+              throw new Error(this.state.error);
+            }
+          );
         });
     } else {
       this.setState({ user: { isAuth: false } });
@@ -63,7 +70,7 @@ export default class App extends Component {
     this.setState({
       isLoading: loadingState
     });
-  }
+  };
 
   handleLogOut = () => {
     TokenService.clearAuthToken();
@@ -75,12 +82,14 @@ export default class App extends Component {
   };
 
   handleSetNotificaions = notificationSettings => {
-    this.setState({ user: { ...this.state.user, notifications: notificationSettings } });
-  }
+    this.setState({
+      user: { ...this.state.user, notifications: notificationSettings }
+    });
+  };
 
   handleSetSkills = skills => {
     this.setState({ user: { ...this.state.user, skills } });
-  }
+  };
 
   render() {
     const { user, isLoading } = this.state;
@@ -92,7 +101,7 @@ export default class App extends Component {
       setNotifications: this.handleSetNotificaions,
       setSkills: this.handleSetSkills,
       startLoading: () => this.handleSetLoading(true),
-      stopLoading: () => this.handleSetLoading(false),
+      stopLoading: () => this.handleSetLoading(false)
     };
 
     return (
@@ -106,8 +115,16 @@ export default class App extends Component {
             <PrivateRoute exact path="/account" component={Account} />
             <PrivateRoute exact path="/feed" component={FeedPage} />
             <PrivateRoute exact path="/projects" component={ProjectsPage} />
-            <PrivateRoute exact path="/projects/:project_handle" component={ProjectDash} />
-            <PrivateRoute exact path="/users/:username" component={UserProfile} />
+            <PrivateRoute
+              exact
+              path="/projects/:project_handle"
+              component={ProjectDash}
+            />
+            <PrivateRoute
+              exact
+              path="/users/:username"
+              component={UserProfile}
+            />
             <PrivateRoute exact path="/chats" component={Chat} />
             <PrivateRoute path="/chats/messages" component={ChatMessages} />
             <Route path="*" component={PageNotFound} />

@@ -11,9 +11,7 @@ const PageNotFound = () => {
       </Helmet>
       <h1>404</h1>
       <h2>Page not found</h2>
-      <p>
-        Looks like you got a little lost. Let's start over.
-      </p>
+      <p>Looks like you got a little lost. Let's start over.</p>
       <Link to="/">
         <Button isLink={true}>Go home</Button>
       </Link>

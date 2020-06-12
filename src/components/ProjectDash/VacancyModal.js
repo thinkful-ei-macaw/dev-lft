@@ -11,20 +11,20 @@ export default class VacancyModal extends React.Component {
       skills: {},
       currentSkill: '',
       skillError: null
-    }
+    };
   }
 
   handleChange = event => {
     const input = event.target.value;
     this.setState({ currentSkill: input, skillError: null });
-  }
+  };
 
   handleKeypress = event => {
     if (event.key === ',' || event.key === 'Enter') {
       event.preventDefault();
       this.validateNewSkill();
     }
-  }
+  };
 
   validateNewSkill = (context = 'input') => {
     const { skills } = this.state;
@@ -41,9 +41,10 @@ export default class VacancyModal extends React.Component {
       skillError = 'Each skill must be less than 30 characters';
     } else if (Object.keys(skills).length >= 10) {
       skillError = 'You can add a maximum of 10 tags';
-    };
+    }
 
-    if (skillError) return this.setState({ skillError, currentSkill: newSkill.trim() });
+    if (skillError)
+      return this.setState({ skillError, currentSkill: newSkill.trim() });
 
     skills[newSkill.toUpperCase()] = true;
 
@@ -51,16 +52,16 @@ export default class VacancyModal extends React.Component {
       skills,
       currentSkill: ''
     });
-  }
+  };
 
-  handleRemoveSkill = (skill) => {
+  handleRemoveSkill = skill => {
     let { skills } = this.state;
     delete skills[skill];
     this.setState({ skills });
-  }
+  };
 
   makeAddedList() {
-    const skills = Object.keys(this.state.skills)
+    const skills = Object.keys(this.state.skills);
     const elements = skills.map((skill, index) => (
       <li
         role="button"
@@ -68,23 +69,23 @@ export default class VacancyModal extends React.Component {
         key={index}
         onClick={() => this.handleRemoveSkill(skill)}
       >
-        <span title={skill}>{skill}</span> <CloseIcon title="Remove this skill" />
+        <span title={skill}>{skill}</span>{' '}
+        <CloseIcon title="Remove this skill" />
       </li>
     ));
-    return elements.length
-      ? <ul className="tags">{elements}</ul>
-      : '';
+    return elements.length ? <ul className="tags">{elements}</ul> : '';
   }
 
   handleSubmit = event => {
     event.preventDefault();
     const skills = Object.keys(this.state.skills);
-    if (!skills.length) return this.setState({ skillError: 'Must provide at least 1 skill' });
+    if (!skills.length)
+      return this.setState({ skillError: 'Must provide at least 1 skill' });
 
     event.target['vacancy-skills'] = { value: skills.join(',') };
 
     this.props.onSubmitVacancy(event);
-  }
+  };
 
   render() {
     const { onCloseVacancyModal, error } = this.props;
@@ -102,8 +103,8 @@ export default class VacancyModal extends React.Component {
             {error}
           </p>
         ) : (
-            ''
-          )}
+          ''
+        )}
         <div className="project">
           <div className="project-left">
             <div className="input-group">
@@ -139,9 +140,7 @@ export default class VacancyModal extends React.Component {
           <div className="project-right">
             <div className="input-group">
               <div className="input">
-                <label htmlFor="skill">
-                  Skills *
-                </label>
+                <label htmlFor="skill">Skills *</label>
                 <input
                   id="skill"
                   type="text"
@@ -155,9 +154,13 @@ export default class VacancyModal extends React.Component {
                   onKeyPress={this.handleKeypress}
                   value={currentSkill}
                 />
-                {skillError
-                  ? <p role="alert" className="error skill-error">{skillError}</p>
-                  : ''}
+                {skillError ? (
+                  <p role="alert" className="error skill-error">
+                    {skillError}
+                  </p>
+                ) : (
+                  ''
+                )}
                 {this.makeAddedList()}
               </div>
             </div>

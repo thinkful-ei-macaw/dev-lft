@@ -42,7 +42,7 @@ class Notifications extends Component {
 
     // send patch request on close
     if (isOpen && notifications.length) this.markAsSeen();
-  }
+  };
 
   getNotifications = () => {
     NotificationsApiService.getNotifications()
@@ -52,16 +52,17 @@ class Notifications extends Component {
       .catch(res => {
         this.setState({ notifications: [res.error || res.message] });
       });
-  }
+  };
 
   markAsSeen() {
-    NotificationsApiService.patchNotifications()
-      .then(this.getNotifications)
+    NotificationsApiService.patchNotifications().then(this.getNotifications);
   }
 
   formatNotification = notification => {
     let notificationText = `Somebody ${notification.type}ed ${notification.name}`;
-    let notificationTime = ChatService.getFormattedDate(notification.date_created);
+    let notificationTime = ChatService.getFormattedDate(
+      notification.date_created
+    );
     let notificationLink = `/projects/${notification.handle}`;
 
     if (notification.type === 'chat') {
@@ -80,11 +81,10 @@ class Notifications extends Component {
 
     return (
       <Link to={notificationLink} onClick={this.toggleNotificationsPopup}>
-        {notificationText}!
-        <span className="time">{notificationTime}</span>
+        {notificationText}!<span className="time">{notificationTime}</span>
       </Link>
     );
-  }
+  };
 
   renderNotifications = () => {
     let { notifications } = this.state;
@@ -92,25 +92,29 @@ class Notifications extends Component {
       return <p>Couldn't find any notifications</p>;
     }
 
-    return notifications.length
-      ? notifications.map((item, i) => {
-        return (
-          <li key={i}>
-            {this.formatNotification(item)}
-          </li>
-        );
+    return notifications.length ? (
+      notifications.map((item, i) => {
+        return <li key={i}>{this.formatNotification(item)}</li>;
       })
-      : <li>Nothing to see here!</li>
+    ) : (
+      <li>Nothing to see here!</li>
+    );
   };
 
   render() {
     const { isOpen, notifications } = this.state;
     return (
-      <div className={`notifications ${!isOpen && notifications.length ? 'new' : ''}`}>
+      <div
+        className={`notifications ${
+          !isOpen && notifications.length ? 'new' : ''
+        }`}
+      >
         <Button
           className={`clear ${isOpen ? 'open' : ''}`}
           onClick={this.toggleNotificationsPopup}
-          title={`${notifications.length} notification${notifications.length !== 1 ? 's' : ''}`}
+          title={`${notifications.length} notification${
+            notifications.length !== 1 ? 's' : ''
+          }`}
         >
           <BellIcon />
         </Button>

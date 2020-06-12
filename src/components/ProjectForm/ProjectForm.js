@@ -22,14 +22,14 @@ export default class ProjectForm extends Component {
   handleChange = event => {
     const input = event.target.value;
     this.setState({ currentTag: input, tagError: null });
-  }
+  };
 
   handleKeypress = event => {
     if (event.key === ',' || event.key === 'Enter') {
       event.preventDefault();
       this.validateNewTag();
     }
-  }
+  };
 
   validateNewTag = (context = 'input') => {
     const { tags } = this.state;
@@ -46,7 +46,7 @@ export default class ProjectForm extends Component {
       tagError = 'Each tag must be less than 30 characters';
     } else if (Object.keys(tags).length >= 10) {
       tagError = 'You can add a maximum of 10 tags';
-    };
+    }
 
     if (tagError) return this.setState({ tagError, currentTag: newTag.trim() });
 
@@ -56,16 +56,16 @@ export default class ProjectForm extends Component {
       tags,
       currentTag: ''
     });
-  }
+  };
 
-  handleRemoveTag = (tag) => {
+  handleRemoveTag = tag => {
     let { tags } = this.state;
     delete tags[tag];
     this.setState({ tags });
-  }
+  };
 
   makeAddedList() {
-    const tags = Object.keys(this.state.tags)
+    const tags = Object.keys(this.state.tags);
     const elements = tags.map((tag, index) => (
       <li
         role="button"
@@ -76,9 +76,7 @@ export default class ProjectForm extends Component {
         <span title={tag}>{tag}</span> <CloseIcon title="Remove this tag" />
       </li>
     ));
-    return elements.length
-      ? <ul className="tags">{elements}</ul>
-      : '';
+    return elements.length ? <ul className="tags">{elements}</ul> : '';
   }
 
   handleSubmit = e => {
@@ -153,9 +151,7 @@ export default class ProjectForm extends Component {
           <div className="project-right">
             <div className="input-group">
               <div className="input">
-                <label htmlFor="add">
-                  Tags
-                </label>
+                <label htmlFor="add">Tags</label>
                 <input
                   id="add"
                   type="text"
@@ -169,9 +165,13 @@ export default class ProjectForm extends Component {
                   onKeyPress={this.handleKeypress}
                   value={currentTag}
                 />
-                {tagError
-                  ? <p role="alert" className="error tag-error">{tagError}</p>
-                  : ''}
+                {tagError ? (
+                  <p role="alert" className="error tag-error">
+                    {tagError}
+                  </p>
+                ) : (
+                  ''
+                )}
                 {this.makeAddedList()}
               </div>
             </div>
@@ -213,8 +213,8 @@ export default class ProjectForm extends Component {
             {this.state.error}
           </p>
         ) : (
-            ''
-          )}
+          ''
+        )}
 
         <Button type="submit">Create Project</Button>
         <Button className="clear" onClick={this.props.onCancel}>

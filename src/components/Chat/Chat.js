@@ -12,7 +12,8 @@ import { ReplyIcon } from '../../images';
 class Chat extends Component {
   constructor(props) {
     super(props);
-    const preSelectedFilter = props.location.state && props.location.state.filter.toLowerCase()
+    const preSelectedFilter =
+      props.location.state && props.location.state.filter.toLowerCase();
     this.state = {
       chats: [],
       activeChat: null,
@@ -25,8 +26,7 @@ class Chat extends Component {
 
   static defaultProps = {
     location: {}
-  }
-
+  };
 
   static contextType = UserContext;
 
@@ -54,8 +54,8 @@ class Chat extends Component {
           activeChat: this.state.activeChat
             ? chats.find(c => c.chat_id === this.state.activeChat.chat_id)
             : chats.length
-              ? chats.filter(this.projectFilter)[0]
-              : null
+            ? chats.filter(this.projectFilter)[0]
+            : null
         });
         this.context.stopLoading();
       })
@@ -95,7 +95,6 @@ class Chat extends Component {
     this.setState({ activeFilter: value }, () => {
       this.setActiveChat(chats.filter(this.projectFilter)[0], false);
     });
-
   };
 
   projectFilter = chat => {
@@ -128,8 +127,8 @@ class Chat extends Component {
                 {error}
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             <div className="grid card">
               <div className="column column-1-3 list-container">
@@ -163,7 +162,7 @@ class Chat extends Component {
                         key={i}
                         className={`user ${
                           activeChat.chat_id === chat.chat_id ? 'active' : ''
-                          }`}
+                        }`}
                         role="button"
                         onClick={() => this.setActiveChat(chat)}
                       >
@@ -178,11 +177,11 @@ class Chat extends Component {
                           <p className="last-message">
                             {(chat.isOwner &&
                               chat.request_status !== 'pending') ||
-                              !chat.isReply ? (
-                                <ReplyIcon />
-                              ) : (
-                                ''
-                              )}
+                            !chat.isReply ? (
+                              <ReplyIcon />
+                            ) : (
+                              ''
+                            )}
                             {chat.request_status === 'pending'
                               ? chat.body
                               : `Request ${chat.request_status}.`}
@@ -195,8 +194,8 @@ class Chat extends Component {
                       </li>
                     ))
                   ) : (
-                      <li className="empty">No chats, yet!</li>
-                    )}
+                    <li className="empty">No chats, yet!</li>
+                  )}
                 </ul>
               </div>
               <div className="column column-2-3">
@@ -208,8 +207,8 @@ class Chat extends Component {
                     onUpdate={this.setChats}
                   />
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
               </div>
             </div>
           </div>

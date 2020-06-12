@@ -25,7 +25,6 @@ class OpenVacancies extends Component {
   };
 
   onCancelVacancy = () => {
-    console.log('here');
     this.setState({
       addingVacancy: false,
       error: null

@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import "./Button.css";
+import './Button.css';
 
 class Button extends Component {
   static defaultProps = {
     className: 'default',
     disabled: false,
     onClick: () => null,
-    type: "button",
+    type: 'button',
     isLink: false,
     swap: null
-  }
+  };
 
   render() {
     const {
@@ -38,9 +38,13 @@ class Button extends Component {
         title={title}
       >
         <i className="content">{children}</i>
-        {swap ? <SwapElement aria-hidden={true} className="swap" title={children} /> : ''}
+        {swap ? (
+          <SwapElement aria-hidden={true} className="swap" title={children} />
+        ) : (
+          ''
+        )}
       </ButtonTag>
-    )
+    );
   }
 }
 
@@ -54,6 +58,6 @@ Button.propTypes = {
   isLink: PropTypes.bool,
   swap: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),
   title: PropTypes.string
-}
+};
 
 export default Button;

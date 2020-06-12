@@ -13,14 +13,14 @@ export default class Nav extends Component {
   static contextType = UserContext;
   static defaultProps = {
     location: {
-      pathname: "/"
+      pathname: '/'
     }
-  }
+  };
 
   state = {
     fixed: false,
-    menuOpen: false,
-  }
+    menuOpen: false
+  };
 
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
@@ -37,7 +37,7 @@ export default class Nav extends Component {
     }
 
     if (this.state.fixed !== isFixed) this.setState({ fixed: isFixed });
-  }
+  };
 
   toggleMenu = (newState = !this.state.menuOpen) => {
     if (newState === this.state.menuOpen) return;
@@ -45,7 +45,7 @@ export default class Nav extends Component {
     this.setState({
       menuOpen: newState
     });
-  }
+  };
 
   renderLinks(links) {
     const currentPath = this.props.location.pathname;
@@ -53,13 +53,15 @@ export default class Nav extends Component {
       <li key={path}>
         <Link
           to={path}
-          className={`${className} ${currentPath.includes(path) ? 'active' : ''}`}
+          className={`${className} ${
+            currentPath.includes(path) ? 'active' : ''
+          }`}
           onClick={() => this.toggleMenu(false)}
         >
           {text}
         </Link>
       </li>
-    ))
+    ));
   }
 
   renderPublicLinks() {
@@ -71,10 +73,12 @@ export default class Nav extends Component {
     const { menuOpen } = this.state;
 
     return (
-      <div aria-hidden={!menuOpen} role={menuOpen ? 'alert' : ''} className={`link-container ${menuOpen ? 'active' : ''}`}>
-        <ul className="links links-right">
-          {this.renderLinks(publicLinks)}
-        </ul>
+      <div
+        aria-hidden={!menuOpen}
+        role={menuOpen ? 'alert' : ''}
+        className={`link-container ${menuOpen ? 'active' : ''}`}
+      >
+        <ul className="links links-right">{this.renderLinks(publicLinks)}</ul>
       </div>
     );
   }
@@ -90,18 +94,23 @@ export default class Nav extends Component {
     const { menuOpen } = this.state;
 
     return (
-      <div aria-hidden={!menuOpen} role={menuOpen ? 'alert' : ''} className={`link-container ${menuOpen ? 'active' : ''}`}>
-        <ul className="links links-left">
-          {this.renderLinks(privateLinks)}
-        </ul>
+      <div
+        aria-hidden={!menuOpen}
+        role={menuOpen ? 'alert' : ''}
+        className={`link-container ${menuOpen ? 'active' : ''}`}
+      >
+        <ul className="links links-left">{this.renderLinks(privateLinks)}</ul>
       </div>
     );
   }
 
   render() {
-    const { user, user: { isAuth } } = this.context;
+    const {
+      user,
+      user: { isAuth }
+    } = this.context;
     const { fixed, menuOpen } = this.state;
-    const { pathname } = this.props.location
+    const { pathname } = this.props.location;
 
     // the nav bar is absolutely positioned
     // this variable being `true` will render
@@ -114,39 +123,45 @@ export default class Nav extends Component {
       <React.Fragment>
         <nav className={fixed ? 'fixed' : ''}>
           <div className="wrapper">
-            <Link to='/' className="home-link"><Logo className="logo" /></Link>
+            <Link to="/" className="home-link">
+              <Logo className="logo" />
+            </Link>
             <div
               role="button"
               className={`link-container-shadow ${menuOpen ? 'active' : ''}`}
               onClick={() => this.toggleMenu(false)}
-            >
-            </div>
-            {
-              isAuth
-                ? (
-                  <React.Fragment>
-                    {this.renderPrivateLinks(user)}
-                    <ul className="links links-right">
-                      <li className="pull-right">
-                        <Notifications />
-                      </li>
-                      <li className="desktop">
-                        <Link to="/account" title="Your Account" onClick={() => this.toggleMenu(false)}>
-                          <Avatar first_name={user.first_name} last_name={user.last_name} />
-                        </Link>
-                      </li>
-                    </ul>
-                  </React.Fragment>
-                )
-                : this.renderPublicLinks()
-            }
+            ></div>
+            {isAuth ? (
+              <React.Fragment>
+                {this.renderPrivateLinks(user)}
+                <ul className="links links-right">
+                  <li className="pull-right">
+                    <Notifications />
+                  </li>
+                  <li className="desktop">
+                    <Link
+                      to="/account"
+                      title="Your Account"
+                      onClick={() => this.toggleMenu(false)}
+                    >
+                      <Avatar
+                        first_name={user.first_name}
+                        last_name={user.last_name}
+                      />
+                    </Link>
+                  </li>
+                </ul>
+              </React.Fragment>
+            ) : (
+              this.renderPublicLinks()
+            )}
             <Button className="clear menu-btn" onClick={this.toggleMenu}>
               <MenuIcon className="menu" />
             </Button>
           </div>
         </nav>
         {push ? <div className="nav-push"></div> : ''}
-      </React.Fragment >
+      </React.Fragment>
     );
   }
 }

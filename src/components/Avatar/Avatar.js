@@ -1,7 +1,12 @@
 import React from 'react';
 import './Avatar.css';
 
-const Avatar = ({ first_name = null, last_name = null, role, onClick = () => null }) => {
+const Avatar = ({
+  first_name = null,
+  last_name = null,
+  role,
+  onClick = () => null
+}) => {
   const empty = first_name === null || last_name === null;
 
   const getNameInitials = (firstName, lastName) => {
@@ -12,10 +17,12 @@ const Avatar = ({ first_name = null, last_name = null, role, onClick = () => nul
   };
 
   return (
-    <span role={role} onClick={onClick} className={`avatar ${empty ? 'avatar-grey' : ''}`}>
-      <span>
-        {getNameInitials(first_name, last_name)}
-      </span>
+    <span
+      role={role}
+      onClick={onClick}
+      className={`avatar ${empty ? 'avatar-grey' : ''}`}
+    >
+      <span>{getNameInitials(first_name, last_name)}</span>
     </span>
   );
 };

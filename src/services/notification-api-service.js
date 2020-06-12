@@ -8,10 +8,9 @@ const NotificationsApiService = {
       headers: {
         authorization: `Bearer ${TokenService.getAuthToken()}`
       }
-    })
-      .then(res =>
-        !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
-      );
+    }).then(res =>
+      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
+    );
   },
 
   patchNotifications() {
@@ -20,11 +19,8 @@ const NotificationsApiService = {
       headers: {
         authorization: `Bearer ${TokenService.getAuthToken()}`
       }
-    })
-      .then(res =>
-        !res.ok ? Promise.reject(res) : res
-      );
-  },
+    }).then(res => (!res.ok ? Promise.reject(res) : res));
+  }
 };
 
 export default NotificationsApiService;

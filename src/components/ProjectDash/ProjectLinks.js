@@ -4,39 +4,33 @@ const ProjectLinks = ({ github = '', live = '', trello = '' }) => {
   return (
     <article className="card">
       <h3 className="title">Links</h3>
-      {!github && !live && !trello
-        ? <p className="project">No links found</p>
-        : (
-          <ul className="project links">
-            {github && <li>
-              <a
-                rel="noopener noreferrer"
-                target="_blank"
-                href={github}
-              >
+      {!github && !live && !trello ? (
+        <p className="project">No links found</p>
+      ) : (
+        <ul className="project links">
+          {github && (
+            <li>
+              <a rel="noopener noreferrer" target="_blank" href={github}>
                 Github
-          </a>
-            </li>}
-            {live && <li>
-              <a
-                rel="noopener noreferrer"
-                target="_blank"
-                href={live}
-              >
+              </a>
+            </li>
+          )}
+          {live && (
+            <li>
+              <a rel="noopener noreferrer" target="_blank" href={live}>
                 Live Page
-          </a>
-            </li>}
-            {trello && <li>
-              <a
-                rel="noopener noreferrer"
-                target="_blank"
-                href={trello}
-              >
+              </a>
+            </li>
+          )}
+          {trello && (
+            <li>
+              <a rel="noopener noreferrer" target="_blank" href={trello}>
                 Trello
-          </a>
-            </li>}
-          </ul>
-        )}
+              </a>
+            </li>
+          )}
+        </ul>
+      )}
     </article>
   );
 };
