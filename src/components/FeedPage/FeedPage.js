@@ -106,8 +106,8 @@ export default class FeedPage extends Component {
                 })}
               </div>
             ) : (
-                <p className="project">No projects available!</p>
-              )}
+              <p className="project">No projects available!</p>
+            )}
           </div>
         </div>
       </section>

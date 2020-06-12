@@ -11,7 +11,7 @@ import './Signup.css';
 class Signup extends React.Component {
   static defaultProps = {
     history: {
-      goBack: () => { }
+      goBack: () => {}
     }
   };
 
@@ -38,13 +38,15 @@ class Signup extends React.Component {
         this.context.onAuth();
         let lastLocation = this.props.history.location.state.from.pathname;
         if (lastLocation) {
-          this.props.history.push(lastLocation)
+          this.props.history.push(lastLocation);
         } else {
           this.props.history.goBack();
         }
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
         this.context.stopLoading();
       });
   };
@@ -53,7 +55,6 @@ class Signup extends React.Component {
     const error = this.state.error;
     return (
       <div className="sign-up hero">
-
         <Helmet>
           <title>Sign Up - Dev LFT</title>
         </Helmet>
@@ -61,27 +62,64 @@ class Signup extends React.Component {
         <form className="card" onSubmit={this.handleSignup} autoComplete="off">
           <h2 className="h3 title">Let's get started.</h2>
           <p className="subtitle">Fill in the fields below to sign up.</p>
-          {error ? <p role="alert" className="error">{error}</p> : ''}
+          {error ? (
+            <p role="alert" className="error">
+              {error}
+            </p>
+          ) : (
+            ''
+          )}
           <div className="input-group">
             <div className="input">
               <label htmlFor="firstname">First Name</label>
-              <input type="text" id="firstname" placeholder="John" name="first_name" minLength="2" maxLength="30" required />
+              <input
+                type="text"
+                id="firstname"
+                placeholder="John"
+                name="first_name"
+                minLength="2"
+                maxLength="30"
+                required
+              />
             </div>
             <div className="input">
               <label htmlFor="lastname">Last Name</label>
-              <input type="text" id="lastname" placeholder="Doe" name="last_name" minLength="2" maxLength="30" required />
+              <input
+                type="text"
+                id="lastname"
+                placeholder="Doe"
+                name="last_name"
+                minLength="2"
+                maxLength="30"
+                required
+              />
             </div>
           </div>
           <div className="input-group">
             <div className="input">
               <label htmlFor="username">Username</label>
-              <input type="text" id="username" placeholder="johndoe" name="user_name" minLength="2" maxLength="30" required />
+              <input
+                type="text"
+                id="username"
+                placeholder="johndoe"
+                name="user_name"
+                minLength="2"
+                maxLength="30"
+                required
+              />
             </div>
           </div>
           <div className="input-group">
             <div className="input">
               <label htmlFor="pwd">Password</label>
-              <input type="password" id="pwd" name="password" minLength="8" maxLength="72" required />
+              <input
+                type="password"
+                id="pwd"
+                name="password"
+                minLength="8"
+                maxLength="72"
+                required
+              />
             </div>
           </div>
 

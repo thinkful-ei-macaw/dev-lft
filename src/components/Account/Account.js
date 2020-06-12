@@ -20,7 +20,7 @@ export default class Account extends Component {
       skills: {},
       skillError: null,
       currentSkill: ''
-    }
+    };
 
     this.accountForm = React.createRef();
   }
@@ -29,17 +29,19 @@ export default class Account extends Component {
   handleChange = event => {
     const input = event.target.value;
     this.setState({ currentSkill: input, skillError: null });
-  }
+  };
 
   handleKeypress = event => {
     if (event.key === ',' || event.key === 'Enter') {
       event.preventDefault();
       this.validateNewSkill();
     }
-  }
+  };
 
   validateNewSkill = (context = 'input') => {
-    const { user: { skills } } = this.context;
+    const {
+      user: { skills }
+    } = this.context;
     const newSkill = this.state.currentSkill.trim();
 
     if (context === 'blur' && !newSkill) return;
@@ -53,14 +55,15 @@ export default class Account extends Component {
       skillError = 'Each skill must be less than 30 characters';
     } else if (Object.keys(skills).length >= 10) {
       skillError = 'You can add a maximum of 10 tags';
-    };
+    }
 
-    if (skillError) return this.setState({ skillError, currentSkill: newSkill.trim() });
-    const updatedSkills = {}
+    if (skillError)
+      return this.setState({ skillError, currentSkill: newSkill.trim() });
+    const updatedSkills = {};
     if (skills) {
       skills.forEach(skill => {
-        updatedSkills[skill] = true
-      })
+        updatedSkills[skill] = true;
+      });
     }
     updatedSkills[newSkill.toUpperCase()] = true;
 
@@ -70,39 +73,48 @@ export default class Account extends Component {
 
     const newSkills = Object.keys(updatedSkills);
     this.context.setSkills(newSkills);
-  }
+  };
 
-  handleRemoveSkill = (skill) => {
-    let { user: { skills } } = this.context;
+  handleRemoveSkill = skill => {
+    let {
+      user: { skills }
+    } = this.context;
 
     const currentSkills = {};
     if (skills) {
       skills.forEach(skill => {
-        currentSkills[skill] = true
-      })
+        currentSkills[skill] = true;
+      });
     }
     delete currentSkills[skill];
 
     const newSkills = Object.keys(currentSkills);
     this.context.setSkills(newSkills);
     this.handleFormEntry();
-  }
+  };
 
   makeAddedList() {
-    const { user: { skills } } = this.context;
-    const elements = skills && skills.map((skill, index) => (
-      <li
-        role="button"
-        className="tag tag-grey"
-        key={index}
-        onClick={() => this.handleRemoveSkill(skill)}
-      >
-        <span title={skill}>{skill}</span> <CloseIcon title="Remove this skill" />
-      </li>
-    ));
-    return elements && elements.length
-      ? <ul className="tags">{elements}</ul>
-      : '';
+    const {
+      user: { skills }
+    } = this.context;
+    const elements =
+      skills &&
+      skills.map((skill, index) => (
+        <li
+          role="button"
+          className="tag tag-grey"
+          key={index}
+          onClick={() => this.handleRemoveSkill(skill)}
+        >
+          <span title={skill}>{skill}</span>{' '}
+          <CloseIcon title="Remove this skill" />
+        </li>
+      ));
+    return elements && elements.length ? (
+      <ul className="tags">{elements}</ul>
+    ) : (
+      ''
+    );
   }
 
   handleUpdate = event => {
@@ -115,12 +127,15 @@ export default class Account extends Component {
       linkedin_url,
       twitter_url,
       notifications,
-      bio,
+      bio
     } = event.target;
 
-    const { user: { skills } } = this.context;
+    const {
+      user: { skills }
+    } = this.context;
 
-    const notificationPrefs = Array.prototype.slice.call(notifications)
+    const notificationPrefs = Array.prototype.slice
+      .call(notifications)
       .filter(input => input.checked)
       .map(input => input.value);
 
@@ -145,18 +160,20 @@ export default class Account extends Component {
         this.context.stopLoading();
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
         this.context.stopLoading();
       });
   };
 
   dismissSuccessMsg = () => {
     this.setState({ updateSuccess: false, error: null });
-  }
+  };
 
   handleFormEntry = () => {
     this.setState({ formDirty: true });
-  }
+  };
 
   handleNotificationChange = e => {
     const { value, checked } = e.target;
@@ -166,16 +183,21 @@ export default class Account extends Component {
       : [...notifications, value];
 
     this.context.setNotifications(newNotificationSettings);
-  }
+  };
 
   renderNotifications = () => {
-    const { user: { notifications = [] } } = this.context;
+    const {
+      user: { notifications = [] }
+    } = this.context;
     const notificationTypes = [
       { type: 'chat', description: 'New chat messages' },
       { type: 'join', description: 'People joining your teams' },
       { type: 'leave', description: 'People leaving your teams' },
-      { type: 'post', description: 'New posts to your teams\' discussion boards' }
-    ]
+      {
+        type: 'post',
+        description: "New posts to your teams' discussion boards"
+      }
+    ];
 
     return notificationTypes.map(({ type, description }, i) => (
       <label className="check" key={i}>
@@ -184,11 +206,12 @@ export default class Account extends Component {
           checked={notifications.includes(type)}
           onChange={this.handleNotificationChange}
           value={type}
-          type="checkbox" />
+          type="checkbox"
+        />
         <span>{description}</span>
       </label>
     ));
-  }
+  };
 
   render() {
     const {
@@ -207,7 +230,12 @@ export default class Account extends Component {
     const { formDirty, error, currentSkill, skillError } = this.state;
 
     return (
-      <form className="page account" onSubmit={this.handleUpdate} onInput={this.handleFormEntry} ref={this.accountForm}>
+      <form
+        className="page account"
+        onSubmit={this.handleUpdate}
+        onInput={this.handleFormEntry}
+        ref={this.accountForm}
+      >
         <Helmet>
           <title>Your Account - Dev LFT</title>
         </Helmet>
@@ -215,20 +243,24 @@ export default class Account extends Component {
         <header>
           <div className="wrapper">
             <h2>Your Account</h2>
-            <Button swap={SaveIcon} disabled={!formDirty} type="submit">Save changes</Button>
+            <Button swap={SaveIcon} disabled={!formDirty} type="submit">
+              Save changes
+            </Button>
           </div>
         </header>
 
         <div className="page-content">
           <div className="wrapper">
-            {this.state.updateSuccess || error
-              ? (
-                <div role="alert" className={`info card ${error ? 'error' : ''}`}>
-                  <p>{error ? error : 'Your profile has been updated'}</p>
-                  <Button className="clear" onClick={this.dismissSuccessMsg}><CloseIcon /></Button>
-                </div>
-              )
-              : ''}
+            {this.state.updateSuccess || error ? (
+              <div role="alert" className={`info card ${error ? 'error' : ''}`}>
+                <p>{error ? error : 'Your profile has been updated'}</p>
+                <Button className="clear" onClick={this.dismissSuccessMsg}>
+                  <CloseIcon />
+                </Button>
+              </div>
+            ) : (
+              ''
+            )}
 
             <div className="grid">
               <div className="column column-1-2">
@@ -237,34 +269,75 @@ export default class Account extends Component {
                   <div className="input-group">
                     <div className="input">
                       <label htmlFor="first_name">First name *</label>
-                      <input id="first_name" type="text" name="first_name" minLength="2" maxLength="30" required placeholder="John" defaultValue={first_name} />
+                      <input
+                        id="first_name"
+                        type="text"
+                        name="first_name"
+                        minLength="2"
+                        maxLength="30"
+                        required
+                        placeholder="John"
+                        defaultValue={first_name}
+                      />
                     </div>
                     <div className="input">
                       <label htmlFor="last_name">Last name *</label>
-                      <input id="last_name" type="text" name="last_name" minLength="2" maxLength="30" required placeholder="Doe" defaultValue={last_name} />
+                      <input
+                        id="last_name"
+                        type="text"
+                        name="last_name"
+                        minLength="2"
+                        maxLength="30"
+                        required
+                        placeholder="Doe"
+                        defaultValue={last_name}
+                      />
                     </div>
                   </div>
                   <div className="input-group">
                     <div className="input">
                       <label htmlFor="github_url">GitHub URL</label>
-                      <input id="github_url" type="url" name="github_url" maxLength="255" placeholder="https://github.com/johndoe" defaultValue={github_url} />
+                      <input
+                        id="github_url"
+                        type="url"
+                        name="github_url"
+                        maxLength="255"
+                        placeholder="https://github.com/johndoe"
+                        defaultValue={github_url}
+                      />
                     </div>
                   </div>
                   <div className="input-group">
                     <div className="input">
                       <label htmlFor="linkedin_url">Linkedin URL</label>
-                      <input id="linkedin_url" type="url" name="linkedin_url" maxLength="255" placeholder="https://linkedin.com/in/johndoe" defaultValue={linkedin_url} />
+                      <input
+                        id="linkedin_url"
+                        type="url"
+                        name="linkedin_url"
+                        maxLength="255"
+                        placeholder="https://linkedin.com/in/johndoe"
+                        defaultValue={linkedin_url}
+                      />
                     </div>
                   </div>
                   <div className="input-group">
                     <div className="input">
                       <label htmlFor="twitter_url">Twitter URL</label>
-                      <input id="twitter_url" type="url" name="twitter_url" maxLength="255" placeholder="https://twitter.com/johndoe" defaultValue={twitter_url} />
+                      <input
+                        id="twitter_url"
+                        type="url"
+                        name="twitter_url"
+                        maxLength="255"
+                        placeholder="https://twitter.com/johndoe"
+                        defaultValue={twitter_url}
+                      />
                     </div>
                   </div>
                   <hr />
                   <Link to={`/users/${username}`} className="profile-link">
-                    <Button className="clear" isLink={true}>View profile</Button>
+                    <Button className="clear" isLink={true}>
+                      View profile
+                    </Button>
                   </Link>
                 </article>
 
@@ -273,12 +346,10 @@ export default class Account extends Component {
                   <div className="input-group">
                     <div className="input">
                       You'll receive notifications about:
-                  </div>
+                    </div>
                   </div>
                   <div className="input-group">
-                    <div className="input">
-                      {this.renderNotifications()}
-                    </div>
+                    <div className="input">{this.renderNotifications()}</div>
                   </div>
                 </article>
               </div>
@@ -286,7 +357,15 @@ export default class Account extends Component {
               <div className="column column-1-2">
                 <article className="card">
                   <h3 className="title">Bio</h3>
-                  <textarea rows="6" name="bio" id="bio" defaultValue={bio && bio.trim()} placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." minLength="30" maxLength="500" ></textarea>
+                  <textarea
+                    rows="6"
+                    name="bio"
+                    id="bio"
+                    defaultValue={bio && bio.trim()}
+                    placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                    minLength="30"
+                    maxLength="500"
+                  ></textarea>
                 </article>
 
                 <article className="card">
@@ -304,19 +383,20 @@ export default class Account extends Component {
                     onKeyPress={this.handleKeypress}
                     value={currentSkill}
                   />
-                  {skillError
-                    ? <p role="alert" className="error skill-error">{skillError}</p>
-                    : ''}
+                  {skillError ? (
+                    <p role="alert" className="error skill-error">
+                      {skillError}
+                    </p>
+                  ) : (
+                    ''
+                  )}
                   {this.makeAddedList()}
                 </article>
               </div>
             </div>
 
             <div className="centered">
-              <Button
-                onClick={onLogOut}
-                className="clear"
-              >
+              <Button onClick={onLogOut} className="clear">
                 Log Out
               </Button>
             </div>

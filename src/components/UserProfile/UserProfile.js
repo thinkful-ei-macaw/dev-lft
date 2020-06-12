@@ -26,7 +26,9 @@ export default class UserProfile extends Component {
         this.context.stopLoading();
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again'
+        });
         this.context.stopLoading();
       });
   }
@@ -70,22 +72,26 @@ export default class UserProfile extends Component {
 
         <div className="page-content">
           <div className="wrapper">
-            {error
-              ? (
-                <div role="alert" className="info card error">
-                  <p>{error}</p>
-                </div>
-              )
-              : ''}
+            {error ? (
+              <div role="alert" className="info card error">
+                <p>{error}</p>
+              </div>
+            ) : (
+              ''
+            )}
 
-            {loggedInUsername === username
-              ? <div className="card info">
+            {loggedInUsername === username ? (
+              <div className="card info">
                 <p>This is what your profile looks to others.</p>
                 <Link to="/account">
-                  <Button isLink={true} className="clear">Edit profile</Button>
+                  <Button isLink={true} className="clear">
+                    Edit profile
+                  </Button>
                 </Link>
               </div>
-              : ''}
+            ) : (
+              ''
+            )}
 
             <div className="grid">
               <div className="column column-1-2">
@@ -93,7 +99,10 @@ export default class UserProfile extends Component {
                   <h3 className="title">Bio</h3>
                   <p className="project">{bio || 'An awesome DevLFT user.'}</p>
                   <p>
-                    Active since {date_created ? this.getDate(date_created) : 'you loaded this page'}
+                    Active since{' '}
+                    {date_created
+                      ? this.getDate(date_created)
+                      : 'you loaded this page'}
                   </p>
                 </article>
 
@@ -103,35 +112,40 @@ export default class UserProfile extends Component {
                     {!github_url && !twitter_url && !linkedin_url && (
                       <li>No links, yet!</li>
                     )}
-                    {github_url && <li>
-                      <a
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        href={github_url}
-                      >
-                        Github
-                      </a>
-                    </li>}
-                    {twitter_url && <li>
-                      <a
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        href={twitter_url}
-                      >
-                        Twitter
-                      </a>
-                    </li>}
-                    {linkedin_url && <li>
-                      <a
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        href={linkedin_url}
-                      >
-                        LinkedIn
-                      </a>
-                    </li>}
+                    {github_url && (
+                      <li>
+                        <a
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          href={github_url}
+                        >
+                          Github
+                        </a>
+                      </li>
+                    )}
+                    {twitter_url && (
+                      <li>
+                        <a
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          href={twitter_url}
+                        >
+                          Twitter
+                        </a>
+                      </li>
+                    )}
+                    {linkedin_url && (
+                      <li>
+                        <a
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          href={linkedin_url}
+                        >
+                          LinkedIn
+                        </a>
+                      </li>
+                    )}
                   </ul>
-
                 </article>
               </div>
 
@@ -139,18 +153,21 @@ export default class UserProfile extends Component {
                 <article className="card">
                   <h3 className="title">Skills</h3>
                   <ul>
-                    {skills.length
-                      ? skills.map((skill, i) => (
-                        <li key={i} className="project">{skill}</li>
+                    {skills.length ? (
+                      skills.map((skill, i) => (
+                        <li key={i} className="project">
+                          {skill}
+                        </li>
                       ))
-                      : <li className="project">Experienced #LFTer</li>}
+                    ) : (
+                      <li className="project">Experienced #LFTer</li>
+                    )}
                   </ul>
                 </article>
               </div>
             </div>
           </div>
         </div>
-
       </section>
     );
   }

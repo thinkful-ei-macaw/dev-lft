@@ -11,7 +11,7 @@ import './Login.css';
 class Login extends React.Component {
   static defaultProps = {
     history: {
-      goBack: () => { }
+      goBack: () => {}
     }
   };
 
@@ -35,13 +35,15 @@ class Login extends React.Component {
         this.context.onAuth();
         let lastLocation = this.props.history.location.state.from.pathname;
         if (lastLocation) {
-          this.props.history.push(lastLocation)
+          this.props.history.push(lastLocation);
         } else {
           this.props.history.goBack();
         }
       })
       .catch(res => {
-        this.setState({ error: res.error || 'Something went wrong. Please try again later' });
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        });
         this.context.stopLoading();
       });
   };
@@ -50,7 +52,6 @@ class Login extends React.Component {
     const error = this.state.error;
     return (
       <div className="log-in hero">
-
         <Helmet>
           <title>Log In - Dev LFT</title>
         </Helmet>
@@ -58,17 +59,36 @@ class Login extends React.Component {
         <form className="card" onSubmit={this.handleLogin} autoComplete="off">
           <h2 className="h3 title">Welcome Back.</h2>
           <p className="subtitle">Fill in the fields below to log in.</p>
-          {error ? <p role="alert" className="error">{error}</p> : ''}
+          {error ? (
+            <p role="alert" className="error">
+              {error}
+            </p>
+          ) : (
+            ''
+          )}
           <div className="input-group">
             <div className="input">
               <label htmlFor="username">Username</label>
-              <input type="text" id="username" placeholder="johndoe" name="user_name" maxLength="30" required />
+              <input
+                type="text"
+                id="username"
+                placeholder="johndoe"
+                name="user_name"
+                maxLength="30"
+                required
+              />
             </div>
           </div>
           <div className="input-group">
             <div className="input">
               <label htmlFor="pwd">Password</label>
-              <input type="password" id="pwd" name="password" maxLength="72" required />
+              <input
+                type="password"
+                id="pwd"
+                name="password"
+                maxLength="72"
+                required
+              />
             </div>
           </div>
 

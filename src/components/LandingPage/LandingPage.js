@@ -16,7 +16,7 @@ export default class LandingPage extends Component {
   state = {
     projects: [],
     userCount: 11000
-  }
+  };
 
   componentDidMount() {
     // get projects
@@ -26,14 +26,13 @@ export default class LandingPage extends Component {
           projects: projects.slice(0, 3)
         });
       })
-      .catch(console.error)
+      .catch(console.error);
   }
 
   render() {
     const { projects } = this.state;
     return (
       <main className="landing-page">
-
         <Helmet>
           <title>Dev LFT | Side Projects Conquered</title>
         </Helmet>
@@ -41,12 +40,13 @@ export default class LandingPage extends Component {
         <section className="hero">
           <div className="wrapper">
             <h1>
-              Side Projects<br />
+              Side Projects
+              <br />
               <em>Conquered.</em>
             </h1>
             <p>
-              Take side projects from concept to completion with
-              teams of passionate pros like yourself.
+              Take side projects from concept to completion with teams of
+              passionate pros like yourself.
             </p>
             <Link to="/signup">
               <Button isLink={true}>Start Yours</Button>
@@ -61,58 +61,82 @@ export default class LandingPage extends Component {
           </div>
 
           <article className="grid">
-            <img className="column column-1-2" src={BuidATeamPhoto} alt="team looking at a board with post-its" />
+            <img
+              className="column column-1-2"
+              src={BuidATeamPhoto}
+              alt="team looking at a board with post-its"
+            />
             <div className="column column-1-2">
               <h3>Build a team</h3>
-              <p>Find great developers and designers to turn your project idea into a reality.</p>
+              <p>
+                Find great developers and designers to turn your project idea
+                into a reality.
+              </p>
             </div>
           </article>
 
           <article className="grid">
-            <img className="column column-1-2" src={BringYourToolsPhoto} alt="a screenshot of the GitHub workflow" />
+            <img
+              className="column column-1-2"
+              src={BringYourToolsPhoto}
+              alt="a screenshot of the GitHub workflow"
+            />
             <div className="column column-1-2">
               <h3>Bring your tools</h3>
-              <p>Keep your existing workflow with integrations like GitHub, Trello and more to come.</p>
+              <p>
+                Keep your existing workflow with integrations like GitHub,
+                Trello and more to come.
+              </p>
             </div>
           </article>
 
           <article className="grid">
-            <img className="column column-1-2" src={JoinATeamPhoto} alt="join a team" />
+            <img
+              className="column column-1-2"
+              src={JoinATeamPhoto}
+              alt="join a team"
+            />
             <div className="column column-1-2">
               <h3>Join a team</h3>
-              <p>Lend your expertise in design or development to others working on the next big thing.</p>
+              <p>
+                Lend your expertise in design or development to others working
+                on the next big thing.
+              </p>
             </div>
           </article>
         </section>
 
-        {projects.length
-          ? (
-            <section className="projects">
-              <div className="wrapper">
-                <h2 className="h3">
-                  Projects that could use<br />
-                  someone like you
-                </h2>
-                <Carousel>
-                  {projects.map(project => (
-                    <ProjectItem key={project.id} project={project} />
-                  ))}
-                </Carousel>
-                <Link to="/signup">
-                  <Button isLink={true}>Sign up to join this team</Button>
-                </Link>
-              </div>
-            </section>
-          )
-          : ''}
+        {projects.length ? (
+          <section className="projects">
+            <div className="wrapper">
+              <h2 className="h3">
+                Projects that could use
+                <br />
+                someone like you
+              </h2>
+              <Carousel>
+                {projects.map(project => (
+                  <ProjectItem key={project.id} project={project} />
+                ))}
+              </Carousel>
+              <Link to="/signup">
+                <Button isLink={true}>Sign up to join this team</Button>
+              </Link>
+            </div>
+          </section>
+        ) : (
+          ''
+        )}
 
         <section className="cta">
           <h2>
-            What are you<br />
+            What are you
+            <br />
             waiting for?
           </h2>
           <p>
-            Start using Dev LFT now<br />
+            Start using Dev LFT now
+            <br />
             and crush your side projects.
           </p>
           <Link to="/signup">

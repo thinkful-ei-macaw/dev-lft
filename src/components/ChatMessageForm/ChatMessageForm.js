@@ -37,21 +37,35 @@ class ChatMessageForm extends Component {
         this.setState({ error: null, body: '' });
         this.props.onNewMessage();
       })
-      .catch(res => this.setState({ error: res.error || 'Something went wrong. Please try again later' }));
+      .catch(res =>
+        this.setState({
+          error: res.error || 'Something went wrong. Please try again later'
+        })
+      );
   };
 
   render() {
     const { error } = this.state;
     const { disabled } = this.props;
     return (
-      <form className="chat-form" onSubmit={e => this.onSend(e)} autoComplete="off">
-        {error
-          ? <p role="alert" className="error">{error}</p>
-          : ''}
+      <form
+        className="chat-form"
+        onSubmit={e => this.onSend(e)}
+        autoComplete="off"
+      >
+        {error ? (
+          <p role="alert" className="error">
+            {error}
+          </p>
+        ) : (
+          ''
+        )}
 
         <div className="input-group pinned">
           <div className="input">
-            <label className="hidden" htmlFor="body">Reply:</label>
+            <label className="hidden" htmlFor="body">
+              Reply:
+            </label>
             <input
               type="text"
               id="body"
@@ -64,7 +78,9 @@ class ChatMessageForm extends Component {
               onChange={e => this.setBody(e.target.value)}
             ></input>
           </div>
-          <Button disabled={disabled} type="submit">Send</Button>
+          <Button disabled={disabled} type="submit">
+            Send
+          </Button>
         </div>
       </form>
     );

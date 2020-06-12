@@ -12,14 +12,15 @@ export default class Carousel extends Component {
   }
 
   goToFocused = e => {
-    const nodes = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    const nodes = Array.prototype.slice.call(
+      document.querySelectorAll('.slide')
+    );
     const focusedSlide = e.target.closest('.slide');
     const newIndex = nodes.indexOf(focusedSlide);
 
     this.carousel.current.scrollLeft = 0; // reset the scroll position
     this.goToSlide(newIndex); // go to focused slide
-
-  }
+  };
 
   goToSlide(number) {
     const slideCount = this.props.children.length;
@@ -39,7 +40,11 @@ export default class Carousel extends Component {
       <div className="carousel" ref={this.carousel}>
         <div className="carousel-slider" style={style}>
           {slides.map((slide, index) => (
-            <div className="slide" onFocusCapture={this.goToFocused} key={index}>
+            <div
+              className="slide"
+              onFocusCapture={this.goToFocused}
+              key={index}
+            >
               {slide}
             </div>
           ))}
