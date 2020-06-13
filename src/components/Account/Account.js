@@ -120,8 +120,8 @@ export default class Account extends Component {
     return elements && elements.length ? (
       <ul className="tags">{elements}</ul>
     ) : (
-        ''
-      );
+      ''
+    );
   }
 
   handleUpdate = event => {
@@ -271,8 +271,8 @@ export default class Account extends Component {
                 </Button>
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             <div className="grid">
               <div className="column column-1-2">
@@ -400,8 +400,8 @@ export default class Account extends Component {
                       {skillError}
                     </p>
                   ) : (
-                      ''
-                    )}
+                    ''
+                  )}
                   {this.makeAddedList()}
                 </article>
               </div>
