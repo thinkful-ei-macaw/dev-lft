@@ -65,6 +65,8 @@ export default class Nav extends Component {
   }
 
   renderPublicLinks() {
+    const kindaPublicLinks = [{ text: 'Feed', path: '/feed' }];
+
     const publicLinks = [
       { text: 'Sign Up', path: '/signup' },
       { text: 'Login', path: '/login' }
@@ -78,6 +80,9 @@ export default class Nav extends Component {
         role={menuOpen ? 'alert' : ''}
         className={`link-container ${menuOpen ? 'active' : ''}`}
       >
+        <ul className="links links-left">
+          {this.renderLinks(kindaPublicLinks)}
+        </ul>
         <ul className="links links-right">{this.renderLinks(publicLinks)}</ul>
       </div>
     );

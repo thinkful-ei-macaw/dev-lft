@@ -5,9 +5,11 @@ const ProjectDashService = {
   getProject(project_id) {
     return fetch(`${config.API_ENDPOINT}/projects/${project_id}`, {
       method: 'GET',
-      headers: {
-        authorization: `Bearer ${TokenService.getAuthToken()}`
-      }
+      headers: TokenService.hasAuthToken()
+        ? {
+            authorization: `Bearer ${TokenService.getAuthToken()}`
+          }
+        : {}
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );
@@ -16,9 +18,11 @@ const ProjectDashService = {
   getVacancies(project_id) {
     return fetch(`${config.API_ENDPOINT}/vacancies/${project_id}`, {
       method: 'GET',
-      headers: {
-        authorization: `Bearer ${TokenService.getAuthToken()}`
-      }
+      headers: TokenService.hasAuthToken()
+        ? {
+            authorization: `Bearer ${TokenService.getAuthToken()}`
+          }
+        : {}
     }).then(res =>
       !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
     );

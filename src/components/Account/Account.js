@@ -24,7 +24,14 @@ export default class Account extends Component {
 
     this.accountForm = React.createRef();
   }
+
   static contextType = UserContext;
+
+  static defaultProps = {
+    history: {
+      push: () => null
+    }
+  };
 
   handleChange = event => {
     const input = event.target.value;
@@ -113,8 +120,8 @@ export default class Account extends Component {
     return elements && elements.length ? (
       <ul className="tags">{elements}</ul>
     ) : (
-      ''
-    );
+        ''
+      );
   }
 
   handleUpdate = event => {
@@ -213,6 +220,12 @@ export default class Account extends Component {
     ));
   };
 
+  handleLogOut() {
+    const { onLogOut = () => null } = this.context;
+    onLogOut();
+    this.props.history.push('/');
+  }
+
   render() {
     const {
       user: {
@@ -223,8 +236,7 @@ export default class Account extends Component {
         twitter_url,
         username,
         bio
-      },
-      onLogOut = () => null
+      }
     } = this.context;
 
     const { formDirty, error, currentSkill, skillError } = this.state;
@@ -259,8 +271,8 @@ export default class Account extends Component {
                 </Button>
               </div>
             ) : (
-              ''
-            )}
+                ''
+              )}
 
             <div className="grid">
               <div className="column column-1-2">
@@ -388,15 +400,15 @@ export default class Account extends Component {
                       {skillError}
                     </p>
                   ) : (
-                    ''
-                  )}
+                      ''
+                    )}
                   {this.makeAddedList()}
                 </article>
               </div>
             </div>
 
             <div className="centered">
-              <Button onClick={onLogOut} className="clear">
+              <Button onClick={() => this.handleLogOut()} className="clear">
                 Log Out
               </Button>
             </div>

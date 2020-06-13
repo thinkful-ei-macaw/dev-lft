@@ -22,15 +22,19 @@ export default class LandingPage extends Component {
     // get projects
     ProjectApiService.getAllProjects()
       .then(projects => {
+        let projectsWithVacancies = projects.filter(
+          project => project.openVacancies > 0
+        );
         this.setState({
-          projects: projects.slice(0, 3)
+          // only the first 5 projects with open vacancies
+          projects: projectsWithVacancies.slice(0, 5)
         });
       })
       .catch(console.error);
   }
 
   render() {
-    const { projects } = this.state;
+    let { projects } = this.state;
     return (
       <main className="landing-page">
         <Helmet>
@@ -119,8 +123,8 @@ export default class LandingPage extends Component {
                   <ProjectItem key={project.id} project={project} />
                 ))}
               </Carousel>
-              <Link to="/signup">
-                <Button isLink={true}>Sign up to join this team</Button>
+              <Link to="/feed">
+                <Button isLink={true}>See all projects</Button>
               </Link>
             </div>
           </section>

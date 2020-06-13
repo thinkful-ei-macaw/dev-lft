@@ -13,7 +13,6 @@ import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
 import UserProfile from './components/UserProfile/UserProfile';
 import Chat from './components/Chat/Chat';
-import ChatMessages from './components/ChatMessages/ChatMessages';
 import Account from './components/Account/Account';
 import ProjectDash from './components/ProjectDash/ProjectDash';
 import GlobalErrorBoundary from './components/ErrorBoundaries/GlobalErrorBoundary';
@@ -112,21 +111,20 @@ export default class App extends Component {
             <PublicOnlyRoute exact path="/" component={LandingPage} />
             <PublicOnlyRoute exact path="/signup" component={Signup} />
             <PublicOnlyRoute exact path="/login" component={Login} />
-            <PrivateRoute exact path="/account" component={Account} />
-            <PrivateRoute exact path="/feed" component={FeedPage} />
-            <PrivateRoute exact path="/projects" component={ProjectsPage} />
-            <PrivateRoute
+            <Route exact path="/feed" component={FeedPage} />
+            <Route
               exact
               path="/projects/:project_handle"
               component={ProjectDash}
             />
+            <PrivateRoute exact path="/account" component={Account} />
+            <PrivateRoute exact path="/projects" component={ProjectsPage} />
             <PrivateRoute
               exact
               path="/users/:username"
               component={UserProfile}
             />
             <PrivateRoute exact path="/chats" component={Chat} />
-            <PrivateRoute path="/chats/messages" component={ChatMessages} />
             <Route path="*" component={PageNotFound} />
           </Switch>
         </GlobalErrorBoundary>

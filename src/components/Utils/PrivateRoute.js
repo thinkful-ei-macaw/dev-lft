@@ -14,7 +14,10 @@ export default function PrivateRoute({ component, ...props }) {
           <Redirect
             to={{
               pathname: '/login',
-              state: { from: componentProps.location }
+              state: {
+                error: 'You must be logged in to view this page',
+                from: componentProps.location
+              }
             }}
           />
         )

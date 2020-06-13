@@ -18,7 +18,7 @@ import { CloseIcon } from '../../images';
 class ProjectDash extends Component {
   static defaultProps = {
     history: {
-      push: () => {}
+      push: () => null
     }
   };
 
@@ -164,6 +164,16 @@ class ProjectDash extends Component {
     });
   };
 
+  requireAuth = () => {
+    this.props.history.push({
+      pathname: '/login',
+      state: {
+        error: 'You must be logged in to perform this action',
+        from: this.props.location
+      }
+    });
+  };
+
   render() {
     let {
       project,
@@ -242,6 +252,7 @@ class ProjectDash extends Component {
             </div>
 
             <OpenVacancies
+              onInteract={this.requireAuth}
               setRequests={this.setRequests}
               setVacancies={this.setVacancies}
               handleApprove={this.handleApprove}

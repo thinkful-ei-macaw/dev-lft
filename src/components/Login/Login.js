@@ -9,15 +9,23 @@ import UserContext from '../../contexts/UserContext';
 import './Login.css';
 
 class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    const passedState =
+      props.history.location && props.history.location.state
+        ? props.history.location.state
+        : { error: null };
+    this.state = { ...passedState };
+  }
+
   static defaultProps = {
     history: {
-      goBack: () => {}
+      goBack: () => null,
+      location: {}
     }
   };
 
   static contextType = UserContext;
-
-  state = { error: null };
 
   handleLogin = e => {
     e.preventDefault();
@@ -33,7 +41,7 @@ class Login extends React.Component {
         password.value = '';
         TokenService.saveAuthToken(user.authToken);
         this.context.onAuth();
-        let lastLocation = this.props.history.location.state.from.pathname;
+        let lastLocation = this.state.from.pathname;
         if (lastLocation) {
           this.props.history.push(lastLocation);
         } else {
@@ -95,7 +103,15 @@ class Login extends React.Component {
           <Button type="submit">Log In</Button>
 
           <p>
-            Don't have an account yet? <Link to="/signup">Sign Up</Link>
+            Don't have an account yet?{' '}
+            <Link
+              to={{
+                pathname: '/signup',
+                state: { ...this.state, error: null }
+              }}
+            >
+              Sign Up
+            </Link>
           </p>
         </form>
       </div>

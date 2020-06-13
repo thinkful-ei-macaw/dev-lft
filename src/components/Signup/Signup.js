@@ -9,9 +9,19 @@ import UserContext from '../../contexts/UserContext';
 import './Signup.css';
 
 class Signup extends React.Component {
+  constructor(props) {
+    super(props);
+    const passedState =
+      props.history.location && props.history.location.state
+        ? props.history.location.state
+        : { error: null };
+    this.state = { ...passedState };
+  }
+
   static defaultProps = {
     history: {
-      goBack: () => {}
+      goBack: () => null,
+      location: {}
     }
   };
 
@@ -36,7 +46,7 @@ class Signup extends React.Component {
       .then(user => {
         TokenService.saveAuthToken(user.authToken);
         this.context.onAuth();
-        let lastLocation = this.props.history.location.state.from.pathname;
+        let lastLocation = this.state.from.pathname;
         if (lastLocation) {
           this.props.history.push(lastLocation);
         } else {
@@ -126,7 +136,15 @@ class Signup extends React.Component {
           <Button type="submit">Sign Up</Button>
 
           <p>
-            Already a Dev LFT member? <Link to="/login">Log In</Link>
+            Already a Dev LFT member?{' '}
+            <Link
+              to={{
+                pathname: '/login',
+                state: { ...this.state, error: null }
+              }}
+            >
+              Log In
+            </Link>
           </p>
         </form>
       </div>

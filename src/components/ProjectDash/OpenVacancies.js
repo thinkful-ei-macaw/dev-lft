@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Button from '../Button/Button';
 import ProjectDashService from '../../services/project-dash-service';
 import VacancyModal from './VacancyModal';
+import UserContext from '../../contexts/UserContext';
 
 // images
 import { PlusIcon } from '../../images';
@@ -16,6 +17,8 @@ class OpenVacancies extends Component {
   state = {
     addingVacancy: false
   };
+
+  static contextType = UserContext;
 
   onAddVacancy = () => {
     this.setState({
@@ -32,7 +35,12 @@ class OpenVacancies extends Component {
   };
 
   handleRequest = (vacancy_id, callback = () => null) => {
-    let { requests, project_id } = this.props;
+    const {
+      user: { isAuth }
+    } = this.context;
+    let { requests, project_id, onInteract } = this.props;
+
+    if (!isAuth) return onInteract();
 
     ProjectDashService.postRequest(vacancy_id)
       .then(res => {
