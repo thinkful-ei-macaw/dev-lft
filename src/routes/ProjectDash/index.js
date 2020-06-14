@@ -194,7 +194,9 @@ class ProjectDash extends Component {
           <title>{`${project.name || 'Project Dashboard'}`} - Dev LFT</title>
         </Helmet>
 
-        <h1 className="hidden" aria-hidden={true}>{project.name}</h1>
+        <h1 className="hidden" aria-hidden={true}>
+          {project.name}
+        </h1>
 
         <header>
           <div className="wrapper">
@@ -212,14 +214,14 @@ class ProjectDash extends Component {
                 </Button>
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             {userRole === 'member' || userRole === 'owner' ? (
               <Posts project_id={project.id} />
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             <div className="grid">
               <div className="column column-1-2">
@@ -231,8 +233,8 @@ class ProjectDash extends Component {
                     project_id={project.id}
                   />
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
 
                 <Info project={project} />
               </div>
@@ -276,8 +278,8 @@ class ProjectDash extends Component {
                 </Button>
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
           </div>
         </div>
       </section>

@@ -55,8 +55,8 @@ class Chat extends Component {
           activeChat: this.state.activeChat
             ? chats.find(c => c.chat_id === this.state.activeChat.chat_id)
             : chats.length
-              ? chats.filter(this.projectFilter)[0]
-              : null
+            ? chats.filter(this.projectFilter)[0]
+            : null
         });
         this.context.stopLoading();
       })
@@ -116,7 +116,9 @@ class Chat extends Component {
           <title>Chats - Dev LFT</title>
         </Helmet>
 
-        <h1 className="hidden" aria-hidden={true}>Your Account</h1>
+        <h1 className="hidden" aria-hidden={true}>
+          Your Account
+        </h1>
 
         <header>
           <div className="wrapper">
@@ -131,8 +133,8 @@ class Chat extends Component {
                 {error}
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             <div className="grid card">
               <div className="column column-1-3 list-container">
@@ -166,7 +168,7 @@ class Chat extends Component {
                         key={i}
                         className={`user ${
                           activeChat.chat_id === chat.chat_id ? 'active' : ''
-                          }`}
+                        }`}
                         role="button"
                         onClick={() => this.setActiveChat(chat)}
                       >
@@ -181,11 +183,11 @@ class Chat extends Component {
                           <p className="last-message">
                             {(chat.isOwner &&
                               chat.request_status !== 'pending') ||
-                              !chat.isReply ? (
-                                <ReplyIcon />
-                              ) : (
-                                ''
-                              )}
+                            !chat.isReply ? (
+                              <ReplyIcon />
+                            ) : (
+                              ''
+                            )}
                             {chat.request_status === 'pending'
                               ? chat.body
                               : `Request ${chat.request_status}.`}
@@ -198,8 +200,8 @@ class Chat extends Component {
                       </li>
                     ))
                   ) : (
-                      <li className="empty">No chats, yet!</li>
-                    )}
+                    <li className="empty">No chats, yet!</li>
+                  )}
                 </ul>
               </div>
               <div className="column column-2-3">
@@ -211,11 +213,14 @@ class Chat extends Component {
                     onUpdate={this.setChats}
                   />
                 ) : (
-                    <div className="chat-view open chat-instructions">
-                      <p>Chats can only be initiated by project owners from requests on a project's dashboard.</p>
-                      <Link to="/projects">Go to your projects</Link>
-                    </div>
-                  )}
+                  <div className="chat-view open chat-instructions">
+                    <p>
+                      Chats can only be initiated by project owners from
+                      requests on a project's dashboard.
+                    </p>
+                    <Link to="/projects">Go to your projects</Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>

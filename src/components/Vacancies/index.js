@@ -81,12 +81,12 @@ class Vacancies extends Component {
                           {item.first_name} {item.last_name}
                         </>
                       ) : (
-                          'You'
-                        )}
+                        'You'
+                      )}
                     </Link>
                   ) : (
-                      <span>{item.title}</span>
-                    )}
+                    <span>{item.title}</span>
+                  )}
                 </h4>
                 <p>{item.username ? item.title : 'This position is open'}</p>
               </div>
@@ -113,8 +113,8 @@ class Vacancies extends Component {
                   />
                 </Button>
               ) : (
-                  ''
-                )}
+                ''
+              )}
 
               {userRole === 'member' && item.username === username ? (
                 <Button
@@ -124,20 +124,20 @@ class Vacancies extends Component {
                   <CloseIcon title="Leave this position" />
                 </Button>
               ) : (
-                  ''
-                )}
+                ''
+              )}
             </li>
           );
         })}
         {!vacancies.length ? (
           <li className="project">No team members, yet!</li>
         ) : (
-            ''
-          )}
+          ''
+        )}
       </ul>
     ) : (
-        <p className="project">No vacancies at this time</p>
-      );
+      <p className="project">No vacancies at this time</p>
+    );
   };
 
   render() {

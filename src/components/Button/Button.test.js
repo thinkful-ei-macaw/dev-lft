@@ -4,9 +4,6 @@ import Button from '.';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(
-    <Button>Test Button</Button>,
-    div
-  );
+  ReactDOM.render(<Button>Test Button</Button>, div);
   ReactDOM.unmountComponentAtNode(div);
 });

@@ -11,8 +11,8 @@ export default function PublicOnlyRoute({ component, ...props }) {
         TokenService.hasAuthToken() ? (
           <Redirect to="/feed" />
         ) : (
-            <Component {...componentProps} />
-          )
+          <Component {...componentProps} />
+        )
       }
     />
   );

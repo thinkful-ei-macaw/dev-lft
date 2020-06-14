@@ -129,8 +129,8 @@ export default class LandingPage extends Component {
             </div>
           </section>
         ) : (
-            ''
-          )}
+          ''
+        )}
 
         <section className="cta">
           <h2>

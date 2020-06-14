@@ -103,8 +103,8 @@ export default class VacancyModal extends React.Component {
             {error}
           </p>
         ) : (
-            ''
-          )}
+          ''
+        )}
         <div className="project">
           <div className="project-left">
             <div className="input-group">
@@ -159,8 +159,8 @@ export default class VacancyModal extends React.Component {
                     {skillError}
                   </p>
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
                 {this.makeAddedList()}
               </div>
             </div>

@@ -68,7 +68,9 @@ export default class FeedPage extends Component {
           <title>Latest Projects - Dev LFT</title>
         </Helmet>
 
-        <h1 className="hidden" aria-hidden={true}>Latest Projects</h1>
+        <h1 className="hidden" aria-hidden={true}>
+          Latest Projects
+        </h1>
 
         <header>
           <div className="wrapper">
@@ -102,7 +104,6 @@ export default class FeedPage extends Component {
 
         <div className="page-content">
           <div className="wrapper">
-
             {error || vacantProjects.length === 0 ? (
               <div
                 role="alert"
@@ -111,8 +112,8 @@ export default class FeedPage extends Component {
                 <p>{error || 'No projects, yet!'}</p>
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             {vacantProjects.map((project, i) => {
               return <ProjectItem key={i} project={project} />;

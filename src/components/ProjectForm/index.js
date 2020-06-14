@@ -170,8 +170,8 @@ export default class ProjectForm extends Component {
                     {tagError}
                   </p>
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
                 {this.makeAddedList()}
               </div>
             </div>
@@ -213,8 +213,8 @@ export default class ProjectForm extends Component {
             {this.state.error}
           </p>
         ) : (
-            ''
-          )}
+          ''
+        )}
 
         <Button type="submit">Create Project</Button>
         <Button className="clear" onClick={this.props.onCancel}>

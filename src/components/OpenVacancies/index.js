@@ -111,8 +111,8 @@ class OpenVacancies extends Component {
                         {userRequest
                           ? `Request ${userRequest.request_status}`
                           : userRole === 'owner'
-                            ? 'Fill this position'
-                            : 'Request to join'}
+                          ? 'Fill this position'
+                          : 'Request to join'}
                       </Button>
                     </div>
                   </div>
@@ -121,8 +121,8 @@ class OpenVacancies extends Component {
             })}
           </ul>
         ) : (
-            <p className="project">No open positions at this time.</p>
-          )}
+          <p className="project">No open positions at this time.</p>
+        )}
       </>
     );
   };
@@ -155,8 +155,8 @@ class OpenVacancies extends Component {
               <span className="hidden">Add a new position</span>
             </Button>
           ) : (
-              ''
-            )}
+            ''
+          )}
         </header>
 
         {addingVacancy ? (
@@ -166,8 +166,8 @@ class OpenVacancies extends Component {
             onCloseVacancyModal={this.onCancelVacancy}
           />
         ) : (
-            ''
-          )}
+          ''
+        )}
 
         {this.renderOpenVacancies()}
       </article>

@@ -11,16 +11,16 @@ export default function PrivateRoute({ component, ...props }) {
         TokenService.hasAuthToken() ? (
           <Component {...componentProps} />
         ) : (
-            <Redirect
-              to={{
-                pathname: '/login',
-                state: {
-                  error: 'You must be logged in to view this page',
-                  from: componentProps.location
-                }
-              }}
-            />
-          )
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: {
+                error: 'You must be logged in to view this page',
+                from: componentProps.location
+              }
+            }}
+          />
+        )
       }
     />
   );

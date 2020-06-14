@@ -120,10 +120,10 @@ class Posts extends Component {
               {isAuthor ? (
                 'You'
               ) : (
-                  <Link to={`/users/${post.username}`}>
-                    {post.first_name} {post.last_name}
-                  </Link>
-                )}
+                <Link to={`/users/${post.username}`}>
+                  {post.first_name} {post.last_name}
+                </Link>
+              )}
             </h4>
             <span className="date">{this.renderDate(post.date_created)}</span>
             {post.canEdit ? (
@@ -136,8 +136,8 @@ class Posts extends Component {
                 <EditIcon />
               </Button>
             ) : (
-                ''
-              )}
+              ''
+            )}
           </header>
 
           {postToEdit === post.id ? (
@@ -164,11 +164,11 @@ class Posts extends Component {
               </Button>
             </form>
           ) : (
-              <p className="body">
-                {post.message.substr(0, 279) +
-                  (post.message.length > 280 ? '...' : '')}
-              </p>
-            )}
+            <p className="body">
+              {post.message.substr(0, 279) +
+                (post.message.length > 280 ? '...' : '')}
+            </p>
+          )}
         </li>
       );
     });
@@ -191,8 +191,8 @@ class Posts extends Component {
             {error}
           </p>
         ) : (
-            ''
-          )}
+          ''
+        )}
 
         <form
           onSubmit={this.handleSubmitPost}

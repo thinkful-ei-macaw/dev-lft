@@ -85,8 +85,8 @@ export default class ProjectsPage extends Component {
                 onCancel={this.handleCreateCancelled}
               />
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             {error || projects.length === 0 ? (
               <div
@@ -96,8 +96,8 @@ export default class ProjectsPage extends Component {
                 <p>{error || 'No projects, yet!'}</p>
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             {projects.map((project, i) => {
               return <ProjectItem key={i} project={project} />;

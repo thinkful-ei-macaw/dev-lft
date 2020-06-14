@@ -58,8 +58,8 @@ class ChatMessageForm extends Component {
             {error}
           </p>
         ) : (
-            ''
-          )}
+          ''
+        )}
 
         <div className="input-group pinned">
           <div className="input">

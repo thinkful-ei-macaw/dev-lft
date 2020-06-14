@@ -79,8 +79,8 @@ class Signup extends React.Component {
               {error}
             </p>
           ) : (
-              ''
-            )}
+            ''
+          )}
           <div className="input-group">
             <div className="input">
               <label htmlFor="firstname">First Name</label>

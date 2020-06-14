@@ -120,8 +120,8 @@ export default class Account extends Component {
     return elements && elements.length ? (
       <ul className="tags">{elements}</ul>
     ) : (
-        ''
-      );
+      ''
+    );
   }
 
   handleUpdate = event => {
@@ -252,7 +252,9 @@ export default class Account extends Component {
           <title>Your Account - Dev LFT</title>
         </Helmet>
 
-        <h1 className="hidden" aria-hidden={true}>Your Account</h1>
+        <h1 className="hidden" aria-hidden={true}>
+          Your Account
+        </h1>
 
         <header>
           <div className="wrapper">
@@ -273,8 +275,8 @@ export default class Account extends Component {
                 </Button>
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             <div className="grid">
               <div className="column column-1-2">
@@ -356,7 +358,9 @@ export default class Account extends Component {
                 </article>
 
                 <fieldset className="card">
-                  <h3 className="title"><legend>Notifications</legend></h3>
+                  <h3 className="title">
+                    <legend>Notifications</legend>
+                  </h3>
                   <div className="input-group">
                     <div className="input">
                       You'll receive notifications about:
@@ -370,7 +374,9 @@ export default class Account extends Component {
 
               <div className="column column-1-2">
                 <article className="card">
-                  <h3 className="title"><label htmlFor="bio">Bio</label></h3>
+                  <h3 className="title">
+                    <label htmlFor="bio">Bio</label>
+                  </h3>
                   <textarea
                     rows="6"
                     name="bio"
@@ -383,7 +389,9 @@ export default class Account extends Component {
                 </article>
 
                 <article className="card">
-                  <h3 className="title"><label htmlFor="skill">Skills</label></h3>
+                  <h3 className="title">
+                    <label htmlFor="skill">Skills</label>
+                  </h3>
                   <input
                     id="skill"
                     type="text"
@@ -402,8 +410,8 @@ export default class Account extends Component {
                       {skillError}
                     </p>
                   ) : (
-                      ''
-                    )}
+                    ''
+                  )}
                   {this.makeAddedList()}
                 </article>
               </div>

@@ -97,8 +97,8 @@ class Notifications extends Component {
         return <li key={i}>{this.formatNotification(item)}</li>;
       })
     ) : (
-        <li>Nothing to see here!</li>
-      );
+      <li>Nothing to see here!</li>
+    );
   };
 
   render() {
@@ -107,14 +107,14 @@ class Notifications extends Component {
       <div
         className={`notifications ${
           !isOpen && notifications.length ? 'new' : ''
-          }`}
+        }`}
       >
         <Button
           className={`clear ${isOpen ? 'open' : ''}`}
           onClick={this.toggleNotificationsPopup}
           title={`${notifications.length} notification${
             notifications.length !== 1 ? 's' : ''
-            }`}
+          }`}
         >
           <BellIcon />
           <span className="hidden">Notifications</span>

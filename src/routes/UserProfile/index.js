@@ -77,8 +77,8 @@ export default class UserProfile extends Component {
                 <p>{error}</p>
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             {loggedInUsername === username ? (
               <div className="card info">
@@ -90,8 +90,8 @@ export default class UserProfile extends Component {
                 </Link>
               </div>
             ) : (
-                ''
-              )}
+              ''
+            )}
 
             <div className="grid">
               <div className="column column-1-2">
@@ -160,8 +160,8 @@ export default class UserProfile extends Component {
                         </li>
                       ))
                     ) : (
-                        <li className="project">Experienced #LFTer</li>
-                      )}
+                      <li className="project">Experienced #LFTer</li>
+                    )}
                   </ul>
                 </article>
               </div>

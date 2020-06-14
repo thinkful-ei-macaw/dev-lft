@@ -11,7 +11,7 @@ import {
 class Info extends React.Component {
   static defaultProps = {
     project: {}
-  }
+  };
 
   renderTags = tags => {
     if (!tags.length) {
@@ -85,8 +85,8 @@ class Info extends React.Component {
               <Link to={`/users/${project_creator.username}`}>
                 {project_creator
                   ? `${project_creator.first_name} ${
-                  project_creator.last_name && project_creator.last_name[0]
-                  }`
+                      project_creator.last_name && project_creator.last_name[0]
+                    }`
                   : 'DevLFT User'}
               </Link>
             </h4>

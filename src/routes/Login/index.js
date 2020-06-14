@@ -74,8 +74,8 @@ class Login extends React.Component {
               {error}
             </p>
           ) : (
-              ''
-            )}
+            ''
+          )}
           <div className="input-group">
             <div className="input">
               <label htmlFor="username">Username</label>

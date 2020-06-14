@@ -67,52 +67,52 @@ export default class Requests extends React.Component {
             error={error}
           />
         ) : (
-            ''
-          )}
+          ''
+        )}
 
         {!pendingRequests.length ? (
           <p className="project">No requests at this time.</p>
         ) : (
-            <ul>
-              {pendingRequests.map(request => (
-                <li key={request.id} className="user request">
-                  <Avatar
-                    first_name={request.first_name}
-                    last_name={request.last_name}
-                  />
-                  <div className="content">
-                    <h4>
-                      <Link to={`/users/${request.username}`}>
-                        {request.first_name} {request.last_name}
-                      </Link>
-                    </h4>
-                    <p>wants to fill your {request.vacancy_title} position</p>
-                  </div>
+          <ul>
+            {pendingRequests.map(request => (
+              <li key={request.id} className="user request">
+                <Avatar
+                  first_name={request.first_name}
+                  last_name={request.last_name}
+                />
+                <div className="content">
+                  <h4>
+                    <Link to={`/users/${request.username}`}>
+                      {request.first_name} {request.last_name}
+                    </Link>
+                  </h4>
+                  <p>wants to fill your {request.vacancy_title} position</p>
+                </div>
 
-                  <div className="buttons">
-                    <Button
-                      className="clear"
-                      onClick={() => this.handleOpenChatModal(request)}
-                    >
-                      <ChatIcon title="Message this user" />
-                    </Button>
-                    <Button
-                      className="clear"
-                      onClick={() => handleApprove(request.id)}
-                    >
-                      <CheckIcon title="Approve this request" />
-                    </Button>
-                    <Button
-                      className="clear"
-                      onClick={() => handleDecline(request.id)}
-                    >
-                      <CloseIcon title="Deny this request" />
-                    </Button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+                <div className="buttons">
+                  <Button
+                    className="clear"
+                    onClick={() => this.handleOpenChatModal(request)}
+                  >
+                    <ChatIcon title="Message this user" />
+                  </Button>
+                  <Button
+                    className="clear"
+                    onClick={() => handleApprove(request.id)}
+                  >
+                    <CheckIcon title="Approve this request" />
+                  </Button>
+                  <Button
+                    className="clear"
+                    onClick={() => handleDecline(request.id)}
+                  >
+                    <CloseIcon title="Deny this request" />
+                  </Button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </article>
     );
   }

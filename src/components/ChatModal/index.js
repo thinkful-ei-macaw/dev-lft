@@ -2,8 +2,8 @@ import React from 'react';
 import Button from '../Button';
 
 const ChatModal = ({
-  handleNewMessage = () => { },
-  handleCloseChatModal = () => { },
+  handleNewMessage = () => {},
+  handleCloseChatModal = () => {},
   error = null,
   request = {}
 }) => {
@@ -14,8 +14,8 @@ const ChatModal = ({
           {error}
         </p>
       ) : (
-          ''
-        )}
+        ''
+      )}
       <div className="input-group">
         <div className="input">
           <label htmlFor="chat-message">

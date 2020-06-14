@@ -55,7 +55,7 @@ export default class Nav extends Component {
           to={path}
           className={`${className} ${
             currentPath.includes(path) ? 'active' : ''
-            }`}
+          }`}
           onClick={() => this.toggleMenu(false)}
         >
           {text}
@@ -159,8 +159,8 @@ export default class Nav extends Component {
                 </ul>
               </React.Fragment>
             ) : (
-                this.renderPublicLinks()
-              )}
+              this.renderPublicLinks()
+            )}
             <Button className="clear menu-btn" onClick={this.toggleMenu}>
               <MenuIcon className="menu" />
               <span className="hidden">Menu</span>

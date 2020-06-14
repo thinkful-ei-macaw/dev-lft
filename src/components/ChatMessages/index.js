@@ -104,8 +104,8 @@ class ChatMessages extends Component {
       ? request_status === 'pending'
         ? `wants to fill your ${vacancy_name} position`
         : request_status === 'denied'
-          ? `wanted to fill your ${vacancy_name} position`
-          : vacancy_name
+        ? `wanted to fill your ${vacancy_name} position`
+        : vacancy_name
       : `You requested to fill their ${vacancy_name} position`;
 
     return (
@@ -115,14 +115,16 @@ class ChatMessages extends Component {
             {error}
           </div>
         ) : (
-            ''
-          )}
+          ''
+        )}
 
         <header>
           <div className="user">
             <Button className="clear tablet" onClick={onClose}>
               <BackIcon />
-              <span className="hidden" aria-hidden={!open}>Back to chats list</span>
+              <span className="hidden" aria-hidden={!open}>
+                Back to chats list
+              </span>
             </Button>
             <Avatar first_name={first_name} last_name={last_name} />
             <div className="content">
@@ -152,8 +154,8 @@ class ChatMessages extends Component {
                 </Button>
               </>
             ) : (
-                ''
-              )}
+              ''
+            )}
           </div>
         </header>
         <ul className="chats" ref={this.chatList}>
@@ -172,13 +174,13 @@ class ChatMessages extends Component {
                     <h4 className="h5">You</h4>
                   </>
                 ) : (
-                    <>
-                      <Avatar first_name={first_name} last_name={last_name} />
-                      <h4 className="h5">
-                        {first_name} {last_name}
-                      </h4>
-                    </>
-                  )}
+                  <>
+                    <Avatar first_name={first_name} last_name={last_name} />
+                    <h4 className="h5">
+                      {first_name} {last_name}
+                    </h4>
+                  </>
+                )}
                 <span className="date">
                   {ChatService.getFormattedDate(message.date_created)}
                 </span>
@@ -191,8 +193,8 @@ class ChatMessages extends Component {
           ) : closed ? (
             <li className="info">This chat has been closed.</li>
           ) : (
-                ''
-              )}
+            ''
+          )}
         </ul>
         <ChatMessageForm
           request_id={request_id}
