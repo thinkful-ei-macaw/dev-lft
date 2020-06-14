@@ -1,16 +1,24 @@
 nav {
-  background: none;
+  background: #000000;
+  mix-blend-mode: lighten;
   position: absolute;
   z-index: 10;
   left: 0;
   right: 0;
   font-size: 1.2rem;
+  transition: all 0.2s ease;
 }
 
 nav,
 .nav-push {
   height: 8rem;
   transition: all 0.3s ease;
+}
+
+nav.bg,
+nav.fixed {
+  background: var(--colorBG);
+  mix-blend-mode: normal;
 }
 
 nav .home-link {
@@ -35,10 +43,6 @@ nav .logo {
   nav.fixed,
   nav.fixed .nav-push {
     height: 4rem;
-  }
-
-  nav.fixed {
-    background: var(--colorBG);
   }
 
   nav.fixed .logo {

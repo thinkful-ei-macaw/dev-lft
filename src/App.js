@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import PrivateRoute from './components/Utils/PrivateRoute';
-import PublicOnlyRoute from './components/Utils/PublicOnlyRoute';
-import PageNotFound from './components/Utils/PageNotFound/PageNotFound';
-import LandingPage from './components/LandingPage/LandingPage';
-import Nav from './components/Nav/Nav';
-import Footer from './components/Footer/Footer';
-import ProjectsPage from './components/ProjectsPage/ProjectsPage';
-import FeedPage from './components/FeedPage/FeedPage';
-import Login from './components/Login/Login';
-import Signup from './components/Signup/Signup';
-import UserProfile from './components/UserProfile/UserProfile';
-import Chat from './components/Chat/Chat';
-import Account from './components/Account/Account';
-import ProjectDash from './components/ProjectDash/ProjectDash';
-import GlobalErrorBoundary from './components/ErrorBoundaries/GlobalErrorBoundary';
+import PrivateRoute from './utils/PrivateRoute';
+import PublicOnlyRoute from './utils/PublicOnlyRoute';
+
+import GlobalErrorBoundary from './components/ErrorBoundary';
+import Nav from './components/Nav/';
+import Footer from './components/Footer';
+
+import LandingPage from './routes/LandingPage';
+import ProjectsPage from './routes/ProjectsPage';
+import FeedPage from './routes/FeedPage';
+import Login from './routes/Login';
+import Signup from './routes/Signup';
+import UserProfile from './routes/UserProfile';
+import Chat from './routes/Chat';
+import Account from './routes/Account';
+import ProjectDash from './routes/ProjectDash';
+import PageNotFound from './routes/PageNotFound';
 
 import UserContext from './contexts/UserContext';
 import TokenService from './services/token-service';

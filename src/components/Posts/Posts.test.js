@@ -1,14 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Nav from '.';
-import { BrowserRouter } from 'react-router-dom';
+import Posts from '.';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
-    <BrowserRouter>
-      <Nav />
-    </BrowserRouter>,
+    <Posts />,
     div
   );
   ReactDOM.unmountComponentAtNode(div);

@@ -287,12 +287,14 @@ form hr {
 }
 
 .page header {
+  background: var(--colorBG);
   padding-bottom: 2rem;
 }
 
 .page header .wrapper {
   display: flex;
   align-items: flex-start;
+  height: 3.2rem;
   justify-content: space-between;
 }
 
@@ -441,6 +443,7 @@ a[href*='//']::after
 /* hero styles */
 .hero {
   height: 100vh;
+  background-color: var(--colorBG);
   background-image: url('./images/hero-banner.jpg');
   background-size: auto 100vh;
   background-position: top center;
@@ -502,6 +505,11 @@ a[href*='//']::after
   text-align: center;
 }
 
+.centered .btn {
+  background: var(--colorMidBG);
+  color: var(--colorFG);
+}
+
 .centered .btn:hover {
   color: var(--colorError);
 }
@@ -520,6 +528,10 @@ a[href*='//']::after
   align-items: center;
   justify-content: space-between;
   padding: 0;
+}
+
+.card .title label {
+  margin-bottom: 0;
 }
 
 .card form {
@@ -619,6 +631,7 @@ a[href*='//']::after
 
 /* 404 */
 .fourohfour {
+  background: var(--colorBG);
   text-align: center;
   font-size: 3vw;
 }

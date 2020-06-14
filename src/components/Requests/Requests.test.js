@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Nav from '.';
+import Requests from '.';
 import { BrowserRouter } from 'react-router-dom';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <BrowserRouter>
-      <Nav />
+      <Requests />
     </BrowserRouter>,
     div
   );
