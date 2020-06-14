@@ -10,6 +10,12 @@ There are so many web developers, software engineers and web designers and codin
 
 [Live](https://www.devlft.com)
 
+## Demo credentials:
+
+- username: demouser
+
+- password: pass
+
 ## Screenshots
 
 ![Landing page and projects page](./public/screens.png)
