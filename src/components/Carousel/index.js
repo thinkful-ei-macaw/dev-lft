@@ -55,7 +55,9 @@ export default class Carousel extends Component {
               onClick={() => this.goToSlide(index)}
               key={index}
               className={`dot ${index === currentSlide ? 'active' : ''}`}
-            ></button>
+            >
+              <span className="hidden">Go to slide ${index + 1}</span>
+            </button>
           ))}
         </div>
       </div>

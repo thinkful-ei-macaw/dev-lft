@@ -60,7 +60,7 @@ export default class Nav extends Component {
           <Link
             to={path}
             className={`${className} ${
-              currentPath.includes(path) ? 'active' : ''
+              path !== '/' && currentPath.includes(path) ? 'active' : ''
             }`}
             onClick={() => {
               this.toggleMenu(false);
@@ -104,7 +104,7 @@ export default class Nav extends Component {
       { text: 'Projects', path: '/projects' },
       { text: 'Chats', path: '/chats' },
       { text: 'Account', path: '/account', className: 'mobile' },
-      { text: 'Log Out', onClick: this.handleLogOut }
+      { text: 'Log Out', onClick: this.handleLogOut, className: 'mobile' }
     ];
 
     const { menuOpen } = this.state;
@@ -147,7 +147,9 @@ export default class Nav extends Component {
               role="button"
               className={`link-container-shadow ${menuOpen ? 'active' : ''}`}
               onClick={() => this.toggleMenu(false)}
-            ></div>
+            >
+              <span className="hidden">Close menu</span>
+            </div>
             {isAuth ? (
               <React.Fragment>
                 {this.renderPrivateLinks(user)}
