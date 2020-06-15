@@ -20,6 +20,7 @@ import ProjectDash from './routes/ProjectDash';
 import PageNotFound from './routes/PageNotFound';
 
 import UserContext from './contexts/UserContext';
+import { SocketProvider } from './contexts/SocketContext';
 import TokenService from './services/token-service';
 import AuthApiService from './services/auth-api-service';
 
@@ -107,31 +108,33 @@ export default class App extends Component {
 
     return (
       <UserContext.Provider value={contextValues}>
-        <Route path="*" component={Nav} />
-        <GlobalErrorBoundary>
-          <Switch>
-            <PublicOnlyRoute exact path="/" component={LandingPage} />
-            <PublicOnlyRoute exact path="/signup" component={Signup} />
-            <PublicOnlyRoute exact path="/login" component={Login} />
-            <Route exact path="/feed" component={FeedPage} />
-            <Route
-              exact
-              path="/projects/:project_handle"
-              component={ProjectDash}
-            />
-            <PrivateRoute exact path="/account" component={Account} />
-            <PrivateRoute exact path="/projects" component={ProjectsPage} />
-            <PrivateRoute
-              exact
-              path="/users/:username"
-              component={UserProfile}
-            />
-            <PrivateRoute exact path="/chats" component={Chat} />
-            <Route path="*" component={PageNotFound} />
-          </Switch>
-        </GlobalErrorBoundary>
-        <Route path="*" component={Footer} />
-        <div className={`loader ${isLoading ? 'active' : ''}`}></div>
+        <SocketProvider>
+          <Route path="*" component={Nav} />
+          <GlobalErrorBoundary>
+            <Switch>
+              <PublicOnlyRoute exact path="/" component={LandingPage} />
+              <PublicOnlyRoute exact path="/signup" component={Signup} />
+              <PublicOnlyRoute exact path="/login" component={Login} />
+              <Route exact path="/feed" component={FeedPage} />
+              <Route
+                exact
+                path="/projects/:project_handle"
+                component={ProjectDash}
+              />
+              <PrivateRoute exact path="/account" component={Account} />
+              <PrivateRoute exact path="/projects" component={ProjectsPage} />
+              <PrivateRoute
+                exact
+                path="/users/:username"
+                component={UserProfile}
+              />
+              <PrivateRoute exact path="/chats" component={Chat} />
+              <Route path="*" component={PageNotFound} />
+            </Switch>
+          </GlobalErrorBoundary>
+          <Route path="*" component={Footer} />
+          <div className={`loader ${isLoading ? 'active' : ''}`}></div>
+        </SocketProvider>
       </UserContext.Provider>
     );
   }

@@ -4,6 +4,7 @@ import Avatar from '../../components/Avatar';
 import ChatService from '../../services/chat-api-service';
 import ChatMessages from '../../components/ChatMessages';
 import UserContext from '../../contexts/UserContext';
+import SocketContext from '../../contexts/SocketContext';
 import './Chat.css';
 
 // images
@@ -106,7 +107,6 @@ class Chat extends Component {
       return true;
     }
   };
-
   render() {
     const { chats, error, activeChat, activeFilter, chatViewOpen } = this.state;
     const filters = this.getFilters(chats);
@@ -206,12 +206,22 @@ class Chat extends Component {
               </div>
               <div className="column column-2-3">
                 {activeChat ? (
-                  <ChatMessages
-                    chat={activeChat}
-                    open={chatViewOpen}
-                    onClose={this.handleCloseChatView}
-                    onUpdate={this.setChats}
-                  />
+                  <UserContext.Consumer>
+                    {user => (
+                      <SocketContext.Consumer>
+                        {socket => (
+                          <ChatMessages
+                            user={user}
+                            webSocket={socket}
+                            chat={activeChat}
+                            open={chatViewOpen}
+                            onClose={this.handleCloseChatView}
+                            onUpdate={this.setChats}
+                          />
+                        )}
+                      </SocketContext.Consumer>
+                    )}
+                  </UserContext.Consumer>
                 ) : (
                   <div className="chat-view open chat-instructions">
                     <p>

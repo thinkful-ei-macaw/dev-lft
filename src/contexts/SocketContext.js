@@ -32,8 +32,7 @@ export class SocketProvider extends Component {
   async componentDidMount() {
     // For now, we'll just grab the connection quick and dirty-like
     try {
-      const user = await AuthApiService.getUserProfile();
-      const userProfile = await user.json();
+      const userProfile = await AuthApiService.getUserProfile();
       this.setState({ clientUsername: userProfile.username });
       // TODO: Clean this up and use env variables
       const clientConnection = new WebSocket(
@@ -63,7 +62,7 @@ export class SocketProvider extends Component {
 
   handleMessage = message => {
     // TODO: Change behavior on message.messageType
-    const messageData = JSON.parse(message);
+    const messageData = JSON.parse(message.data);
     if (messageData.messageType === 'chat') {
       this.setState({
         clientChats: [messageData.content, ...this.state.clientChats]

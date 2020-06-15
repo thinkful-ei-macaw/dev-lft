@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import ChatService from '../../services/chat-api-service';
 import ProjectDashService from '../../services/project-dash-service';
 import Avatar from '../Avatar';
-import UserContext from '../../contexts/UserContext';
 import ChatMessageForm from '../ChatMessageForm';
 import Button from '../Button';
 import './ChatMessages.css';
@@ -43,8 +42,6 @@ class ChatMessages extends Component {
     onClose: () => null
   };
 
-  static contextType = UserContext;
-
   componentDidMount() {
     this.setAllMessages();
   }
@@ -54,6 +51,18 @@ class ChatMessages extends Component {
       this.setAllMessages();
     } else {
       this.chatList.current.scrollTop = this.chatList.current.scrollHeight;
+    }
+
+    if (
+      this.props.webSocket.clientChats[0] !== oldProps.webSocket.clientChats[0]
+    ) {
+      this.setState({
+        allMessages: [
+          ...this.props.webSocket.clientChats,
+          ...this.state.allMessages
+        ]
+      });
+      this.props.webSocket.clearClientChats();
     }
   }
 
@@ -98,7 +107,7 @@ class ChatMessages extends Component {
     } = this.props;
 
     const { allMessages, error } = this.state;
-    const { user } = this.context;
+    const { user } = this.props.user;
 
     const headerMessage = isOwner
       ? request_status === 'pending'
