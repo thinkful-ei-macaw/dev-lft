@@ -1,15 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Button from './Button';
-import { BrowserRouter } from 'react-router-dom';
+import Button from '.';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(
-    <BrowserRouter>
-      <Button>Test Button</Button>
-    </BrowserRouter>,
-    div
-  );
+  ReactDOM.render(<Button>Test Button</Button>, div);
   ReactDOM.unmountComponentAtNode(div);
 });

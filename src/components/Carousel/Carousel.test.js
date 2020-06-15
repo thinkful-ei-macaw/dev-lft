@@ -1,21 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Carousel from './Carousel';
-import { BrowserRouter } from 'react-router-dom';
+import Carousel from '.';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  const slides = [{ slide: 'a' }];
-  const props = {
-    width: `${slides.length * 100}%`
-  };
   ReactDOM.render(
-    <BrowserRouter>
-      <Carousel {...props}>
-        <div />
-        <div />
-      </Carousel>
-    </BrowserRouter>,
+    <Carousel>
+      <div />
+      <div />
+    </Carousel>,
     div
   );
   ReactDOM.unmountComponentAtNode(div);

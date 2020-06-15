@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Nav from './Nav';
+import Nav from '.';
 import { BrowserRouter } from 'react-router-dom';
 
 it('renders without crashing', () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Footer from './Footer';
+import Footer from '.';
 import { BrowserRouter } from 'react-router-dom';
 
 it('renders without crashing', () => {
