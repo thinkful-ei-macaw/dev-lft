@@ -47,21 +47,31 @@ export default class Nav extends Component {
     });
   };
 
+  handleLogOut = () => {
+    const { onLogOut = () => null } = this.context;
+    onLogOut();
+  };
+
   renderLinks(links) {
     const currentPath = this.props.location.pathname;
-    return links.map(({ text, path, className = '' }) => (
-      <li key={path}>
-        <Link
-          to={path}
-          className={`${className} ${
-            currentPath.includes(path) ? 'active' : ''
-          }`}
-          onClick={() => this.toggleMenu(false)}
-        >
-          {text}
-        </Link>
-      </li>
-    ));
+    return links.map(
+      ({ text, path = '/', className = '', onClick = () => null }) => (
+        <li key={path}>
+          <Link
+            to={path}
+            className={`${className} ${
+              currentPath.includes(path) ? 'active' : ''
+            }`}
+            onClick={() => {
+              this.toggleMenu(false);
+              onClick();
+            }}
+          >
+            {text}
+          </Link>
+        </li>
+      )
+    );
   }
 
   renderPublicLinks() {
@@ -93,7 +103,8 @@ export default class Nav extends Component {
       { text: 'Feed', path: '/feed' },
       { text: 'Projects', path: '/projects' },
       { text: 'Chats', path: '/chats' },
-      { text: 'Account', path: '/account', className: 'mobile' }
+      { text: 'Account', path: '/account', className: 'mobile' },
+      { text: 'Log Out', onClick: this.handleLogOut }
     ];
 
     const { menuOpen } = this.state;

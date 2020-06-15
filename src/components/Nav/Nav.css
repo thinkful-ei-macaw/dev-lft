@@ -1,6 +1,5 @@
 nav {
-  background: #000000;
-  mix-blend-mode: lighten;
+  background: #00000044;
   position: absolute;
   z-index: 10;
   left: 0;
@@ -76,6 +75,7 @@ nav .link-container {
   width: 100%;
   max-width: 70vw;
   background: var(--colorDarkBG);
+  mix-blend-mode: normal;
   padding: 3rem 2rem 2rem;
   font-size: 2rem;
   opacity: 0;

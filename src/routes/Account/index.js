@@ -418,7 +418,10 @@ export default class Account extends Component {
             </div>
 
             <div className="centered">
-              <Button onClick={() => this.handleLogOut()} className="clear">
+              <Button
+                onClick={() => this.handleLogOut()}
+                className="clear desktop"
+              >
                 Log Out
               </Button>
             </div>
