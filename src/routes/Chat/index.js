@@ -89,10 +89,7 @@ class Chat extends Component {
     // Set a new active chat index, grab the messages and put them into
     // the appropriate array via getActiveChatMessages
     this.getActiveChatMessages(this.state.chats[chatIdx]);
-    const chatIndex = this.state.chats.findIndex(
-      c => c.chat_id === this.state.chats[chatIdx].chat_id
-    );
-    this.setState({ activeChatIdx: chatIndex, chatViewOpen: autoOpen });
+    this.setState({ activeChatIdx: chatIdx, chatViewOpen: autoOpen });
   };
 
   getActiveChatMessages = chat => {
@@ -152,9 +149,12 @@ class Chat extends Component {
   setActiveFilter = e => {
     const { value } = e.target;
     const { chats } = this.state;
-    this.setState({ activeFilter: value }, () => {
-      this.setActiveChatIdx(chats.filter(this.projectFilter)[0], false);
-    });
+    const activeFilteredIndex = chats.findIndex(
+      c => c.project.project_name.toLowerCase() === value.toLowerCase()
+    );
+    this.setState({ activeFilter: value }, () =>
+      this.setActiveChat(activeFilteredIndex, false)
+    );
   };
 
   projectFilter = chat => {
@@ -238,7 +238,13 @@ class Chat extends Component {
                             : ''
                         }`}
                         role="button"
-                        onClick={() => this.setActiveChat(i)}
+                        onClick={() =>
+                          this.setActiveChat(
+                            this.state.chats.findIndex(
+                              c => c.chat_id === chat.chat_id
+                            )
+                          )
+                        }
                       >
                         <Avatar
                           first_name={chat.recipient.first_name}
