@@ -186,6 +186,7 @@ class ChatMessages extends Component {
         <ChatMessageForm
           request_id={request_id}
           recipient_username={recipient_username}
+          author_username={user.username}
           onNewMessage={this.props.onNewMessageSuccess}
           disabled={request_status !== 'pending' || closed_status}
         />

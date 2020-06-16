@@ -38,6 +38,7 @@ class ChatMessageForm extends Component {
         this.props.onNewMessage({
           ...newMessage,
           isAuthor: true,
+          author_username: this.props.author_username,
           date_created: new Date()
         });
       })
