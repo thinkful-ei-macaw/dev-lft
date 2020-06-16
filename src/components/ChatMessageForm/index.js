@@ -42,6 +42,7 @@ class ChatMessageForm extends Component {
         });
       })
       .catch(res => {
+        console.error(res);
         this.setState({
           error: res.error || 'Something went wrong. Please try again later'
         });

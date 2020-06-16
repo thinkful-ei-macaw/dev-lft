@@ -28,19 +28,41 @@ class Chat extends Component {
   };
 
   componentDidMount() {
-    // TODO: Figure out why component is
-    // fully mounting -> unmounting -> mounting
-    // on full refresh.
+    // Making sure our WebSocket context has loaded
+    // with a valid connection helps stop a superfluous call
+    // to chats endpoint. Currently this causes Chats to
+    // mount -> unmount -> mount with WebSocket connection on the second mount
     if (this.props.webSocket.clientConnection.url) {
       this.setChats();
     }
   }
 
+  componentDidUpdate() {
+    // Detects that a new chat has been received via
+    // WebSocket connection, and updates state of the
+    // chat(s) accordingly. Followed by a reset of the temporary store of
+    // WebSocket chats to prevent an infinite render loop
+    const { clientChats } = this.props.webSocket;
+    if (clientChats.length > 0) {
+      clientChats.forEach(clientChat => {
+        let currentChats = this.state.chats;
+        let updatedChats = currentChats.map(chat => {
+          if (clientChat.chat_id === chat.chat_id) {
+            return {
+              ...chat,
+              messages: [clientChat, ...chat.messages]
+            };
+          } else return chat;
+        });
+        this.setState({ chats: updatedChats });
+      });
+      this.props.webSocket.clearClientChats();
+    }
+  }
+
   setChats = () => {
     this.setState({ error: null });
-    if (!this.state.activeChatIdx) {
-      // this.props.user.startLoading();
-    }
+    // TODO: Add loading state management back in
     ChatService.getChats()
       .then(chats => {
         this.setState(
@@ -55,19 +77,17 @@ class Chat extends Component {
               this.state.chats[this.state.activeChatIdx]
             )
         );
-        // this.props.user.stopLoading();
       })
       .catch(res => {
         this.setState({
           error: res.error || 'Something went wrong. Please try again later'
         });
-        // this.props.user.stopLoading();
       });
   };
 
   setActiveChat = (chatIdx, autoOpen = true) => {
-    // Set a new active Chat, grab the messages and put them into
-    // the appropriate array by chat_id
+    // Set a new active chat index, grab the messages and put them into
+    // the appropriate array via getActiveChatMessages
     this.getActiveChatMessages(this.state.chats[chatIdx]);
     const chatIndex = this.state.chats.findIndex(
       c => c.chat_id === this.state.chats[chatIdx].chat_id
@@ -96,12 +116,19 @@ class Chat extends Component {
   };
 
   onNewMessageSuccess = message => {
-    this.setState({
-      activeChat: {
-        ...this.state.activeChat,
-        messages: [message, ...this.state.activeChat.messages]
-      }
+    // Called when a new message is submitted by you.
+    // We no longer hit the server again so it's simply dropped
+    // in as the most recent message in the chat
+    const currentChats = this.state.chats;
+    const updatedChats = currentChats.map(chat => {
+      if (chat.chat_id === currentChats[this.state.activeChatIdx].chat_id) {
+        return {
+          ...chat,
+          messages: [message, ...chat.messages]
+        };
+      } else return chat;
     });
+    this.setState({ chats: updatedChats });
   };
 
   handleCloseChatView = () => {

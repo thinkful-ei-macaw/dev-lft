@@ -20,7 +20,7 @@ import ProjectDash from './routes/ProjectDash';
 import PageNotFound from './routes/PageNotFound';
 
 import UserContext from './contexts/UserContext';
-import { SocketProvider } from './contexts/SocketContext';
+import SocketContext, { SocketProvider } from './contexts/SocketContext';
 import TokenService from './services/token-service';
 import AuthApiService from './services/auth-api-service';
 
@@ -128,7 +128,15 @@ export default class App extends Component {
                 path="/users/:username"
                 component={UserProfile}
               />
-              <PrivateRoute exact path="/chats" component={Chat} />
+              <PrivateRoute
+                exact
+                path="/chats"
+                component={() => (
+                  <SocketContext.Consumer>
+                    {socket => <Chat webSocket={socket} />}
+                  </SocketContext.Consumer>
+                )}
+              />
               <Route path="*" component={PageNotFound} />
             </Switch>
           </GlobalErrorBoundary>
