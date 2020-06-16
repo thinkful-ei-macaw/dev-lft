@@ -4,7 +4,6 @@ import Avatar from '../../components/Avatar';
 import ChatService from '../../services/chat-api-service';
 import ChatMessages from '../../components/ChatMessages';
 import UserContext from '../../contexts/UserContext';
-import SocketContext from '../../contexts/SocketContext';
 import './Chat.css';
 
 // images
@@ -21,7 +20,6 @@ class Chat extends Component {
       activeChat: null,
       activeFilter: preSelectedFilter || '',
       error: null,
-      interval_id: null,
       chatViewOpen: false
     };
   }
@@ -34,14 +32,6 @@ class Chat extends Component {
 
   componentDidMount() {
     this.setChats();
-    const checkChats = setInterval(() => {
-      this.setChats();
-    }, 30000);
-    this.setState({ interval_id: checkChats });
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.state.interval_id);
   }
 
   setChats = () => {
@@ -51,14 +41,17 @@ class Chat extends Component {
     }
     ChatService.getChats()
       .then(chats => {
-        this.setState({
-          chats,
-          activeChat: this.state.activeChat
-            ? chats.find(c => c.chat_id === this.state.activeChat.chat_id)
-            : chats.length
-            ? chats.filter(this.projectFilter)[0]
-            : null
-        });
+        this.setState(
+          {
+            chats,
+            activeChat: this.state.activeChat
+              ? chats.find(c => c.chat_id === this.state.activeChat.chat_id)
+              : chats.length
+              ? chats.filter(this.projectFilter)[0]
+              : null
+          },
+          () => this.getActiveChatMessages(this.state.activeChat.chat_id)
+        );
         this.context.stopLoading();
       })
       .catch(res => {
@@ -70,7 +63,42 @@ class Chat extends Component {
   };
 
   setActiveChat = (chat, autoOpen = true) => {
+    // Set a new active Chat, grab the messages and put them into
+    // the appropriate array by chat_id
+    this.getActiveChatMessages(chat.chat_id);
     this.setState({ activeChat: chat, chatViewOpen: autoOpen });
+  };
+
+  getActiveChatMessages = chat_id => {
+    ChatService.getAllChatMessages(chat_id)
+      .then(allMessages => {
+        const chats = this.state.chats;
+        const newChats = chats.map(c => {
+          if (c.chat_id === chat_id) {
+            return {
+              ...c,
+              messages: allMessages.allMessages
+            };
+          } else return c;
+        });
+        this.setState({
+          chats: newChats,
+          activeChat: {
+            ...this.state.activeChat,
+            messages: allMessages.allMessages
+          }
+        });
+      })
+      .catch(error => this.setState({ error }));
+  };
+
+  onNewMessageSuccess = message => {
+    this.setState({
+      activeChat: {
+        ...this.state.activeChat,
+        messages: [message, ...this.state.activeChat.messages]
+      }
+    });
   };
 
   handleCloseChatView = () => {
@@ -84,7 +112,7 @@ class Chat extends Component {
     if (!chats || chats.length === 0) return [];
 
     chats.forEach(chat => {
-      let project = chat.project_name.toLowerCase();
+      let project = chat.project.project_name.toLowerCase();
       projectNames[project] = true;
     });
 
@@ -102,7 +130,9 @@ class Chat extends Component {
   projectFilter = chat => {
     const { activeFilter } = this.state;
     if (activeFilter !== '') {
-      return chat.project_name.toLowerCase() === activeFilter.toLowerCase();
+      return (
+        chat.project.project_name.toLowerCase() === activeFilter.toLowerCase()
+      );
     } else {
       return true;
     }
@@ -173,29 +203,32 @@ class Chat extends Component {
                         onClick={() => this.setActiveChat(chat)}
                       >
                         <Avatar
-                          first_name={chat.first_name}
-                          last_name={chat.last_name}
+                          first_name={chat.recipient.first_name}
+                          last_name={chat.recipient.last_name}
                         />
                         <div className="content">
                           <h4>
-                            {chat.first_name} {chat.last_name[0]}
+                            {chat.recipient.first_name}{' '}
+                            {chat.recipient.last_name[0]}
                           </h4>
                           <p className="last-message">
-                            {(chat.isOwner &&
-                              chat.request_status !== 'pending') ||
-                            !chat.isReply ? (
+                            {(chat.project.isOwner &&
+                              chat.project.request_status !== 'pending') ||
+                            !chat.messages[0].isAuthor ? (
                               <ReplyIcon />
                             ) : (
                               ''
                             )}
-                            {chat.request_status === 'pending'
-                              ? chat.body
-                              : `Request ${chat.request_status}.`}
+                            {chat.project.request_status === 'pending'
+                              ? chat.messages[0].body
+                              : `Request ${chat.project.request_status}.`}
                           </p>
                         </div>
 
                         <span className="date">
-                          {ChatService.getFormattedDate(chat.date_created)}
+                          {ChatService.getFormattedDate(
+                            chat.messages[0].date_created
+                          )}
                         </span>
                       </li>
                     ))
@@ -206,22 +239,13 @@ class Chat extends Component {
               </div>
               <div className="column column-2-3">
                 {activeChat ? (
-                  <UserContext.Consumer>
-                    {user => (
-                      <SocketContext.Consumer>
-                        {socket => (
-                          <ChatMessages
-                            user={user}
-                            webSocket={socket}
-                            chat={activeChat}
-                            open={chatViewOpen}
-                            onClose={this.handleCloseChatView}
-                            onUpdate={this.setChats}
-                          />
-                        )}
-                      </SocketContext.Consumer>
-                    )}
-                  </UserContext.Consumer>
+                  <ChatMessages
+                    chat={activeChat}
+                    open={chatViewOpen}
+                    onClose={this.handleCloseChatView}
+                    onUpdate={this.setChats}
+                    onNewMessageSuccess={this.onNewMessageSuccess}
+                  />
                 ) : (
                   <div className="chat-view open chat-instructions">
                     <p>

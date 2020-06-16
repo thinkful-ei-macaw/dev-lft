@@ -35,13 +35,17 @@ class ChatMessageForm extends Component {
     ChatService.postChatMessage(newMessage)
       .then(() => {
         this.setState({ error: null, body: '' });
-        this.props.onNewMessage();
+        this.props.onNewMessage({
+          ...newMessage,
+          isAuthor: true,
+          date_created: new Date()
+        });
       })
-      .catch(res =>
+      .catch(res => {
         this.setState({
           error: res.error || 'Something went wrong. Please try again later'
-        })
-      );
+        });
+      });
   };
 
   render() {

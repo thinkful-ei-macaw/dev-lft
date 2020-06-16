@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ChatService from '../../services/chat-api-service';
 import ProjectDashService from '../../services/project-dash-service';
+import UserContext from '../../contexts/UserContext';
+
 import Avatar from '../Avatar';
 import ChatMessageForm from '../ChatMessageForm';
 import Button from '../Button';
@@ -26,58 +28,33 @@ class ChatMessages extends Component {
     this.chatList = React.createRef();
   }
 
+  static contextType = UserContext;
+
   static defaultProps = {
     chat: {
-      closed: false,
-      first_name: 'John',
-      last_name: 'Doe',
-      project_name: 'Project Name',
-      request_id: null,
-      recipient_username: 'username',
-      vacancy_name: 'Vacancy Name',
-      isOwner: false,
-      request_status: false
+      closed_status: false,
+      recipient: {
+        first_name: 'John',
+        last_name: 'Doe',
+        recipient_username: 'username'
+      },
+      project: {
+        project_name: 'Project Name',
+        request_id: null,
+        vacancy_name: 'Vacancy Name',
+        isOwner: false,
+        request_status: false
+      }
     },
     open: false,
     onClose: () => null
   };
 
-  componentDidMount() {
-    this.setAllMessages();
-  }
-
   componentDidUpdate(oldProps) {
-    if (this.props.chat.body !== oldProps.chat.body) {
-      this.setAllMessages();
-    } else {
+    if (!this.props.chat.messages[0].body !== oldProps.chat.messages[0].body) {
       this.chatList.current.scrollTop = this.chatList.current.scrollHeight;
     }
-
-    if (
-      this.props.webSocket.clientChats[0] !== oldProps.webSocket.clientChats[0]
-    ) {
-      this.setState({
-        allMessages: [
-          ...this.props.webSocket.clientChats,
-          ...this.state.allMessages
-        ]
-      });
-      this.props.webSocket.clearClientChats();
-    }
   }
-
-  setAllMessages = () => {
-    const {
-      chat: { chat_id }
-    } = this.props;
-    ChatService.getAllChatMessages(chat_id)
-      .then(allMessages => {
-        this.setState({ ...allMessages });
-        this.chatList.current.scrollTop = this.chatList.current.scrollHeight;
-      })
-      .then(this.props.onUpdate)
-      .catch(error => this.setState({ error }));
-  };
 
   handleRequest = (request_id, status) => {
     ProjectDashService.patchRequest(status, request_id)
@@ -92,22 +69,23 @@ class ChatMessages extends Component {
   render() {
     const {
       chat: {
-        closed,
-        first_name,
-        last_name,
-        project_name,
-        request_id,
-        recipient_username,
-        vacancy_name,
-        isOwner = false,
-        request_status
+        closed_status,
+        messages,
+        recipient: { first_name, last_name, recipient_username },
+        project: {
+          project_name,
+          request_id,
+          vacancy_name,
+          isOwner = false,
+          request_status
+        }
       },
       open,
       onClose = () => null
     } = this.props;
 
-    const { allMessages, error } = this.state;
-    const { user } = this.props.user;
+    const { error } = this.state;
+    const { user } = this.context;
 
     const headerMessage = isOwner
       ? request_status === 'pending'
@@ -168,7 +146,7 @@ class ChatMessages extends Component {
           </div>
         </header>
         <ul className="chats" ref={this.chatList}>
-          {[...allMessages].reverse().map(message => (
+          {[...messages].reverse().map(message => (
             <li
               key={message.author_username + message.date_created}
               className={`message ${message.isAuthor ? 'author' : ''}`}
@@ -199,7 +177,7 @@ class ChatMessages extends Component {
           ))}
           {request_status !== 'pending' ? (
             <li className="info">Request {request_status}.</li>
-          ) : closed ? (
+          ) : closed_status ? (
             <li className="info">This chat has been closed.</li>
           ) : (
             ''
@@ -208,8 +186,8 @@ class ChatMessages extends Component {
         <ChatMessageForm
           request_id={request_id}
           recipient_username={recipient_username}
-          onNewMessage={this.setAllMessages}
-          disabled={request_status !== 'pending' || closed}
+          onNewMessage={this.props.onNewMessageSuccess}
+          disabled={request_status !== 'pending' || closed_status}
         />
       </section>
     );
