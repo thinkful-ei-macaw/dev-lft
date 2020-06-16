@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import Avatar from '../../components/Avatar';
 import ChatService from '../../services/chat-api-service';
 import ChatMessages from '../../components/ChatMessages';
-import UserContext from '../../contexts/UserContext';
 import './Chat.css';
 
 // images
@@ -17,7 +16,7 @@ class Chat extends Component {
       props.location.state && props.location.state.filter.toLowerCase();
     this.state = {
       chats: [],
-      activeChat: null,
+      activeChatIdx: null,
       activeFilter: preSelectedFilter || '',
       error: null,
       chatViewOpen: false
@@ -28,48 +27,56 @@ class Chat extends Component {
     location: {}
   };
 
-  static contextType = UserContext;
-
   componentDidMount() {
-    this.setChats();
+    // TODO: Figure out why component is
+    // fully mounting -> unmounting -> mounting
+    // on full refresh.
+    if (this.props.webSocket.clientConnection.url) {
+      this.setChats();
+    }
   }
 
   setChats = () => {
     this.setState({ error: null });
-    if (!this.state.activeChat) {
-      this.context.startLoading();
+    if (!this.state.activeChatIdx) {
+      // this.props.user.startLoading();
     }
     ChatService.getChats()
       .then(chats => {
         this.setState(
           {
             chats,
-            activeChat: this.state.activeChat
-              ? chats.find(c => c.chat_id === this.state.activeChat.chat_id)
-              : chats.length
-              ? chats.filter(this.projectFilter)[0]
-              : null
+            activeChatIdx: this.state.activeChatIdx
+              ? this.state.activeChatIdx
+              : 0
           },
-          () => this.getActiveChatMessages(this.state.activeChat.chat_id)
+          () =>
+            this.getActiveChatMessages(
+              this.state.chats[this.state.activeChatIdx]
+            )
         );
-        this.context.stopLoading();
+        // this.props.user.stopLoading();
       })
       .catch(res => {
         this.setState({
           error: res.error || 'Something went wrong. Please try again later'
         });
-        this.context.stopLoading();
+        // this.props.user.stopLoading();
       });
   };
 
-  setActiveChat = (chat, autoOpen = true) => {
+  setActiveChat = (chatIdx, autoOpen = true) => {
     // Set a new active Chat, grab the messages and put them into
     // the appropriate array by chat_id
-    this.getActiveChatMessages(chat.chat_id);
-    this.setState({ activeChat: chat, chatViewOpen: autoOpen });
+    this.getActiveChatMessages(this.state.chats[chatIdx]);
+    const chatIndex = this.state.chats.findIndex(
+      c => c.chat_id === this.state.chats[chatIdx].chat_id
+    );
+    this.setState({ activeChatIdx: chatIndex, chatViewOpen: autoOpen });
   };
 
-  getActiveChatMessages = chat_id => {
+  getActiveChatMessages = chat => {
+    const { chat_id } = chat;
     ChatService.getAllChatMessages(chat_id)
       .then(allMessages => {
         const chats = this.state.chats;
@@ -82,11 +89,7 @@ class Chat extends Component {
           } else return c;
         });
         this.setState({
-          chats: newChats,
-          activeChat: {
-            ...this.state.activeChat,
-            messages: allMessages.allMessages
-          }
+          chats: newChats
         });
       })
       .catch(error => this.setState({ error }));
@@ -123,7 +126,7 @@ class Chat extends Component {
     const { value } = e.target;
     const { chats } = this.state;
     this.setState({ activeFilter: value }, () => {
-      this.setActiveChat(chats.filter(this.projectFilter)[0], false);
+      this.setActiveChatIdx(chats.filter(this.projectFilter)[0], false);
     });
   };
 
@@ -138,7 +141,13 @@ class Chat extends Component {
     }
   };
   render() {
-    const { chats, error, activeChat, activeFilter, chatViewOpen } = this.state;
+    const {
+      chats,
+      error,
+      activeChatIdx,
+      activeFilter,
+      chatViewOpen
+    } = this.state;
     const filters = this.getFilters(chats);
     return (
       <section className="page chat-page">
@@ -197,10 +206,12 @@ class Chat extends Component {
                       <li
                         key={i}
                         className={`user ${
-                          activeChat.chat_id === chat.chat_id ? 'active' : ''
+                          chats[activeChatIdx].chat_id === chat.chat_id
+                            ? 'active'
+                            : ''
                         }`}
                         role="button"
-                        onClick={() => this.setActiveChat(chat)}
+                        onClick={() => this.setActiveChat(i)}
                       >
                         <Avatar
                           first_name={chat.recipient.first_name}
@@ -238,9 +249,9 @@ class Chat extends Component {
                 </ul>
               </div>
               <div className="column column-2-3">
-                {activeChat ? (
+                {activeChatIdx !== null ? (
                   <ChatMessages
-                    chat={activeChat}
+                    chat={chats[activeChatIdx]}
                     open={chatViewOpen}
                     onClose={this.handleCloseChatView}
                     onUpdate={this.setChats}
