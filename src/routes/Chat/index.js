@@ -149,9 +149,10 @@ class Chat extends Component {
   setActiveFilter = e => {
     const { value } = e.target;
     const { chats } = this.state;
-    const activeFilteredIndex = chats.findIndex(
+    let activeFilteredIndex = chats.findIndex(
       c => c.project.project_name.toLowerCase() === value.toLowerCase()
     );
+    if (activeFilteredIndex === -1) activeFilteredIndex = 0;
     this.setState({ activeFilter: value }, () =>
       this.setActiveChat(activeFilteredIndex, false)
     );
