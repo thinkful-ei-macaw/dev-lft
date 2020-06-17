@@ -30,10 +30,6 @@ class Chat extends Component {
   };
 
   componentDidMount() {
-    // Making sure our WebSocket context has loaded
-    // with a valid connection helps stop a superfluous call
-    // to chats endpoint. Currently this causes Chats to
-    // mount -> unmount -> mount with WebSocket connection on the second mount
     this._isMounted = true;
     this.setChats();
   }

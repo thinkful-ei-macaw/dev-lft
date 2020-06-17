@@ -65,7 +65,6 @@ export class SocketProvider extends Component {
     );
 
   handleMessage = message => {
-    // TODO: Change behavior on message.messageType
     const messageData = JSON.parse(message.data);
     if (messageData.messageType === 'chat') {
       this.setState({
