@@ -33,14 +33,18 @@ export class SocketProvider extends Component {
     // For now, we'll just grab the connection quick and dirty-like
     try {
       const userProfile = await AuthApiService.getUserProfile();
-      this.setState({ clientUsername: userProfile.username });
       // TODO: Clean this up and use env variables
       const clientConnection = new WebSocket(
         `ws://localhost:8000/${userProfile.username}`
       );
       // On new message from server, send though message handler
       clientConnection.onmessage = msg => this.handleMessage(msg);
-      this.setState({ clientConnection });
+      if (this._isMounted) {
+        this.setState({
+          clientConnection,
+          clientUsername: userProfile.username
+        });
+      }
     } catch (error) {
       this.setState({ error });
     }

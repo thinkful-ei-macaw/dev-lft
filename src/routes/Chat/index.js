@@ -10,6 +10,8 @@ import { ReplyIcon } from '../../images';
 import { Link } from 'react-router-dom';
 
 class Chat extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     const preSelectedFilter =
@@ -32,9 +34,12 @@ class Chat extends Component {
     // with a valid connection helps stop a superfluous call
     // to chats endpoint. Currently this causes Chats to
     // mount -> unmount -> mount with WebSocket connection on the second mount
-    if (this.props.webSocket.clientConnection.url) {
-      this.setChats();
-    }
+    this._isMounted = true;
+    this.setChats();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   componentDidUpdate() {
@@ -63,20 +68,19 @@ class Chat extends Component {
   setChats = () => {
     this.setState({ error: null });
     // TODO: Add loading state management back in
+    // Note: Checking if the component is mounted allows us to
+    // better handle when a user hard refreshes (parents cause two
+    // mounts in that scenario).
     ChatService.getChats()
       .then(chats => {
-        this.setState(
-          {
+        if (this._isMounted) {
+          this.setState({
             chats,
             activeChatIdx: this.state.activeChatIdx
               ? this.state.activeChatIdx
-              : 0
-          },
-          () =>
-            this.getActiveChatMessages(
-              this.state.chats[this.state.activeChatIdx]
-            )
-        );
+              : null
+          });
+        }
       })
       .catch(res => {
         this.setState({
@@ -233,6 +237,7 @@ class Chat extends Component {
                       <li
                         key={i}
                         className={`user ${
+                          activeChatIdx &&
                           chats[activeChatIdx].chat_id === chat.chat_id
                             ? 'active'
                             : ''
