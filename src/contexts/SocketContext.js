@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AuthApiService from '../services/auth-api-service';
+import config from '../config';
 
 const SocketContext = React.createContext({
   clientUsername: '',
@@ -21,7 +22,6 @@ export class SocketProvider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clientUsername: '',
       clientConnection: {},
       clientNotifications: [],
       clientChats: [],
@@ -30,19 +30,18 @@ export class SocketProvider extends Component {
   }
 
   async componentDidMount() {
-    // For now, we'll just grab the connection quick and dirty-like
     try {
-      const userProfile = await AuthApiService.getUserProfile();
-      // TODO: Clean this up and use env variables
+      // First, get a new auth ticket from the server
+      const webSocketTicket = await AuthApiService.getWebSocketTicket();
+      // Then we send this up as part of our req params
       const clientConnection = new WebSocket(
-        `ws://localhost:8000/${userProfile.username}`
+        `${config.WEB_SOCKET_ENDPOINT}/${webSocketTicket.ticket}`
       );
       // On new message from server, send though message handler
       clientConnection.onmessage = msg => this.handleMessage(msg);
       if (this._isMounted) {
         this.setState({
-          clientConnection,
-          clientUsername: userProfile.username
+          clientConnection
         });
       }
     } catch (error) {

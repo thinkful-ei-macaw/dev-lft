@@ -57,6 +57,17 @@ const AuthApiService = {
       },
       body: JSON.stringify(user)
     }).then(res => (!res.ok ? res.json().then(e => Promise.reject(e)) : res));
+  },
+
+  getWebSocketTicket() {
+    return fetch(`${config.API_ENDPOINT}/ws/auth`, {
+      method: 'GET',
+      headers: {
+        Authorization: `bearer ${TokenService.getAuthToken()}`
+      }
+    }).then(res =>
+      !res.ok ? res.json().then(e => Promise.reject(e)) : res.json()
+    );
   }
 };
 
