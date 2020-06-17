@@ -3,7 +3,6 @@ import AuthApiService from '../services/auth-api-service';
 import config from '../config';
 
 const SocketContext = React.createContext({
-  clientUsername: '',
   clientConnection: {},
   clientNotifications: [],
   clientChats: [],
