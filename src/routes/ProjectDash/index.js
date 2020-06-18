@@ -10,6 +10,7 @@ import OpenVacancies from '../../components/OpenVacancies';
 import Requests from '../../components/Requests';
 import Button from '../../components/Button';
 import UserContext from '../../contexts/UserContext';
+import SocketContext from '../../contexts/SocketContext';
 import './ProjectDash.css';
 
 // images
@@ -218,7 +219,9 @@ class ProjectDash extends Component {
             )}
 
             {userRole === 'member' || userRole === 'owner' ? (
-              <Posts project_id={project.id} />
+              <SocketContext.Consumer>
+                {socket => <Posts project_id={project.id} webSocket={socket} />}
+              </SocketContext.Consumer>
             ) : (
               ''
             )}

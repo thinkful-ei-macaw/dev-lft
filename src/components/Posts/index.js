@@ -26,6 +26,14 @@ class Posts extends Component {
     this.getPosts();
   }
 
+  componentDidUpdate() {
+    const { clientPosts } = this.props.webSocket;
+    if (clientPosts.length > 0) {
+      this.setState({ posts: [...clientPosts, ...this.state.posts] });
+      this.props.webSocket.clearClientPosts();
+    }
+  }
+
   handleEditPost = post_id => {
     this.setState({
       postToEdit: post_id
