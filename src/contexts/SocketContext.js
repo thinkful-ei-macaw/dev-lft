@@ -28,7 +28,23 @@ export class SocketProvider extends Component {
     };
   }
 
+  static defaultProps = {
+    isAuth: false
+  };
+
   async componentDidMount() {
+    if (this.props.isAuth) {
+      this.getWebSocketConnection();
+    }
+  }
+
+  async componentDidUpdate(oldProps) {
+    if (this.props.isAuth && oldProps.isAuth !== true) {
+      this.getWebSocketConnection();
+    }
+  }
+
+  getWebSocketConnection = async () => {
     try {
       // First, get a new auth ticket from the server
       const webSocketTicket = await AuthApiService.getWebSocketTicket();
@@ -45,6 +61,14 @@ export class SocketProvider extends Component {
       }
     } catch (error) {
       this.setState({ error });
+    }
+  };
+
+  componentWillUnmount() {
+    // If there is a connection, close it.
+    if (this.state.clientConnection.close) {
+      this.state.clientConnection.close();
+      this.setState({ clientConnection: {} });
     }
   }
 

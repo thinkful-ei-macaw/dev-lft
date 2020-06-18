@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import TokenService from '../services/token-service';
-import { SocketProvider } from '../contexts/SocketContext';
 
 export default function PrivateRoute({ component, ...props }) {
   const Component = component;
@@ -10,9 +9,7 @@ export default function PrivateRoute({ component, ...props }) {
       {...props}
       render={componentProps =>
         TokenService.hasAuthToken() ? (
-          <SocketProvider>
-            <Component {...componentProps} />
-          </SocketProvider>
+          <Component {...componentProps} />
         ) : (
           <Redirect
             to={{
