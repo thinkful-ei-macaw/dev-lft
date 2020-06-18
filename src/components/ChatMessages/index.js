@@ -17,13 +17,7 @@ class ChatMessages extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      allMessages: [],
-      redirect: false,
-      first_name: '',
-      last_name: '',
-      project_name: '',
-      error: null,
-      interval_id: null
+      error: null
     };
     this.chatList = React.createRef();
   }
@@ -33,6 +27,7 @@ class ChatMessages extends Component {
   static defaultProps = {
     chat: {
       closed_status: false,
+      messages: [],
       recipient: {
         first_name: 'John',
         last_name: 'Doe',
@@ -43,11 +38,13 @@ class ChatMessages extends Component {
         request_id: null,
         vacancy_name: 'Vacancy Name',
         isOwner: false,
-        request_status: false
+        request_status: ''
       }
     },
     open: false,
-    onClose: () => null
+    onClose: () => null,
+    onUpdate: () => null,
+    onNewMessageSuccess: () => null
   };
 
   componentDidUpdate(oldProps) {
@@ -201,13 +198,26 @@ ChatMessages.propTypes = {
       state: PropTypes.object
     })
   }),
-  allMessages: PropTypes.array,
-  redirect: PropTypes.bool,
-  first_name: PropTypes.string,
-  last_name: PropTypes.string,
-  project_name: PropTypes.string,
-  error: PropTypes.object,
-  interval_id: PropTypes.number
+  chat: PropTypes.shape({
+    closed_status: PropTypes.bool,
+    messages: PropTypes.array,
+    recipient: PropTypes.shape({
+      first_name: PropTypes.string,
+      last_name: PropTypes.string,
+      recipient_username: PropTypes.string
+    }),
+    project: PropTypes.shape({
+      project_name: PropTypes.string,
+      request_id: PropTypes.number,
+      vacancy_name: PropTypes.string,
+      isOwner: PropTypes.bool,
+      request_status: PropTypes.string
+    })
+  }).isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onNewMessageSuccess: PropTypes.func.isRequired
 };
 
 export default ChatMessages;

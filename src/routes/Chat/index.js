@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import Avatar from '../../components/Avatar';
 import ChatService from '../../services/chat-api-service';
@@ -26,7 +27,11 @@ class Chat extends Component {
   }
 
   static defaultProps = {
-    location: {}
+    location: {},
+    webSocket: {
+      clientChats: [],
+      clearClientChats: () => null
+    }
   };
 
   componentDidMount() {
@@ -234,7 +239,7 @@ class Chat extends Component {
                       <li
                         key={i}
                         className={`user ${
-                          activeChatIdx &&
+                          activeChatIdx !== null &&
                           chats[activeChatIdx].chat_id === chat.chat_id
                             ? 'active'
                             : ''
@@ -310,3 +315,11 @@ class Chat extends Component {
   }
 }
 export default Chat;
+
+Chat.propTypes = {
+  location: PropTypes.object,
+  webSocket: PropTypes.shape({
+    clientChats: PropTypes.array,
+    clearClientChats: PropTypes.func
+  }).isRequired
+};
