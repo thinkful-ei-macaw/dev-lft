@@ -298,7 +298,11 @@ class Chat extends Component {
                     onNewMessageSuccess={this.onNewMessageSuccess}
                   />
                 ) : (
-                  <div className="chat-view open chat-instructions">
+                  <div
+                    className={`chat-view chat-instructions ${
+                      chats.length ? 'open' : ''
+                    }`}
+                  >
                     <p>
                       Chats can only be initiated by project owners from
                       requests on a project's dashboard.
