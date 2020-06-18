@@ -29,7 +29,11 @@ class Posts extends Component {
   componentDidUpdate() {
     const { clientPosts } = this.props.webSocket;
     if (clientPosts.length > 0) {
-      this.setState({ posts: [...clientPosts, ...this.state.posts] });
+      this.setState(
+        { posts: [...clientPosts, ...this.state.posts] },
+        () =>
+          (this.postList.current.scrollTop = this.postList.current.scrollHeight)
+      );
       this.props.webSocket.clearClientPosts();
     }
   }
