@@ -265,7 +265,7 @@ class Chat extends Component {
                           <p className="last-message">
                             {(chat.project.isOwner &&
                               chat.project.request_status !== 'pending') ||
-                            !chat.messages[0].isAuthor ? (
+                            chat.messages[0].isAuthor ? (
                               <ReplyIcon />
                             ) : (
                               ''
