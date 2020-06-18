@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ChatService from '../../services/chat-api-service';
 import ProjectDashService from '../../services/project-dash-service';
-import Avatar from '../Avatar';
 import UserContext from '../../contexts/UserContext';
+
+import Avatar from '../Avatar';
 import ChatMessageForm from '../ChatMessageForm';
 import Button from '../Button';
 import './ChatMessages.css';
@@ -16,59 +17,41 @@ class ChatMessages extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      allMessages: [],
-      redirect: false,
-      first_name: '',
-      last_name: '',
-      project_name: '',
-      error: null,
-      interval_id: null
+      error: null
     };
     this.chatList = React.createRef();
   }
 
-  static defaultProps = {
-    chat: {
-      closed: false,
-      first_name: 'John',
-      last_name: 'Doe',
-      project_name: 'Project Name',
-      request_id: null,
-      recipient_username: 'username',
-      vacancy_name: 'Vacancy Name',
-      isOwner: false,
-      request_status: false
-    },
-    open: false,
-    onClose: () => null
-  };
-
   static contextType = UserContext;
 
-  componentDidMount() {
-    this.setAllMessages();
-  }
+  static defaultProps = {
+    chat: {
+      closed_status: false,
+      messages: [],
+      recipient: {
+        first_name: 'John',
+        last_name: 'Doe',
+        recipient_username: 'username'
+      },
+      project: {
+        project_name: 'Project Name',
+        request_id: null,
+        vacancy_name: 'Vacancy Name',
+        isOwner: false,
+        request_status: ''
+      }
+    },
+    open: false,
+    onClose: () => null,
+    onUpdate: () => null,
+    onNewMessageSuccess: () => null
+  };
 
   componentDidUpdate(oldProps) {
-    if (this.props.chat.body !== oldProps.chat.body) {
-      this.setAllMessages();
-    } else {
+    if (!this.props.chat.messages[0].body !== oldProps.chat.messages[0].body) {
       this.chatList.current.scrollTop = this.chatList.current.scrollHeight;
     }
   }
-
-  setAllMessages = () => {
-    const {
-      chat: { chat_id }
-    } = this.props;
-    ChatService.getAllChatMessages(chat_id)
-      .then(allMessages => {
-        this.setState({ ...allMessages });
-        this.chatList.current.scrollTop = this.chatList.current.scrollHeight;
-      })
-      .then(this.props.onUpdate)
-      .catch(error => this.setState({ error }));
-  };
 
   handleRequest = (request_id, status) => {
     ProjectDashService.patchRequest(status, request_id)
@@ -83,21 +66,22 @@ class ChatMessages extends Component {
   render() {
     const {
       chat: {
-        closed,
-        first_name,
-        last_name,
-        project_name,
-        request_id,
-        recipient_username,
-        vacancy_name,
-        isOwner = false,
-        request_status
+        closed_status,
+        messages,
+        recipient: { first_name, last_name, recipient_username },
+        project: {
+          project_name,
+          request_id,
+          vacancy_name,
+          isOwner = false,
+          request_status
+        }
       },
       open,
       onClose = () => null
     } = this.props;
 
-    const { allMessages, error } = this.state;
+    const { error } = this.state;
     const { user } = this.context;
 
     const headerMessage = isOwner
@@ -159,7 +143,7 @@ class ChatMessages extends Component {
           </div>
         </header>
         <ul className="chats" ref={this.chatList}>
-          {[...allMessages].reverse().map(message => (
+          {[...messages].reverse().map(message => (
             <li
               key={message.author_username + message.date_created}
               className={`message ${message.isAuthor ? 'author' : ''}`}
@@ -190,7 +174,7 @@ class ChatMessages extends Component {
           ))}
           {request_status !== 'pending' ? (
             <li className="info">Request {request_status}.</li>
-          ) : closed ? (
+          ) : closed_status ? (
             <li className="info">This chat has been closed.</li>
           ) : (
             ''
@@ -199,8 +183,9 @@ class ChatMessages extends Component {
         <ChatMessageForm
           request_id={request_id}
           recipient_username={recipient_username}
-          onNewMessage={this.setAllMessages}
-          disabled={request_status !== 'pending' || closed}
+          author_username={user.username}
+          onNewMessage={this.props.onNewMessageSuccess}
+          disabled={request_status !== 'pending' || closed_status}
         />
       </section>
     );
@@ -213,13 +198,26 @@ ChatMessages.propTypes = {
       state: PropTypes.object
     })
   }),
-  allMessages: PropTypes.array,
-  redirect: PropTypes.bool,
-  first_name: PropTypes.string,
-  last_name: PropTypes.string,
-  project_name: PropTypes.string,
-  error: PropTypes.object,
-  interval_id: PropTypes.number
+  chat: PropTypes.shape({
+    closed_status: PropTypes.bool,
+    messages: PropTypes.array,
+    recipient: PropTypes.shape({
+      first_name: PropTypes.string,
+      last_name: PropTypes.string,
+      recipient_username: PropTypes.string
+    }),
+    project: PropTypes.shape({
+      project_name: PropTypes.string,
+      request_id: PropTypes.number,
+      vacancy_name: PropTypes.string,
+      isOwner: PropTypes.bool,
+      request_status: PropTypes.string
+    })
+  }).isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onNewMessageSuccess: PropTypes.func.isRequired
 };
 
 export default ChatMessages;

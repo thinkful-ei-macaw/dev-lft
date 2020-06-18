@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import Avatar from '../../components/Avatar';
 import ChatService from '../../services/chat-api-service';
 import ChatMessages from '../../components/ChatMessages';
-import UserContext from '../../contexts/UserContext';
 import './Chat.css';
 
 // images
@@ -11,65 +11,126 @@ import { ReplyIcon } from '../../images';
 import { Link } from 'react-router-dom';
 
 class Chat extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     const preSelectedFilter =
       props.location.state && props.location.state.filter.toLowerCase();
     this.state = {
       chats: [],
-      activeChat: null,
+      activeChatIdx: null,
       activeFilter: preSelectedFilter || '',
       error: null,
-      interval_id: null,
       chatViewOpen: false
     };
   }
 
   static defaultProps = {
-    location: {}
+    location: {},
+    webSocket: {
+      clientChats: [],
+      clearClientChats: () => null
+    }
   };
 
-  static contextType = UserContext;
-
   componentDidMount() {
+    this._isMounted = true;
     this.setChats();
-    const checkChats = setInterval(() => {
-      this.setChats();
-    }, 30000);
-    this.setState({ interval_id: checkChats });
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.interval_id);
+    this._isMounted = false;
+  }
+
+  componentDidUpdate() {
+    // Detects that a new chat has been received via
+    // WebSocket connection, and updates state of the
+    // chat(s) accordingly. Followed by a reset of the temporary store of
+    // WebSocket chats to prevent an infinite render loop
+    const { clientChats } = this.props.webSocket;
+    if (clientChats.length > 0) {
+      clientChats.forEach(clientChat => {
+        let currentChats = this.state.chats;
+        let updatedChats = currentChats.map(chat => {
+          if (clientChat.chat_id === chat.chat_id) {
+            return {
+              ...chat,
+              messages: [clientChat, ...chat.messages]
+            };
+          } else return chat;
+        });
+        this.setState({ chats: updatedChats });
+      });
+      this.props.webSocket.clearClientChats();
+    }
   }
 
   setChats = () => {
     this.setState({ error: null });
-    if (!this.state.activeChat) {
-      this.context.startLoading();
-    }
+    // TODO: Add loading state management back in
+    // Note: Checking if the component is mounted allows us to
+    // better handle when a user hard refreshes (parents cause two
+    // mounts in that scenario).
     ChatService.getChats()
       .then(chats => {
-        this.setState({
-          chats,
-          activeChat: this.state.activeChat
-            ? chats.find(c => c.chat_id === this.state.activeChat.chat_id)
-            : chats.length
-            ? chats.filter(this.projectFilter)[0]
-            : null
-        });
-        this.context.stopLoading();
+        if (this._isMounted) {
+          this.setState({
+            chats,
+            activeChatIdx: this.state.activeChatIdx
+              ? this.state.activeChatIdx
+              : null
+          });
+        }
       })
       .catch(res => {
         this.setState({
           error: res.error || 'Something went wrong. Please try again later'
         });
-        this.context.stopLoading();
       });
   };
 
-  setActiveChat = (chat, autoOpen = true) => {
-    this.setState({ activeChat: chat, chatViewOpen: autoOpen });
+  setActiveChat = (chatIdx, autoOpen = true) => {
+    // Set a new active chat index, grab the messages and put them into
+    // the appropriate array via getActiveChatMessages
+    this.getActiveChatMessages(this.state.chats[chatIdx]);
+    this.setState({ activeChatIdx: chatIdx, chatViewOpen: autoOpen });
+  };
+
+  getActiveChatMessages = chat => {
+    const { chat_id } = chat;
+    ChatService.getAllChatMessages(chat_id)
+      .then(allMessages => {
+        const chats = this.state.chats;
+        const newChats = chats.map(c => {
+          if (c.chat_id === chat_id) {
+            return {
+              ...c,
+              messages: allMessages.allMessages
+            };
+          } else return c;
+        });
+        this.setState({
+          chats: newChats
+        });
+      })
+      .catch(error => this.setState({ error }));
+  };
+
+  onNewMessageSuccess = message => {
+    // Called when a new message is submitted by you.
+    // We no longer hit the server again so it's simply dropped
+    // in as the most recent message in the chat
+    const currentChats = this.state.chats;
+    const updatedChats = currentChats.map(chat => {
+      if (chat.chat_id === currentChats[this.state.activeChatIdx].chat_id) {
+        return {
+          ...chat,
+          messages: [message, ...chat.messages]
+        };
+      } else return chat;
+    });
+    this.setState({ chats: updatedChats });
   };
 
   handleCloseChatView = () => {
@@ -83,7 +144,7 @@ class Chat extends Component {
     if (!chats || chats.length === 0) return [];
 
     chats.forEach(chat => {
-      let project = chat.project_name.toLowerCase();
+      let project = chat.project.project_name.toLowerCase();
       projectNames[project] = true;
     });
 
@@ -93,22 +154,33 @@ class Chat extends Component {
   setActiveFilter = e => {
     const { value } = e.target;
     const { chats } = this.state;
-    this.setState({ activeFilter: value }, () => {
-      this.setActiveChat(chats.filter(this.projectFilter)[0], false);
-    });
+    let activeFilteredIndex = chats.findIndex(
+      c => c.project.project_name.toLowerCase() === value.toLowerCase()
+    );
+    if (activeFilteredIndex === -1) activeFilteredIndex = 0;
+    this.setState({ activeFilter: value }, () =>
+      this.setActiveChat(activeFilteredIndex, false)
+    );
   };
 
   projectFilter = chat => {
     const { activeFilter } = this.state;
     if (activeFilter !== '') {
-      return chat.project_name.toLowerCase() === activeFilter.toLowerCase();
+      return (
+        chat.project.project_name.toLowerCase() === activeFilter.toLowerCase()
+      );
     } else {
       return true;
     }
   };
-
   render() {
-    const { chats, error, activeChat, activeFilter, chatViewOpen } = this.state;
+    const {
+      chats,
+      error,
+      activeChatIdx,
+      activeFilter,
+      chatViewOpen
+    } = this.state;
     const filters = this.getFilters(chats);
     return (
       <section className="page chat-page">
@@ -167,35 +239,47 @@ class Chat extends Component {
                       <li
                         key={i}
                         className={`user ${
-                          activeChat.chat_id === chat.chat_id ? 'active' : ''
+                          activeChatIdx !== null &&
+                          chats[activeChatIdx].chat_id === chat.chat_id
+                            ? 'active'
+                            : ''
                         }`}
                         role="button"
-                        onClick={() => this.setActiveChat(chat)}
+                        onClick={() =>
+                          this.setActiveChat(
+                            this.state.chats.findIndex(
+                              c => c.chat_id === chat.chat_id
+                            )
+                          )
+                        }
                       >
                         <Avatar
-                          first_name={chat.first_name}
-                          last_name={chat.last_name}
+                          first_name={chat.recipient.first_name}
+                          last_name={chat.recipient.last_name}
                         />
                         <div className="content">
                           <h4>
-                            {chat.first_name} {chat.last_name[0]}
+                            {chat.recipient.first_name}{' '}
+                            {chat.recipient.last_name[0]}
                           </h4>
                           <p className="last-message">
-                            {(chat.isOwner &&
-                              chat.request_status !== 'pending') ||
-                            !chat.isReply ? (
+                            {(chat.project.isOwner &&
+                              chat.project.request_status !== 'pending') ||
+                            !chat.messages[0].isAuthor ? (
                               <ReplyIcon />
                             ) : (
                               ''
                             )}
-                            {chat.request_status === 'pending'
-                              ? chat.body
-                              : `Request ${chat.request_status}.`}
+                            {chat.project.request_status === 'pending'
+                              ? chat.messages[0].body
+                              : `Request ${chat.project.request_status}.`}
                           </p>
                         </div>
 
                         <span className="date">
-                          {ChatService.getFormattedDate(chat.date_created)}
+                          {ChatService.getFormattedDate(
+                            chat.messages[0].date_created
+                          )}
                         </span>
                       </li>
                     ))
@@ -205,12 +289,13 @@ class Chat extends Component {
                 </ul>
               </div>
               <div className="column column-2-3">
-                {activeChat ? (
+                {activeChatIdx !== null ? (
                   <ChatMessages
-                    chat={activeChat}
+                    chat={chats[activeChatIdx]}
                     open={chatViewOpen}
                     onClose={this.handleCloseChatView}
                     onUpdate={this.setChats}
+                    onNewMessageSuccess={this.onNewMessageSuccess}
                   />
                 ) : (
                   <div className="chat-view open chat-instructions">
@@ -230,3 +315,11 @@ class Chat extends Component {
   }
 }
 export default Chat;
+
+Chat.propTypes = {
+  location: PropTypes.object,
+  webSocket: PropTypes.shape({
+    clientChats: PropTypes.array,
+    clearClientChats: PropTypes.func
+  }).isRequired
+};
