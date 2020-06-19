@@ -45,6 +45,10 @@ export class SocketProvider extends Component {
     if (this.props.isAuth && oldProps.isAuth !== true) {
       this.getWebSocketConnection();
     }
+    if (oldProps.isAuth === true && this.props.isAuth === false) {
+      this.state.clientConnection.close();
+      this.setState({ clientConnection: {} });
+    }
   }
 
   getWebSocketConnection = async () => {
@@ -57,11 +61,9 @@ export class SocketProvider extends Component {
       );
       // On new message from server, send though message handler
       clientConnection.onmessage = msg => this.handleMessage(msg);
-      if (this._isMounted) {
-        this.setState({
-          clientConnection
-        });
-      }
+      this.setState({
+        clientConnection
+      });
     } catch (error) {
       this.setState({ error });
     }
