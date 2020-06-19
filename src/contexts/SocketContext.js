@@ -7,12 +7,14 @@ const SocketContext = React.createContext({
   clientNotifications: [],
   clientChats: [],
   clientPosts: [],
+  clientPatchedPosts: [],
   setAcceptChats: () => null,
   setAcceptPosts: () => null,
   handleMessage: () => null,
   clearClientNotifications: () => null,
   clearClientChats: () => null,
-  clearClientPosts: () => null
+  clearClientPosts: () => null,
+  clearClientPatchedPosts: () => null
 });
 
 export default SocketContext;
@@ -24,11 +26,32 @@ export class SocketProvider extends Component {
       clientConnection: {},
       clientNotifications: [],
       clientChats: [],
-      clientPosts: []
+      clientPosts: [],
+      clientPatchedPosts: []
     };
   }
 
+  static defaultProps = {
+    isAuth: false
+  };
+
   async componentDidMount() {
+    if (this.props.isAuth) {
+      this.getWebSocketConnection();
+    }
+  }
+
+  async componentDidUpdate(oldProps) {
+    if (this.props.isAuth && oldProps.isAuth !== true) {
+      this.getWebSocketConnection();
+    }
+    if (oldProps.isAuth === true && this.props.isAuth === false) {
+      this.state.clientConnection.close();
+      this.setState({ clientConnection: {} });
+    }
+  }
+
+  getWebSocketConnection = async () => {
     try {
       // First, get a new auth ticket from the server
       const webSocketTicket = await AuthApiService.getWebSocketTicket();
@@ -38,19 +61,26 @@ export class SocketProvider extends Component {
       );
       // On new message from server, send though message handler
       clientConnection.onmessage = msg => this.handleMessage(msg);
-      if (this._isMounted) {
-        this.setState({
-          clientConnection
-        });
-      }
+      this.setState({
+        clientConnection
+      });
     } catch (error) {
       this.setState({ error });
+    }
+  };
+
+  componentWillUnmount() {
+    // If there is a connection, close it.
+    if (this.state.clientConnection.close) {
+      this.state.clientConnection.close();
+      this.setState({ clientConnection: {} });
     }
   }
 
   clearClientNotifications = () => this.setState({ clientNotifications: [] });
   clearClientChats = () => this.setState({ clientChats: [] });
   clearClientPosts = () => this.setState({ clientPosts: [] });
+  clearClientPatchedPosts = () => this.setState({ clientPatchedPosts: [] });
 
   setAcceptChats = status =>
     this.state.clientConnection.send(
@@ -59,7 +89,11 @@ export class SocketProvider extends Component {
 
   setAcceptPosts = status =>
     this.state.clientConnection.send(
-      JSON.stringify({ changeRoom: true, receivePosts: status })
+      JSON.stringify({
+        changeRoom: true,
+        receivePosts: status,
+        receivePatchPosts: status
+      })
     );
 
   handleMessage = message => {
@@ -73,6 +107,15 @@ export class SocketProvider extends Component {
     if (messageData.messageType === 'post') {
       this.setState({
         clientPosts: [messageData.content, ...this.state.clientPosts]
+      });
+    }
+
+    if (messageData.messageType === 'post-patch') {
+      this.setState({
+        clientPatchedPosts: [
+          messageData.content,
+          ...this.state.clientPatchedPosts
+        ]
       });
     }
 
@@ -92,10 +135,12 @@ export class SocketProvider extends Component {
       clientNotifications: this.state.clientNotifications,
       clientChats: this.state.clientChats,
       clientPosts: this.state.clientPosts,
+      clientPatchedPosts: this.state.clientPatchedPosts,
       setAcceptChats: this.setAcceptChats,
       setAcceptPosts: this.setAcceptPosts,
       clearClientChats: this.clearClientChats,
-      clearClientPosts: this.clearClientPosts
+      clearClientPosts: this.clearClientPosts,
+      clearClientPatchedPosts: this.clearClientPatchedPosts
     };
 
     return (

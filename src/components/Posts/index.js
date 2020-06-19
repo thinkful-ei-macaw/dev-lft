@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { format, differenceInHours, differenceInMinutes } from 'date-fns';
 import UserContext from '../../contexts/UserContext';
@@ -24,6 +25,30 @@ class Posts extends Component {
 
   componentDidMount() {
     this.getPosts();
+  }
+
+  componentDidUpdate() {
+    const { clientPosts, clientPatchedPosts } = this.props.webSocket;
+    if (clientPosts.length > 0) {
+      this.setState(
+        { posts: [...clientPosts, ...this.state.posts] },
+        () =>
+          (this.postList.current.scrollTop = this.postList.current.scrollHeight)
+      );
+      this.props.webSocket.clearClientPosts();
+    }
+
+    if (clientPatchedPosts.length > 0) {
+      const postsToUpdate = this.state.posts;
+      clientPatchedPosts.forEach(post => {
+        let currentPostIdx = postsToUpdate.findIndex(p => p.id === post.id);
+        if (currentPostIdx >= 0) {
+          postsToUpdate[currentPostIdx] = post;
+        }
+      });
+      this.setState({ posts: postsToUpdate });
+      this.props.webSocket.clearClientPatchedPosts();
+    }
   }
 
   handleEditPost = post_id => {
@@ -55,7 +80,7 @@ class Posts extends Component {
     let post_id = this.state.postToEdit;
     let message = e.target['edit-post'].value;
     ProjectDashService.patchPost(post_id, message)
-      .then(this.getPosts)
+      .then(() => this.setState({ postToEdit: null }))
       .catch(res => {
         this.setState({
           error: res.error || 'Something went wrong. Please try again later'
@@ -69,13 +94,11 @@ class Posts extends Component {
     let message = e.target['create-post'].value;
     this.postForm.current.reset();
 
-    ProjectDashService.postPost(project_id, message)
-      .then(this.getPosts)
-      .catch(res => {
-        this.setState({
-          error: res.error || 'Something went wrong. Please try again later'
-        });
+    ProjectDashService.postPost(project_id, message).catch(res => {
+      this.setState({
+        error: res.error || 'Something went wrong. Please try again later'
       });
+    });
   };
 
   handleCancelEdit = () => {
@@ -111,17 +134,20 @@ class Posts extends Component {
     }
 
     let allPosts = [...posts].reverse().map(post => {
-      const isAuthor = post.username === username;
+      const isAuthor = post.author.username === username;
       return (
         <li key={post.id} className={`message ${isAuthor ? 'author' : ''}`}>
           <header className="user-info">
-            <Avatar first_name={post.first_name} last_name={post.last_name} />
+            <Avatar
+              first_name={post.author.first_name}
+              last_name={post.author.last_name}
+            />
             <h4 className="h5">
               {isAuthor ? (
                 'You'
               ) : (
-                <Link to={`/users/${post.username}`}>
-                  {post.first_name} {post.last_name}
+                <Link to={`/users/${post.author.username}`}>
+                  {post.author.first_name} {post.author.last_name}
                 </Link>
               )}
             </h4>
@@ -219,4 +245,15 @@ class Posts extends Component {
     );
   }
 }
+
 export default Posts;
+
+Posts.propTypes = {
+  project_id: PropTypes.number.isRequired,
+  webSocket: PropTypes.shape({
+    clientPosts: PropTypes.array,
+    clientPatchedPosts: PropTypes.array,
+    clearClientPosts: PropTypes.func,
+    clearClientPatchedPosts: PropTypes.func
+  }).isRequired
+};

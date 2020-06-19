@@ -79,7 +79,7 @@ class Chat extends Component {
             chats,
             activeChatIdx: this.state.activeChatIdx
               ? this.state.activeChatIdx
-              : null
+              : 0
           });
         }
       })
