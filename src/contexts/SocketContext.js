@@ -7,12 +7,14 @@ const SocketContext = React.createContext({
   clientNotifications: [],
   clientChats: [],
   clientPosts: [],
+  clientPatchedPosts: [],
   setAcceptChats: () => null,
   setAcceptPosts: () => null,
   handleMessage: () => null,
   clearClientNotifications: () => null,
   clearClientChats: () => null,
-  clearClientPosts: () => null
+  clearClientPosts: () => null,
+  clearClientPatchedPosts: () => null
 });
 
 export default SocketContext;
@@ -24,7 +26,8 @@ export class SocketProvider extends Component {
       clientConnection: {},
       clientNotifications: [],
       clientChats: [],
-      clientPosts: []
+      clientPosts: [],
+      clientPatchedPosts: []
     };
   }
 
@@ -75,6 +78,7 @@ export class SocketProvider extends Component {
   clearClientNotifications = () => this.setState({ clientNotifications: [] });
   clearClientChats = () => this.setState({ clientChats: [] });
   clearClientPosts = () => this.setState({ clientPosts: [] });
+  clearClientPatchedPosts = () => this.setState({ clientPatchedPosts: [] });
 
   setAcceptChats = status =>
     this.state.clientConnection.send(
@@ -83,7 +87,11 @@ export class SocketProvider extends Component {
 
   setAcceptPosts = status =>
     this.state.clientConnection.send(
-      JSON.stringify({ changeRoom: true, receivePosts: status })
+      JSON.stringify({
+        changeRoom: true,
+        receivePosts: status,
+        receivePatchPosts: status
+      })
     );
 
   handleMessage = message => {
@@ -97,6 +105,15 @@ export class SocketProvider extends Component {
     if (messageData.messageType === 'post') {
       this.setState({
         clientPosts: [messageData.content, ...this.state.clientPosts]
+      });
+    }
+
+    if (messageData.messageType === 'post-patch') {
+      this.setState({
+        clientPatchedPosts: [
+          messageData.content,
+          ...this.state.clientPatchedPosts
+        ]
       });
     }
 
@@ -116,10 +133,12 @@ export class SocketProvider extends Component {
       clientNotifications: this.state.clientNotifications,
       clientChats: this.state.clientChats,
       clientPosts: this.state.clientPosts,
+      clientPatchedPosts: this.state.clientPatchedPosts,
       setAcceptChats: this.setAcceptChats,
       setAcceptPosts: this.setAcceptPosts,
       clearClientChats: this.clearClientChats,
-      clearClientPosts: this.clearClientPosts
+      clearClientPosts: this.clearClientPosts,
+      clearClientPatchedPosts: this.clearClientPatchedPosts
     };
 
     return (

@@ -27,7 +27,7 @@ class Posts extends Component {
   }
 
   componentDidUpdate() {
-    const { clientPosts } = this.props.webSocket;
+    const { clientPosts, clientPatchedPosts } = this.props.webSocket;
     if (clientPosts.length > 0) {
       this.setState(
         { posts: [...clientPosts, ...this.state.posts] },
@@ -35,6 +35,18 @@ class Posts extends Component {
           (this.postList.current.scrollTop = this.postList.current.scrollHeight)
       );
       this.props.webSocket.clearClientPosts();
+    }
+
+    if (clientPatchedPosts.length > 0) {
+      const postsToUpdate = this.state.posts;
+      clientPatchedPosts.forEach(post => {
+        let currentPostIdx = postsToUpdate.findIndex(p => p.id === post.id);
+        if (currentPostIdx >= 0) {
+          postsToUpdate[currentPostIdx] = post;
+        }
+      });
+      this.setState({ posts: postsToUpdate });
+      this.props.webSocket.clearClientPatchedPosts();
     }
   }
 
@@ -67,7 +79,7 @@ class Posts extends Component {
     let post_id = this.state.postToEdit;
     let message = e.target['edit-post'].value;
     ProjectDashService.patchPost(post_id, message)
-      .then(this.getPosts)
+      .then(() => this.setState({ postToEdit: null }))
       .catch(res => {
         this.setState({
           error: res.error || 'Something went wrong. Please try again later'
@@ -81,13 +93,11 @@ class Posts extends Component {
     let message = e.target['create-post'].value;
     this.postForm.current.reset();
 
-    ProjectDashService.postPost(project_id, message)
-      .then(this.getPosts)
-      .catch(res => {
-        this.setState({
-          error: res.error || 'Something went wrong. Please try again later'
-        });
+    ProjectDashService.postPost(project_id, message).catch(res => {
+      this.setState({
+        error: res.error || 'Something went wrong. Please try again later'
       });
+    });
   };
 
   handleCancelEdit = () => {
