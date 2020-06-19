@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { format, differenceInHours, differenceInMinutes } from 'date-fns';
 import UserContext from '../../contexts/UserContext';
@@ -244,4 +245,15 @@ class Posts extends Component {
     );
   }
 }
+
 export default Posts;
+
+Posts.propTypes = {
+  project_id: PropTypes.number.isRequired,
+  webSocket: PropTypes.shape({
+    clientPosts: PropTypes.array,
+    clientPatchedPosts: PropTypes.array,
+    clearClientPosts: PropTypes.func,
+    clearClientPatchedPosts: PropTypes.func
+  }).isRequired
+};
