@@ -265,7 +265,7 @@ class Chat extends Component {
                           <p className="last-message">
                             {(chat.project.isOwner &&
                               chat.project.request_status !== 'pending') ||
-                            !chat.messages[0].isAuthor ? (
+                            chat.messages[0].isAuthor ? (
                               <ReplyIcon />
                             ) : (
                               ''
@@ -298,7 +298,11 @@ class Chat extends Component {
                     onNewMessageSuccess={this.onNewMessageSuccess}
                   />
                 ) : (
-                  <div className="chat-view open chat-instructions">
+                  <div
+                    className={`chat-view chat-instructions ${
+                      chats.length ? 'open' : ''
+                    }`}
+                  >
                     <p>
                       Chats can only be initiated by project owners from
                       requests on a project's dashboard.
