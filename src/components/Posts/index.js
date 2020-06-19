@@ -133,17 +133,20 @@ class Posts extends Component {
     }
 
     let allPosts = [...posts].reverse().map(post => {
-      const isAuthor = post.username === username;
+      const isAuthor = post.author.username === username;
       return (
         <li key={post.id} className={`message ${isAuthor ? 'author' : ''}`}>
           <header className="user-info">
-            <Avatar first_name={post.first_name} last_name={post.last_name} />
+            <Avatar
+              first_name={post.author.first_name}
+              last_name={post.author.last_name}
+            />
             <h4 className="h5">
               {isAuthor ? (
                 'You'
               ) : (
-                <Link to={`/users/${post.username}`}>
-                  {post.first_name} {post.last_name}
+                <Link to={`/users/${post.author.username}`}>
+                  {post.author.first_name} {post.author.last_name}
                 </Link>
               )}
             </h4>
